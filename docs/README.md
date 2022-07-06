@@ -44,7 +44,7 @@
 Размеры, где L=длина редуктора.
 
 <p align="center">
-<img src="../picture/dvig_razmer.png" width=700/>
+<img src="picture/dvig_razmer.png" width=700/>
 </p>
 
 #Энкодер
@@ -58,7 +58,7 @@
 Размеры:
 
 <p align="center">
-<img src="../picture/encod_razmer.png" width=700/>
+<img src="picture/encod_razmer.png" width=700/>
 </p>
 
 #ШУНТ 5А 75mv
@@ -66,10 +66,10 @@
 Размеры:
 
 <p align="center">
-<img src="../picture/shynt_razmer1.png" width=700/>
+<img src="picture/shynt_razmer1.png" width=700/>
 </p>
 <p align="center">
-<img src="../picture/shynt_razmer2.png" width=700/>
+<img src="picture/shynt_razmer2.png" width=700/>
 </p>
 
 #Источник питания AM1D-0505SZ
@@ -114,10 +114,10 @@
 
 Конфиг регистра:
 <p align="center">
-<img src="../picture/ACP_pic1.png" width=700/>
+<img src="picture/ACP_pic1.png" width=700/>
 </p>
 <p align="center">
-<img src="../picture/ACP_pic2.png" width=700/>
+<img src="picture/ACP_pic2.png" width=700/>
 </p>
 
 Начиная с младшего бита, расположенного справа
@@ -135,5 +135,5 @@
 Способ передачи данных I2C:
 
 <p align="center">
-<img src="../picture/ACP_tabl.png" width=700/>
+<img src="picture/ACP_tabl.png" width=700/>
 </p>
