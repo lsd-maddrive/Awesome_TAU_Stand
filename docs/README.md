@@ -71,12 +71,6 @@
 </p>
 <p align="center">
 <img src="picture/shunt_razmer2.png" width=700/>
-=======
-<img src="picture/shynt_razmer1.png" width=700/>
-</p>
-<p align="center">
-<img src="picture/shynt_razmer2.png" width=700/>
->>>>>>> 4ed5618fa8700a2e12abe0f7ef386b163f92c41a
 </p>
 
 #Источник питания AM1D-0505SZ
@@ -141,15 +135,13 @@
 
 Способ передачи данных I2C:
 
-<<<<<<< HEAD
 | Кол-во бит | СколькоВ на 1 бит/коэф. усиления | измерений в сек | Min значение | Max значение |
 | ------ | ------ |
 | 12 | 1мВ | 240 | -2048 | 2047 |
 | 14 | 250мкВ | 60 | -8192 | 8191 |
 | 16 | 62.5мкВ | 15 | -32768 | 32767 |
 | 18 | 15.625мкВ | 3.75 | -131072 | 131071 |
-=======
+
 <p align="center">
 <img src="picture/ACP_tabl.png" width=700/>
 </p>
->>>>>>> 4ed5618fa8700a2e12abe0f7ef386b163f92c41a
