@@ -1,6 +1,6 @@
 
   <p align="center">
-  <img src="picture/Address.jpg" width=700/>
+  <img src="picture/Address.jpg" width=500/>
   </p>
   
   
@@ -8,18 +8,31 @@
   
   
   <p align="center">
-  <img src="picture/Func.jpg" width=700/>
+  <img src="picture/Func.jpg" width=300/>
   </p>
   
   
   То есть мастер сможет записывать и читать регистры.
+  
+  
+  <p align="center">
+  <img src="picture/Alg1.jpg" width=300/>
+  </p>
+  
+  
+  
+   <p align="center">
+  <img src="picture/Alg2.jpg" width=300/>
+  </p>
+  
+  
   Для чтения выбранных регистров матлаб будет слать запросы постоянно с выбранным интервалом времени. Если подчинённый не отвечает, то можно сделать выплывающее окно с ошибкой соединения.
   Для записи в регистр из матлаба будет отправляться соответствующее сообщение. Чтобы подтвердить запись можно из микроконтроллера отправить сообщение, подтверждающее запись.
   Для удобной работы с регистрами в микроконтроллере они будут созданы в виде структуры. 
   
   
   <p align="center">
-  <img src="picture/Str.jpg" width=700/>
+  <img src="picture/Str.jpg" width=300/>
   </p>
   
   
