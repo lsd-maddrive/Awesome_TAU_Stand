@@ -16,13 +16,13 @@
   
   
   <p align="center">
-  <img src="picture/Alg1.jpg" width=300/>
+  <img src="picture/Alg1.jpg" width=700/>
   </p>
   
   
   
    <p align="center">
-  <img src="picture/Alg2.jpg" width=300/>
+  <img src="picture/Alg2.jpg" width=700/>
   </p>
   
   
