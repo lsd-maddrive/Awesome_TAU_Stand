@@ -8,7 +8,7 @@
   
   
   <p align="center">
-  <img src="picture/Func.jpg" width=300/>
+  <img src="picture/Func.jpg" width=500/>
   </p>
   
   
