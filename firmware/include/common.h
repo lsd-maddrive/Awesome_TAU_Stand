@@ -11,8 +11,9 @@
 // List of all possible programs
 #define MAIN_ROUTINE 0
 #define FIRST_TEST 1
+#define I2C_TEST 2
 
 // Selection of program to run
-#define PROGRAM_ROUTINE FIRST_TEST
+#define PROGRAM_ROUTINE I2C_TEST
 
 #endif /* INCLUDE_COMMON_H_ */
