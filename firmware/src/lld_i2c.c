@@ -13,8 +13,12 @@ static I2CDriver* i2c1 =  &I2CD1;
 
 void i2cStartUp(void){
   i2cStart(i2c1, &i2c1_conf);
-  palSetLineMode(PAL_LINE(GPIOB, 8), PAL_MODE_ALTERNATE(4));
-  palSetLineMode(PAL_LINE(GPIOB, 9), PAL_MODE_ALTERNATE(4));
+  palSetPadMode(GPIOB, 8, PAL_MODE_ALTERNATE(4) |
+                        PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_OSPEED_HIGHEST |
+                        PAL_STM32_PUPDR_PULLUP);
+  palSetPadMode(GPIOB, 9, PAL_MODE_ALTERNATE(4) |
+                        PAL_STM32_OTYPE_OPENDRAIN | PAL_STM32_OSPEED_HIGHEST |
+                        PAL_STM32_PUPDR_PULLUP);
 }
 
 msg_t i2cSimpleWrite(uint8_t addr, uint8_t *buf, uint8_t n){
@@ -28,3 +32,4 @@ msg_t i2cSimpleRead(uint8_t addr, uint8_t *buf, uint8_t n){
 msg_t i2cRegisterRead(uint8_t addr, uint8_t raddr, uint8_t *buf, uint8_t n){
  return i2cMasterTransmit(i2c1, addr, &raddr, 1, buf, n);
 }
+
