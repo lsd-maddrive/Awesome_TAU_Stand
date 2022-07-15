@@ -7,6 +7,8 @@ void sensor_m3421_init(void);
 float get_volts(void);
 void sensor_m3421_read(void);
 void sensor_m3421_init(void);
+uint8_t get_config(void);
+
 
 
 

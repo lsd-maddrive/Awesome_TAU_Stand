@@ -4,5 +4,6 @@
 void first_test(void);
 void test_i2c(void);
 void test_sensor_m3421(void);
+void new_test(void);
 
 #endif /* INCLUDE_TESTS_H_ */

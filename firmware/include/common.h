@@ -13,9 +13,9 @@
 #define FIRST_TEST 1
 #define I2C_TEST 2
 #define SENSOR_M3421_TEST 3
-#define SENSOR_M3421 4
+#define SENSOR_M3421_NEW_TEST 4
 
 // Selection of program to run
-#define PROGRAM_ROUTINE SENSOR_M3421_TEST
+#define PROGRAM_ROUTINE SENSOR_M3421_NEW_TEST
 
 #endif /* INCLUDE_COMMON_H_ */

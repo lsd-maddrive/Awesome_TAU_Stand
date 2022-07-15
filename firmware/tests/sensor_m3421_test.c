@@ -9,14 +9,15 @@ void test_sensor_m3421(void){
   halInit();
   debug_stream_init();
   i2cStartUp();
+  dbgprintf("start\r\n");
 
   uint8_t rxbuf[3] = {0};
   uint8_t setup = 0b00011000;
   uint8_t sign;
-  while (true){
-    i2cSimpleWrite(0b1101000, &setup, 1);
-    dbgprintf("start %d\r\n", i2cGetErrors(&I2CD1));
+  i2cSimpleWrite(0b1101000, &setup, 1);
+  dbgprintf("start %d\r\n", i2cGetErrors(&I2CD1));
 
+  while (true){
 
     i2cSimpleRead(0b1101000, rxbuf, 3);
     int16_t temp = *(int16_t*)rxbuf;

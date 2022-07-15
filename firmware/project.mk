@@ -6,6 +6,7 @@ PROJECT_CSRC 	= src/main.c \
 				  test/sensor_m3421_test.c\
 				  src/sensor_m3421.c\
 				  src/terminal_write.c\
+				  test\new_sensor_test.c\
 				  
 				  
 # C++ source files
