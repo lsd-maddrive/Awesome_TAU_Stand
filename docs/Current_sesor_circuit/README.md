@@ -1,4 +1,4 @@
-#Схема измерения тока
+# Схема измерения тока
 
 <p align="center">
 <img src="picture/Current_sensor_circuit.png" width=700/>
