@@ -9,8 +9,6 @@ static inline void testRoutines(void) {
     test_i2c();
 #elif(PROGRAM_ROUTINE == SENSOR_M3421_TEST)
     test_sensor_m3421();
-#elif(PROGRAM_ROUTINE == SENSOR_M3421_NEW_TEST)
-    new_test();
 #endif
 }
 
