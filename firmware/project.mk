@@ -2,10 +2,11 @@
 PROJECT_CSRC 	= src/main.c \
 				  tests/first_test.c \
 				  src/lld_i2c.c \
-				  tests/i2c_test.c\
-				  tests/sensor_m3421_test.c\
-				  src/sensor_m3421.c\
-				  src/terminal_write.c\
+				  tests/i2c_test.c \
+				  tests/sensor_m3421_test.c \
+				  src/sensor_m3421.c \
+				  src/terminal_write.c \
+				  tests/current_sensor_test.c \
 				  
 				  
 				  
