@@ -3,9 +3,8 @@
 
 #define SENSOR_M3421_ADDR 0b1101000 // Address of used ADC.
 
-#define ADC_DATA_RATE 0.01666 // At 14 bits data rate is 60 PSP. 1/60 = 0.01666.
-#define CURRENT_COEF 5/(8*0.075) // 8 - gain ofisolation amplifier.
-                                       // Shunt operates 5 A at 75 mV.
+#define ADC_DATA_RATE 20 // At 14 bits data rate is 60 PSP. 1/60 = 0.01666.
+
 
 //List of posible settings.
 //Signal gain. 0 - 1 V/V, 1 - 2 V/V, 2 - 4 V/V, 3 - 8V/V.

@@ -127,7 +127,7 @@ float sensorM3421Read(void){
   add = 0; // It is needed to fill the array.
 
 
-  if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS){ // Builds configuration and initializes the sensor.
+  if (ADC_MODE_ROUTINE != ADC_MODE_CONTINUOUS){ // Builds configuration and initializes the sensor.
       config = sensor_m3421_make_config();
       i2cSimpleWrite(SENSOR_M3421_ADDR, &config, 1);
   }

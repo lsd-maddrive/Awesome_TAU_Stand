@@ -9,9 +9,9 @@ static float current; // Current value calculated from the voltage in AMPS.
  *
  *  @notapi
  */
-static THD_WORKING_AREA(adcThread, 256);// 256 - stack size
+static THD_WORKING_AREA(waCurrentSensor, 256);// 256 - stack size
 
-static THD_FUNCTION(adcRead, arg)
+static THD_FUNCTION(currentSensor, arg)
 {
     arg = arg; // just to avoid warnings
 
@@ -27,11 +27,12 @@ static THD_FUNCTION(adcRead, arg)
  *          the current value from it.
  *
  *  @note   Used m3421 ADC.
+ *  @note   One-Shot mode may not be working.
  */
 void currentSensorInit(void){
   sensorM3421Init();
   if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)
-    chThdCreateStatic(adcThread, sizeof(adcThread), NORMALPRIO, adcRead, NULL);
+    chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensor, NULL);
 
 }
 
@@ -41,7 +42,9 @@ void currentSensorInit(void){
  *
  * @param[out]  current   Current value calculated from the voltage in AMPS,
  *                        taking into account the sign.
+ *
  */
 float getCurrent(void){
-  return current;
+  if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)  return current;
+  return sensorM3421Read()*CURRENT_COEF;
 }

@@ -7,7 +7,7 @@
  * @brief   Launches I2C and sets microcontroller legs.
  *
  * @note    I2c1 is used.
- * @note    We use the GPIOB 8 (SLC) and GPIOB 9 (SDA) leg of the microcontroller.
+ * @note    We use the GPIOB 8 (SCL) and GPIOB 9 (SDA) leg of the microcontroller.
  */
 void i2cStartUp(void);
 
@@ -40,7 +40,7 @@ msg_t i2cSimpleRead(uint8_t addr, uint8_t *buf, uint8_t n);
  * @ note   Uses standard i2c function.
  *
  * @ param[in]  addr    7 bit slave address.
- *              raddr   Pointer to an array containing the data to be passed.
+ *              raddr   8 bit register address.
  *              buf     A pointer to an array that contains the received data.
  *              n       Number of bytes to read.
  */

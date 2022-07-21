@@ -19,7 +19,7 @@ static I2CDriver* i2c1 =  &I2CD1;
  * @brief   Launches I2C and sets microcontroller legs.
  *
  * @note    I2c1 is used.
- * @note    We use the GPIOB 8 (SLC) and GPIOB 9 (SDA) leg of the microcontroller.
+ * @note    We use the GPIOB 8 (SCL) and GPIOB 9 (SDA) leg of the microcontroller.
  */
 void i2cStartUp(void){
   i2cStart(i2c1, &i2c1_conf);
