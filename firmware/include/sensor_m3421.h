@@ -4,7 +4,7 @@
 #define SENSOR_M3421_ADDR 0b1101000 // Address of used ADC.
 
 #define ADC_DATA_RATE 0.01666 // At 14 bits data rate is 60 PSP. 1/60 = 0.01666.
-#define CURRENT_COEF 5/(8*75*pow(10, -3)) // 8 - gain ofisolation amplifier.
+#define CURRENT_COEF 5/(8*0.075) // 8 - gain ofisolation amplifier.
                                        // Shunt operates 5 A at 75 mV.
 
 //List of posible settings.
@@ -36,22 +36,6 @@
  *
  */
 void sensorM3421Init(void);
-
-/*
- * @brief Returns measured voltage value in VOLTS.
- *
- * @param[out]  volts   The result of voltage measurments in VOLTS,
- *                      taking into account the gain and the sign.
- */
-float getVolts(void);
-
-/*
- * @brief Returns the converted current from the voltage in AMPS.
- *
- * @param[out]  current   Current value calculated from the voltage in AMPS,
- *                        taking into account the sign.
- */
-float getCurrent(void);
 
 /*
  * @brief   Measures the voltage and convert the result from ADC to volts.

@@ -4,6 +4,8 @@
 #include <sensor_m3421.h>
 
 void test_sensor_m3421(void){
+  chSysInit();
+  halInit();
   sensorM3421Init();
   debugStreamInit();
   float volts;

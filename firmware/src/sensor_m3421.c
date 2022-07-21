@@ -5,8 +5,7 @@
 #include <math.h>
 #include <terminal_write.h>
 
-float volts; // The result of voltage measurments in VOLTS.
-float current; // Current value calculated from the voltage in AMPS.
+static float volts; // The result of voltage measurments in VOLTS.
 
 uint8_t config = {0}; // Contains the specified sensor configuration
 uint8_t rxbuf[3] = {0}; // It stores the read data from the ADC.
@@ -59,27 +58,6 @@ int8_t sensor_m3421_make_config(void){
 }
 
 /*
- *  @brief  Starts the second thread to read the voltage from the ADC and
- *          converts it to a current value.
- *
- *  @notapi
- */
-static THD_WORKING_AREA(adcThread, 256);// 256 - stack size
-
-static THD_FUNCTION(adcRead, arg)
-{
-    arg = arg; // just to avoid warnings
-
-    systime_t time = chVTGetSystemTime();
-    while( true ){
-      volts = sensorM3421Read(); // Reads the voltage from the ADC.
-      current = volts*CURRENT_COEF; // Converts the voltage to a current value.
-      time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
-    }
-}
-
-
-/*
  * @brief   Initializes the sensor.
  *
  * @note    Launches I2C.
@@ -88,8 +66,6 @@ static THD_FUNCTION(adcRead, arg)
  *
  */
 void sensorM3421Init(void){
-  chSysInit();
-  halInit();
   i2cStartUp(); //Launches I2C.
 
   /*
@@ -99,9 +75,9 @@ void sensorM3421Init(void){
   if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS){ //
     config = sensor_m3421_make_config();
     i2cSimpleWrite(SENSOR_M3421_ADDR, &config, 1);
-    chThdCreateStatic(adcThread, sizeof(adcThread), NORMALPRIO, adcRead, NULL);
   }
 }
+
 
 /*
  * @brief  Convert the obtained value from ADC to a voltage measured in volts.
@@ -188,26 +164,6 @@ float sensorM3421Read(void){
   return volts;
 }
 
-
-/*
- * @brief Returns measured voltage value in VOLTS.
- *
- * @param[out]  volts   The result of voltage measurments in VOLTS,
- *                      taking into account the gain and the sign.
- */
-float getVolts(void){
-  return volts;
-}
-
-/*
- * @brief Returns the converted current from the voltage in AMPS.
- *
- * @param[out]  current   Current value calculated from the voltage in AMPS,
- *                        taking into account the sign.
- */
-float getCurrent(void){
-  return current;
-}
 
 /*
  *  @brief  Returns the config byte read from the ADC.
