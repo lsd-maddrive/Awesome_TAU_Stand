@@ -164,6 +164,15 @@ float sensorM3421Read(void){
   return volts;
 }
 
+/*
+ * @brief Returns measured voltage value in VOLTS.
+ *
+ * @param[out]  volts   The result of voltage measurments in VOLTS,
+ *                      taking into account the gain and the sign.
+ */
+float getVolts(void){
+  return volts;
+}
 
 /*
  *  @brief  Returns the config byte read from the ADC.

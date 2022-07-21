@@ -1,7 +1,6 @@
 #include "common.h"
 #include <sensor_m3421.h>
 
-static float volts; // The result of voltage measurments in VOLTS.
 static float current; // Current value calculated from the voltage in AMPS.
 
 /*
@@ -18,8 +17,7 @@ static THD_FUNCTION(adcRead, arg)
 
     systime_t time = chVTGetSystemTime();
     while( true ){
-      volts = sensorM3421Read(); // Reads the voltage from the ADC.
-      current = volts*CURRENT_COEF; // Converts the voltage to a current value.
+      current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
     }
 }
@@ -37,15 +35,6 @@ void currentSensorInit(void){
 
 }
 
-/*
- * @brief Returns measured voltage value in VOLTS.
- *
- * @param[out]  volts   The result of voltage measurments in VOLTS,
- *                      taking into account the gain and the sign.
- */
-float getVolts(void){
-  return volts;
-}
 
 /*
  * @brief Returns the converted current from the voltage in AMPS.
