@@ -37,7 +37,7 @@ void i2cStartUp(void){
  * @ note   Uses standard i2c function.
  *
  * @ param[in]  addr    7 bit slave address.
- *              buf     Register address containing the data to be passed.
+ *              buf     8 bit register address.
  *              n       Number of bytes to send.
  */
 msg_t i2cSimpleWrite(uint8_t addr, uint8_t *buf, uint8_t n){
@@ -64,7 +64,7 @@ msg_t i2cSimpleRead(uint8_t addr, uint8_t *buf, uint8_t n){
  * @ note   Uses standard i2c function.
  *
  * @ param[in]  addr    7 bit slave address.
- *              raddr   Pointer to an array containing the data to be passed.
+ *              raddr   8 bit register address.
  *              buf     A pointer to an array that contains the received data.
  *              n       Number of bytes to read.
  */
