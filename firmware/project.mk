@@ -11,7 +11,7 @@ PROJECT_CPPSRC 	=
 # Directories to search headers in
 PROJECT_INCDIR	= include \
                   tests \
-                  include/modbusTCP\ 
+                  include/modbusTCP 
 # Additional libraries
 PROJECT_LIBS	= -lm
 # Compiler options
