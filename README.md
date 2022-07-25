@@ -7,7 +7,7 @@
   <img src="Настройки.jpg" width=500/>
   </p>
  4. Попинговать плату, если пингуется то все подключилось.
- 4. Для проверки Modbus TCP запустить программу Modbuss Poll.
+  Для проверки Modbus TCP запустить программу Modbuss Poll.
 * [Modbuss Poll]
 (https://www.modbustools.com/download.html)
 
