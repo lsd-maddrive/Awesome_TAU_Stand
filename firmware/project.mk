@@ -1,6 +1,13 @@
 # C source files
 PROJECT_CSRC 	= src/main.c \
-				  tests/first_test.c
+				  tests/first_test.c\
+				  tests/state_driver_test.c\
+				  src/state_driver.c\
+				  src/measurements.c\
+				  src/controllers.c\
+				  src/sensors/sensorsFunc.c\
+				  src/controllers/controllFunc.c\
+				
 # C++ source files
 PROJECT_CPPSRC 	= 
 # Directories to search headers in

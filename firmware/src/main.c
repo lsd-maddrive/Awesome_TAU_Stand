@@ -3,6 +3,8 @@
 static inline void testRoutines(void) {
 #if(PROGRAM_ROUTINE == FIRST_TEST)
     first_test();
+#elif(PROGRAM_ROUTINE == LLD_TEST)
+    sd_test();
 #endif
 }
 
