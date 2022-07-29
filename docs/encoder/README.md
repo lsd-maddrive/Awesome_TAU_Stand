@@ -6,7 +6,7 @@
 
 10 бит = 1024P/R
 
-Размеры:
+Размеры: 
 
 <p align="center">
 <img src="picture/encod_razmer.png" width=700/>
