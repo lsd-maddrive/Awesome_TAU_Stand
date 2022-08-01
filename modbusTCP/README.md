@@ -8,6 +8,7 @@
   </p>
  4. Попинговать плату, если пингуется то все подключилось.
   Для проверки Modbus TCP запустить программу Modbuss Poll.
+  
 * [Modbuss Poll] (https://www.modbustools.com/download.html).
 
 
