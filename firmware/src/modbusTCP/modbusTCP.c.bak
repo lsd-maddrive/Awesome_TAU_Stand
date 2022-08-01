@@ -184,7 +184,7 @@ int16_t modbustcp_go(uint8_t* data)
       }
     }
     break;
-    case MB_Fun_Write_Discrete_Register:
+    case 0x05:
     {
       while(current_discrete!=NULL)
       {

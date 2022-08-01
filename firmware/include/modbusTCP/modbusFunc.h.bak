@@ -13,9 +13,6 @@
 #define MB_TCP_Take_Data         10
 #define MB_Fun_Read_Analog_Input_Register         0x04
 #define MB_Fun_Read_Analog_Output_Register         0x03
-#define MB_Fun_Write_Analog_Register         0x06
-#define MB_Fun_Read_Discrete_Register         0x01
-#define MB_Fun_Write_Discrete_Register         0x05
 
 int16_t modbusTCP_Read_Analog_Input_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter);
 int16_t modbusTCP_Read_Analog_Output_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter);

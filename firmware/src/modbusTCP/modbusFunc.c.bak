@@ -9,31 +9,31 @@ extern analog_node_t* current_analog;
 extern discrete_node_t* current_discrete;
 
 
-//Forming a response to reading the input analog register. Modbus TCP function-0x04.
+//Forming a response to reading the input analog register
 int16_t modbusTCP_Read_Analog_Input_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter)
 {
 	return modbustcp_send_answer_fun_0x04(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter);
 }
 
-//Forming a response to reading the output analog register. Modbus TCP function-0x03.
+//Forming a response to reading the output analog register
 int16_t modbusTCP_Read_Analog_Output_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter)
 {
 	return modbustcp_send_answer_fun_0x03(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter);
 }
 
-//Forming a response to reading a discrete register. Modbus TCP function-0x01.
+//Forming a response to reading a discrete register
 int16_t modbusTCP_Read_Discrete_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter)
 {
 	return modbustcp_send_answer_fun_0x01(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t counter);
 }
 
-//Formation of the response to the recording of the analog register. Modbus TCP function-0x06.
+//Formation of the response to the recording of the analog register
 int16_t modbusTCP_Write_Analog_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,int16_t value)
 {
 	return modbustcp_send_answer_fun_0x06(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,int16_t value);
 }
 
-//Formation of a response to the recording of a discrete register. Modbus TCP function-0x05.
+//Formation of a response to the recording of a discrete register
 int16_t modbusTCP_Write_Discrete_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,uint8_t boole)
 {
 	return modbustcp_send_answer_fun_0x05(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,uint8_t boole);
