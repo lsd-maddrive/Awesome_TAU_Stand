@@ -5,10 +5,9 @@
 #include "modbusRegister.h"
 #include "modbusFunc.h"
 
-// Это связка lwip с chibios
+
 #include <lwipthread.h>
 
-// А это уже сам lwip. Там много всего есть, но я мало что понимаю
 #include <lwip/netif.h>
 #include <lwip/api.h>
 
@@ -47,11 +46,11 @@ THD_WORKING_AREA(wa_tcp_server, 4096);
 
 THD_FUNCTION(tcp_server, p) {
 
-// Чтобы убрать ворнинги
+// To remove the warnings
   (void)p;
 
-// Определим переменные. conn - внутреннее соединение, чтобы начать слушать порт
-// newconn - внешнее соединение с тем кто постучится
+// Let's define the variables. conn - internal connection to start listening to the port
+// newconn - external connection to the one who knocks
   struct netconn *conn, *newconn;
   err_t err;
   struct netbuf* buf;
@@ -59,45 +58,44 @@ THD_FUNCTION(tcp_server, p) {
   uint16_t len;
   uint16_t answer_len;
 
-// Запускаем соединение в режиме TCP
+// Starting the connection in TCP mode
   conn = netconn_new(NETCONN_TCP);
 
-// Поленился нормально прокинуть сюда адрес, поэтому определяю его заново. Он должен быть такй же как и в мейне
   struct ip4_addr ip;
   IP4_ADDR(&ip, 192, 168, 1, 123);
-// Подключаемся к 80 порту
+// Connecting to port 80
   netconn_bind(conn, &ip, 80);
 
-// И начинаем его слушать
+// And we start listening to him
   netconn_listen(conn);
 
   while (true)
   {
     palToggleLine(LINE_LED3);
-    // Ждем что кто-то подключится. Функция блокирующая
+    // We are waiting for someone to connect. Blocking function
     err = netconn_accept(conn, &newconn);
-    // Если кто-то подключился начинаем общение
+    // If someone is connected, we start communicating
     if (err == ERR_OK)
     {
        while ((err = netconn_recv(newconn, &buf)) == ERR_OK)
        {
          do
          {
-           //Прием данных от клиента
+           //Receiving data from the client
            netbuf_data(buf,(void **)&data, &len);
-           //Формирование ответа протокола ModbusTCP
+           //Modbus TCP Protocol Response Generation
            answer_len=modbustcp_go(data);
-           //Отправка ответа клиенту
+           //Sending a response to the client
            netconn_write(newconn, out_buf, answer_len, NETCONN_NOCOPY);
 
          }
-         //Пока соединение не закрыто
+         //Until the connection is closed
          while (netbuf_next(buf) >= 0);
 
          netbuf_delete(buf);
        }
 
-       // После отключения закрываем соединение
+       // After disconnecting, we close the connection
        netconn_close(newconn);
        netconn_delete(newconn);
      }
@@ -107,15 +105,15 @@ THD_FUNCTION(tcp_server, p) {
 
 void modbustcp_init(void)
 {
-  //Создание аналоговых и дискретных регистров
+  //Creating analog and discrete registers
   modbus_register_create();
-  // Задаем адрес стмки
+  // Setting the STM address
       lwipthread_opts_t opts;
       struct ip4_addr ip, gateway, netmask;
       IP4_ADDR(&ip, 192, 168, 1, 123);
       IP4_ADDR(&gateway, 192, 168, 1, 1);
       IP4_ADDR(&netmask, 255, 255, 255, 0);
-  // Макадресс вроде может быть абсолютно любой. Главное чтобы в сети не было одинаковых
+  // The mac address seems to be absolutely any. The main thing is that there are no identical ones in the network
       uint8_t macaddr[6] = {0xC2, 0xAF, 0x51, 0x03, 0xCF, 0x46};
 
       opts.address = ip.addr;
@@ -126,15 +124,15 @@ void modbustcp_init(void)
       opts.link_down_cb = NULL;
 
 
-  // Запускаем сетевой драйвер. С этого момента на разьеме начнется индикация и стм будет пинговаться, если другой конец шнура в той же сети
-  // Можем не передавать настройки, использовав NULL в качестве аргумента. Тогда будут использованы настройки по умолчанию из файла lwipthread.h
+  // We launch the network driver. From this moment on, the display will start on the connector and the stm will ping if the other end of the cord is in the same network
+  // We can not pass the settings by using NULL as an argument. Then the default settings from the lwipthread.h file will be used
       lwipInit(&opts);
       chThdSleepSeconds(2);
 }
 
 void modbustcp_start(void)
 {
-  // Запустим поток сервера
+  // Let's start the server flow
   chThdCreateStatic(wa_tcp_server, 4096, NORMALPRIO, tcp_server, NULL);
 }
 
