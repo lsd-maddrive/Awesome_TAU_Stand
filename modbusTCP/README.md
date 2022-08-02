@@ -1,6 +1,6 @@
 ## Как пользоваться Modbus TCP на STM32F767ZI.
 
-1. Для запуска теста нужно установить define MODBUSTCP_TEST.
+ 1. Для запуска теста нужно установить define MODBUSTCP_TEST.
  2. Подключить STM32F767ZI к компьютеру через Ethernet напрямую либо через сетевой коммутатор.
  3. Установить настройки сети как показано на изображении.
    <p align="center">
@@ -8,11 +8,7 @@
   </p>
  4. Попинговать плату, если пингуется то все подключилось.
   Для проверки Modbus TCP запустить программу Modbuss Poll.
- [Modbuss Poll] (https://www.modbustools.com/download.html)
-
-
-
-
+  [Modbuss Poll] (https://www.modbustools.com/download.html)
  5. Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
     <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
