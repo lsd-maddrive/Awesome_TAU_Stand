@@ -9,6 +9,7 @@
  4. Попинговать плату, если пингуется то все подключилось.
   Для проверки Modbus TCP запустить программу Modbuss Poll.
   [Modbuss Poll] (https://www.modbustools.com/download.html)
+
  5. Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
     <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
