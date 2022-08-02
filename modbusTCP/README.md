@@ -4,14 +4,16 @@
  2. Подключить STM32F767ZI к компьютеру через Ethernet напрямую либо через сетевой коммутатор.
  3. Установить настройки сети как показано на изображении.
    <p align="center">
-  <img src="/modbusTCP/pictures/Настройки.jpg" width=500/>
+  <img src="/modbusTCP/pictures/Настройки.jpg" width=300/>
   </p>
- 4. Попинговать плату, если пингуется то все подключилось.Для проверки Modbus TCP запустить программу Modbuss Poll.
+ 4. Попинговать плату, если пингуется то все подключилось.Для проверки Modbus TCP запустить программу Modbuss Poll. [Modbuss Poll] (https://www.modbustools.com/download.html)
+ 
+ 
+ 
  5. Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
     <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
   </p>
-  
  6. Настроить подключение и выбрать период опроса.
     <p align="center">
   <img src="/modbusTCP/pictures/подключение.jpg" width=500/>
