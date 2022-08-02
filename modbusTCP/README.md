@@ -6,7 +6,7 @@
    <p align="center">
   <img src="/modbusTCP/pictures/Настройки.jpg" width=300/>
   </p>
- 4. Попинговать плату, если пингуется то все подключилось.(https://www.modbustools.com/download.html) для проверки Modbus TCP запустить программу Modbuss Poll.
+
  5. Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
     <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
