@@ -13,17 +13,17 @@
 
  
  5) Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
-    <p align="center">
+   <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
   </p>
   
  6) Настроить подключение и выбрать период опроса.
-    <p align="center">
+   <p align="center">
   <img src="/modbusTCP/pictures/подключение.jpg" width=500/>
   </p>
   
  7) Если все получилось, будут отображаться регистры.
-    <p align="center">
+   <p align="center">
   <img src="/modbusTCP/pictures/чтение регистров.jpg" width=900/>
   </p>
   
