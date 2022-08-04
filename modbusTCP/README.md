@@ -6,7 +6,7 @@
    <p align="center">
   <img src="/modbusTCP/pictures/Настройки.jpg" width=300/>
   </p>
- 4) Попинговать плату, если пингуется то все подключилось.[Modbuss Poll] (https://www.modbustools.com/download.html) для проверки Modbus TCP запустить программу Modbuss Poll.
+  4) Попинговать плату, если пингуется то все подключилось. [Modbuss Poll] (https://www.modbustools.com/download.html) для проверки Modbus TCP запустить программу Modbuss Poll.
 
 
 
