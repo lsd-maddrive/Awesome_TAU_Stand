@@ -1,5 +1,7 @@
 #include <common.h>
 
+
+
 static inline void testRoutines(void) {
 #if(PROGRAM_ROUTINE == FIRST_TEST)
     first_test();
@@ -10,22 +12,21 @@ static inline void testRoutines(void) {
 #elif(PROGRAM_ROUTINE == CURRENT_SENSOR_TEST)
     test_current_sensor();
 #elif(PROGRAM_ROUTINE == MODBUSTCP_TEST)
-    test_modbustcp();
-
+    test_modbusTCP();
 #endif
 }
 
 
 
 
-int main(void)
-{
+int main(void) {
 #if(PROGRAM_ROUTINE != MAIN_ROUTINE)
     testRoutines();
 #else
     chSysInit();
     halInit();
-    while(1);
-#endif
 
+    while(1);
+
+#endif
 }

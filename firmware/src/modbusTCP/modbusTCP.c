@@ -1,5 +1,4 @@
-#include "ch.h"
-#include "hal.h"
+
 #include "modbusTCP.h"
 #include "modbusGet.h"
 #include "modbusRegister.h"
@@ -36,12 +35,8 @@
   
 uint8_t modbus_out_buf[100];
 
-extern analog_node_t* current_analog;
-extern discrete_node_t* current_discrete;
-extern analog_node_t* Reg_analog_1;
-extern discrete_node_t* Reg_discrete_1;
 
-THD_WORKING_AREA(wa_tcp_server, 4096);
+THD_WORKING_AREA(wa_tcp_server, 1024);
 
 
 THD_FUNCTION(tcp_server, p) {
@@ -86,7 +81,7 @@ THD_FUNCTION(tcp_server, p) {
            //Modbus TCP Protocol Response Generation
            answer_len=modbustcp_go(data);
            //Sending a response to the client
-           netconn_write(newconn, out_buf, answer_len, NETCONN_NOCOPY);
+           netconn_write(newconn, modbus_out_buf, answer_len, NETCONN_NOCOPY);
 
          }
          //Until the connection is closed
@@ -105,8 +100,6 @@ THD_FUNCTION(tcp_server, p) {
 
 void modbustcp_init(void)
 {
-  //Creating analog and discrete registers
-  modbus_register_create();
   // Setting the STM address
       lwipthread_opts_t opts;
       struct ip4_addr ip, gateway, netmask;
@@ -133,15 +126,13 @@ void modbustcp_init(void)
 void modbustcp_start(void)
 {
   // Let's start the server flow
-  chThdCreateStatic(wa_tcp_server, 4096, NORMALPRIO, tcp_server, NULL);
+  chThdCreateStatic(wa_tcp_server, 1024, NORMALPRIO, tcp_server, NULL);
 }
 
 int16_t modbustcp_go(uint8_t* data)
 {
-  int16_t tid, pid, address, count,len=0,value;
+  int16_t tid, pid, address, count,len=0;
   uint8_t func, uid;
-  current_analog=Reg_analog_1;
-  current_discrete=Reg_discrete_1;
   tid=modbustcp_get_tid(data);
   pid=modbustcp_get_pid(data);
   uid=modbustcp_get_uid(data);
@@ -152,79 +143,42 @@ int16_t modbustcp_go(uint8_t* data)
   {
     switch(func)
     {
-    case MB_Fun_Read_Analog_Input_Register:
+    case MB_FUN_READ_ANALOG_INPUT_REGISTER:
     {
-      while(current_analog!=NULL)
-      {
-        if(current_analog->address==address)
-        {
-          len=modbusTCP_Read_Analog_Input_Register(tid,pid,uid,func,count);
-          return len; 
-        }
-        else
-        {
-          current_analog=current_analog->next;
-        }
-      }
+      len=modbusTCP_Read_Analog_Input_Register(tid,pid,uid,func,count,address);
+      return len;
     }
     break;
-    case MB_Fun_Read_Analog_Output_Register:
+    case MB_FUN_READ_ANALOG_OUTPUT_REGISTER:
     {
-      while(current_analog!=NULL)
-      {
-        if(current_analog->address==address)
-        {
-          len=modbusTCP_Read_Analog_Output_Register(tid,pid,uid,func,count);
-          return len; 
-        }
-        else 
-          current_analog=current_analog->next;
-      }
+      len=modbusTCP_Read_Analog_Output_Register(tid,pid,uid,func,count,address);
+      return len;
     }
     break;
-    case MB_Fun_Write_Discrete_Register:
+    case MB_FUN_WRITE_DISCRETE_REGISTER:
     {
-      while(current_discrete!=NULL)
-      {
-        if(current_discrete->address==address)
-        {
-          current_discrete->value=modbustcp_get_boll_value(data);
-          len=modbusTCP_Write_Discrete_Register(tid,pid,uid,func,address,current_discrete->value);
-          return len; 
-        }
-        else 
-          current_discrete=current_discrete->next;
-      }
+      Discrete_Register[address]=modbustcp_get_boll_value(data);
+      len=modbusTCP_Write_Discrete_Register(tid,pid,uid,func,address,Discrete_Register[address]);
+      return len;
     }
     break;
-    case MB_Fun_Read_Discrete_Register:
+    case MB_FUN_READ_DISCRETE_OUTPUT_REGISTER:
     {
-      while(current_discrete!=NULL)
-      {
-        if(current_discrete->address==address)
-        {
-          len=modbusTCP_Read_Discrete_Register(tid,pid,uid,func,count);
-          return len; 
-        }
-        else 
-          current_discrete=current_discrete->next;
-      }
+      len=modbusTCP_Read_Discrete_Output_Register(tid,pid,uid,func,count,address);
+      return len;
     }
     break;
-    case MB_Fun_Write_Analog_Register:
+    case MB_FUN_READ_DISCRETE_INPUT_REGISTER:
     {
-      while(current_analog!=NULL)
-      { 
-        if(current_analog->address==address)
-        {
-          value=modbustcp_get_value(data);
-          current_analog->value=value;
-          len=modbusTCP_Write_Analog_Register(tid,pid,uid,func, address,value);
-          return len; 
-        }
-        else 
-          current_analog=current_analog->next;
-      }
+      len=modbusTCP_Read_Discrete_Input_Register(tid,pid,uid,func,count,address);
+      return len;
+    }
+    break;
+    case MB_FUN_WRITE_ANALOG_REGISTER:
+    {
+      Analog_Register[address]=modbustcp_get_value(data);
+      len=modbusTCP_Write_Analog_Register(tid,pid,uid,func, address,Analog_Register[address]);
+      return len;
     }
     break;
     }

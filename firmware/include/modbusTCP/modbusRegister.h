@@ -4,26 +4,13 @@
 #include "ch.h"
 #include "hal.h"
 
-typedef struct analog_node
-{
-  struct analog_node* next;
-  int16_t value;
-  uint8_t address;
-}
-analog_node_t;
 
-typedef struct discrete_node
-{
-  struct discrete_node* next;
-  uint8_t value;
-  uint8_t address;
-}
-discrete_node_t;
+#define REGISTER_LEN 100
 
 
-void modbus_analog_register_create(void);
-void modbus_discrete_register_create(void);
-void modbus_register_create(void);
+extern int16_t Analog_Register[REGISTER_LEN];
+extern uint8_t Discrete_Register[REGISTER_LEN];
+
 
 
 #endif /* MODBUSREGISTER */
