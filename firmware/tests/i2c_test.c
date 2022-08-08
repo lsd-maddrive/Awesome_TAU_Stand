@@ -1,9 +1,5 @@
-#include "common.h"
 #include "lld_i2c.h"
-#include <hal.h>
-#include <ch.h>
 #include <terminal_write.h>
-
 
 
 void test_i2c(void){

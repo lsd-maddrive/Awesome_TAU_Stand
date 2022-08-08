@@ -1,3 +1,6 @@
+#include <lld_i2c.h>
+#include <math.h>
+
 #ifndef INCLUDE_SENSOR_M3421_H_
 #define INCLUDE_SENSOR_M3421_H_
 

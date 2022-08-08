@@ -1,12 +1,19 @@
 # C source files
 PROJECT_CSRC 	= src/main.c \
 				  src/lld_i2c.c \
-				  tests/i2c_test.c \
-				  tests/sensor_m3421_test.c \
 				  src/sensor_m3421.c \
 				  src/terminal_write.c \
-				  tests/current_sensor_test.c \
 				  src/current_sensor.c \
+				  srs/can_lld.c \
+				  srs/encoder.c \
+				  tests/i2c_test.c \
+				  tests/sensor_m3421_test.c \
+				  tests/current_sensor_test.c \
+				  tests/can_test.c \
+				  tests/can_test_2.c \
+				  
+				  
+				  
 				  
 				  
 				  

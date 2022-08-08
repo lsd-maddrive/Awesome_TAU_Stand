@@ -1,14 +1,9 @@
-#include <common.h>
-#include <lld_i2c.h>
 #include <sensor_m3421.h>
-#include <string.h>
-#include <math.h>
-#include <terminal_write.h>
 
 static float volts; // The result of voltage measurments in VOLTS.
 
 uint8_t config = {0}; // Contains the specified sensor configuration
-uint8_t rxbuf[3] = {0}; // It stores the read data from the ADC.
+static uint8_t rxbuf[3] = {0}; // It stores the read data from the ADC.
 uint8_t add = {0}; // It is needed to fill the array.
 int32_t val; // It is a sorted array of "rxbuf".
 uint8_t n; //Number of bits set in "res" (Sample Rate Selection/bit selection).
