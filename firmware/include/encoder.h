@@ -98,7 +98,7 @@ float getMultiTurnAngle(void);
  *
  *  @note   Characteristics: rotation speed, number of turns, angle of rotation, multi-turn angle of rotation.
  */
-encoderParam* encoderGetStruct(void);
+encoderParam* getEncoderStruct(void);
 
 
 #endif /* INCLUDE_ENCODER_H_ */

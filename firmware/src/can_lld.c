@@ -43,7 +43,6 @@ void canSimpleInit(void){
 
   canStart(can1, &can_conf);
 
-//  canSTM32SetFilters(&CAND1,8,0,NULL);
 }
 
 /*
