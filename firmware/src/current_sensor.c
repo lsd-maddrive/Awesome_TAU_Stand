@@ -1,5 +1,7 @@
 #include "common.h"
 #include <sensor_m3421.h>
+#include "current_sensor.h"
+
 
 static float current; // Current value calculated from the voltage in AMPS.
 
