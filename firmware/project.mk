@@ -12,12 +12,14 @@ PROJECT_CSRC 	= src/main.c \
 				  src/modbusTCP/modbusGet.c \
 				  src/modbusTCP/modbusRegister.c \
 				  src/modbusTCP/modbusTCP.c 
+
 # C++ source files
 PROJECT_CPPSRC 	= 
 # Directories to search headers in
 PROJECT_INCDIR	= include \
                   tests \
                   include/modbusTCP 
+
 # Additional libraries
 PROJECT_LIBS	= -lm
 # Compiler options
