@@ -16,11 +16,12 @@
 #define CAN_TXBUF_DATA_LEN_4 4
 
 // Command FUNC.
-#define CAN_TXBUF_ANGLE_BYTE 0x01
+#define CAN_TXBUF_ANGLE_BYTE        0x01
+#define CAN_TXBUF_MODE              0x04
 #define CAN_TXBUF_SET_ZERO_POSITION 0x06
-#define CAN_TXBUF_TURNS_BYTE 0x09
-#define CAN_TXBUF_VELOCITY_BYTE 0x0A
-#define CAN_TXBUF_SET_SAMPLE_TIME 0x0B
+#define CAN_TXBUF_TURNS_BYTE        0x09
+#define CAN_TXBUF_VELOCITY_BYTE     0x0A
+#define CAN_TXBUF_SET_SAMPLE_TIME   0x0B
 
 // Data length.
 #define CAN_TXBUF_DATA_LEN_BYTE_5 0x05
@@ -40,7 +41,7 @@
 typedef struct
 {
     float Speed ; // Rotation speed in rpm
-    int32_t NumberOfTurns; // Number of turns (can be both positive and negative).
+    uint32_t NumberOfTurns; // Number of turns (can be both positive and negative).
     float Angle; // Angle of rotation witin one turn (in range from 0 to 360 degrees).
     float MultiTurnAngle; // Angle of rotation (greater or less than 0 degrees).
 } encoderParam;

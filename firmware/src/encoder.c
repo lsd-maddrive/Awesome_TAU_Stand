@@ -28,9 +28,10 @@ void encoderVelocity(void){
   canSimpleWrite(&txbuf); // Writes configuration.
   // If the answer came, it will convert the data into the necessary ones.
   if(canSimpleRead(&rxbuf) ==MSG_OK){
-    encoder.Speed = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
-    encoder.Speed = encoder.Speed * COEF_VELOCITY;
+    encoder.Speed = (float)(rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3]) * COEF_VELOCITY;
+//    encoder.Speed = encoder.Speed * COEF_VELOCITY;
   }
+  else palToggleLine(LINE_LED1);
 }
 
 /*
@@ -47,6 +48,7 @@ void encoderTurns(void){
   if(canSimpleRead(&rxbuf) ==MSG_OK){
     encoder.NumberOfTurns = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
   }
+  else palToggleLine(LINE_LED1);
 }
 
 /*
@@ -67,6 +69,7 @@ void encoderAngle(void){
     encoder.Angle = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
     encoder.Angle = encoder.Angle * COEF_ANGLE;
   }
+  else palToggleLine(LINE_LED1);
 }
 
 /*
@@ -100,9 +103,9 @@ static THD_FUNCTION(encoderThread, arg)
     systime_t time = chVTGetSystemTime();
     while( true ){
       encoderVelocity(); // Measures encoder rotation speed.
-      encoderTurns(); // Measures the number of turns.
+//      encoderTurns(); // Measures the number of turns.
       encoderAngle(); // Measures the rotation angle within one turn.
-      encoderMultiAngle(); // Measures the multi-turn rotation angle.
+//      encoderMultiAngle(); // Measures the multi-turn rotation angle.
 
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ENCODER_DATA_RATE ) );
     }
@@ -137,6 +140,14 @@ void encoderInit(void){
   txbuf.data8[1] = CAN_TXBUF_DEVICE_ID;
   txbuf.data8[2] = CAN_TXBUF_SET_ZERO_POSITION;
   txbuf.data8[3] = CAN_TXBUF_ZERO_BYTE;
+  canSimpleWrite(&txbuf);
+
+  // Sets the zero position of the encoder.
+  txbuf.DLC = CAN_TXBUF_DATA_LEN_4;
+  txbuf.data8[0] = CAN_TXBUF_DATA_LEN_BYTE_4;
+  txbuf.data8[1] = CAN_TXBUF_DEVICE_ID;
+  txbuf.data8[2] = CAN_TXBUF_MODE;
+  txbuf.data8[3] = 0x00;
   canSimpleWrite(&txbuf);
 
   // Starts another thread.
