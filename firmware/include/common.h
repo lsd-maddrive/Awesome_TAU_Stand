@@ -16,6 +16,7 @@
 #define CURRENT_SENSOR_TEST     3
 #define CAN_TEST                4
 #define CAN_TEST_2              5
+#define INTERRUPT               6
 
 // Selection of program to run
 #define PROGRAM_ROUTINE INTERAPTION_TEST
