@@ -16,7 +16,7 @@ void test_can(void){
     dbgPrintf("Angle = %.5f\r\n",getAngle());
     dbgPrintf("Multi turn angle = %.5f\r\n",getMultiTurnAngle());
 
-    chThdSleepMilliseconds(1000);
+    chThdSleepMilliseconds(100);
   }
 }
 

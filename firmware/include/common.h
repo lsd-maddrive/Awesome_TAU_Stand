@@ -9,13 +9,13 @@
 #include <tests.h>
 
 // List of all possible programs
-#define MAIN_ROUTINE 0
-#define I2C_TEST 1
-#define SENSOR_M3421_TEST 2
-#define CURRENT_SENSOR_TEST 3
-#define CAN_TEST 4
-#define CAN_TEST_2 5
-#define INTERAPTION_TEST 6
+
+#define MAIN_ROUTINE            0
+#define I2C_TEST                1
+#define SENSOR_M3421_TEST       2
+#define CURRENT_SENSOR_TEST     3
+#define CAN_TEST                4
+#define CAN_TEST_2              5
 
 // Selection of program to run
 #define PROGRAM_ROUTINE INTERAPTION_TEST
