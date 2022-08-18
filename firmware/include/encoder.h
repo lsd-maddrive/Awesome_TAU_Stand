@@ -22,6 +22,7 @@
 #define CAN_TXBUF_TURNS_BYTE        0x09
 #define CAN_TXBUF_VELOCITY_BYTE     0x0A
 #define CAN_TXBUF_SET_SAMPLE_TIME   0x0B
+#define CAN_TXBUF_MULTI_TURN_ANGLE  0x08
 
 // Data length.
 #define CAN_TXBUF_DATA_LEN_BYTE_5 0x05
@@ -40,11 +41,11 @@
  */
 typedef struct
 {
-    float Speed ; // Rotation speed in rpm
-    uint32_t NumberOfTurns; // Number of turns (can be both positive and negative).
-    float Angle; // Angle of rotation witin one turn (in range from 0 to 360 degrees).
-    float MultiTurnAngle; // Angle of rotation (greater or less than 0 degrees).
-} encoderParam;
+    float RotationalSpeed ; // Rotation speed in rpm
+    int32_t NumberOfTurns; // Number of turns (can be both positive and negative).
+    float AngleOfRotation; // Angle of rotation witin one turn (in range from 0 to 360 degrees).
+    int32_t MultiTurnAngleOfRotation; // Angle of rotation (greater or less than 0 degrees).
+} absoluteEncoderParam;
 
 /*
  *  @brief  Initializes the encoder and starts another thread to read characteristics from it.
@@ -52,14 +53,14 @@ typedef struct
  *  @note   Set encoder angular velocity sampling time (20 milliseconds).
  *  @note   Sets the zero position of the encoder.
  */
-void encoderInit(void);
+void absoluteEncoderInit(void);
 
 /*
  *  @brief  Stops can if it's enabled.
  *
  *  @note   Not verified.
  */
-void encoderUninit(void);
+void absoluteEncoderUninit(void);
 
 
 /*
@@ -67,7 +68,7 @@ void encoderUninit(void);
  *
  *  @param[out]  encoder.Speed  Encoder rotation speed in rpm.
  */
-float getVelocity(void);
+float getAbsoluteEncoderRotationalSpeed(void);
 
 /*
  *  @brief  Returns number of turns from the starting position.
@@ -76,21 +77,21 @@ float getVelocity(void);
  *                                      and negative.
  *
  */
-float getNumberOfTurns(void);
+float getAbsoluteEncoderNumberOfTurns(void);
 
 /*
  *  @brief  Returns the rotation angle of the encoder in degrees within one turn.
  *
  *  @param[out]  encoder.Angle  The rotation angle can be in the range from 0 to 360 degrees.
  */
-float getAngle(void);
+float getAbsoluteEncoderAngleOfRotation(void);
 
 /*
  *  @brief  Returns the rotation angle of the encoder in degrees.
  *
  *  @param[out]  encoder.Angle  The rotation angle can be greater or less than 0 degrees.
  */
-float getMultiTurnAngle(void);
+float getAbsoluteEncoderMultiTurnAngleOfRotation(void);
 
 /*
  *  @brief  Returns all characteristics from the encoder.
@@ -99,7 +100,7 @@ float getMultiTurnAngle(void);
  *
  *  @note   Characteristics: rotation speed, number of turns, angle of rotation, multi-turn angle of rotation.
  */
-encoderParam* getEncoderStruct(void);
+absoluteEncoderParam* getAbsoluteEncoderStruct(void);
 
 
 #endif /* INCLUDE_ENCODER_H_ */

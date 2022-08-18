@@ -10,10 +10,6 @@ static inline void testRoutines(void) {
     test_current_sensor();
 #elif(PROGRAM_ROUTINE == CAN_TEST)
     test_can();
-#elif(PROGRAM_ROUTINE == CAN_TEST_2)
-    test();
-#elif(PROGRAM_ROUTINE == INTERAPTION_TEST)
-    test_interaption();
 #endif
 }
 

@@ -5,16 +5,16 @@
 void test_can(void){
   halInit();
   chSysInit();
-  encoderInit();
+  absoluteEncoderInit();
   debugStreamInit();
   dbgPrintf("Start\r\n");
 
   while(true){
 
-    dbgPrintf("Speed = %.5f\r\n",getVelocity());
-    dbgPrintf("Number of turns = %d\r\n",getNumberOfTurns());
-    dbgPrintf("Angle = %.5f\r\n",getAngle());
-    dbgPrintf("Multi turn angle = %.5f\r\n",getMultiTurnAngle());
+    dbgPrintf("Speed = %.5f\r\n",getAbsoluteEncoderRotationalSpeed());
+    dbgPrintf("Number of turns = %d\r\n",getAbsoluteEncoderNumberOfTurns());
+    dbgPrintf("Angle = %.5f\r\n",getAbsoluteEncoderAngleOfRotation());
+    dbgPrintf("Multi turn angle = %.5f\r\n",getAbsoluteEncoderMultiTurnAngleOfRotation());
 
     chThdSleepMilliseconds(100);
   }

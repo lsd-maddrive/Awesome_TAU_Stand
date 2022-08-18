@@ -15,10 +15,8 @@
 #define SENSOR_M3421_TEST       2
 #define CURRENT_SENSOR_TEST     3
 #define CAN_TEST                4
-#define CAN_TEST_2              5
-#define INTERRUPT               6
 
 // Selection of program to run
-#define PROGRAM_ROUTINE INTERAPTION_TEST
+#define PROGRAM_ROUTINE CAN_TEST
 
 #endif /* INCLUDE_COMMON_H_ */
