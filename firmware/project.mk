@@ -11,6 +11,7 @@ PROJECT_CSRC 	= src/main.c \
 				  tests/current_sensor_test.c \
 				  tests/can_test.c \
 				  tests/can_test_2.c \
+				  tests/interruption.c \
 				  
 				  
 				  
