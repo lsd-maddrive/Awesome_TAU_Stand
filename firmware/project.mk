@@ -11,7 +11,9 @@ PROJECT_CSRC 	= src/main.c \
 				  src/modbusTCP/modbusFunc.c \
 				  src/modbusTCP/modbusGet.c \
 				  src/modbusTCP/modbusRegister.c \
-				  src/modbusTCP/modbusTCP.c 
+				  src/modbusTCP/modbusTCP.c \
+				  tests/interrupt_test.c \
+				  
 
 # C++ source files
 PROJECT_CPPSRC 	= 

@@ -13,6 +13,8 @@ static inline void testRoutines(void) {
     test_current_sensor();
 #elif(PROGRAM_ROUTINE == MODBUSTCP_TEST)
     test_modbusTCP();
+#elif(PROGRAM_ROUTINE == INTERRUPT_WITH_TIMER_TEST)
+    test_interrupt();
 #endif
 }
 
