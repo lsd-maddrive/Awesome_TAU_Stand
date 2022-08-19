@@ -6,4 +6,13 @@
 <img src="picture/stm.png" width=700/>
 </p>
 
-[Документация](https://www.compel.ru/item-pdf/3bed7b58acf34d5531147ed2cb0db319/pn/st~nucleo-f767zi.pdf)
+<p align="center">
+<img src="picture/mounting_drawing2.png" width=700/>
+</p>
+
+<p align="center">
+<img src="picture/mounting_drawing.png" width=700/>
+</p>
+
+[Документация](https://www.st.com/resource/en/user_manual/dm00244518-stm32-nucleo144-boards-mb1137-stmicroelectronics.pdf)
+
