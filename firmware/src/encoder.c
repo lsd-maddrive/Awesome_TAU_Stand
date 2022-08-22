@@ -43,7 +43,7 @@ void absoluteEncoderRotationalSpeed(void){
  *  @notapi
  */
 void absoluteEncoderNumberOfTurns(void){
-  absoluteEncoder.NumberOfTurns = (int32_t)absoluteEncoder.MultiTurnAngleOfRotation/360;
+  absoluteEncoder.NumberOfTurns = (int32_t)(absoluteEncoder.MultiTurnAngleOfRotation / 360);
 }
 
 /*
@@ -80,8 +80,14 @@ void absoluteEncoderAngleOfRotation(void){
 void absoluteEncoderMultiAngleOfRotation(void){
   txbuf.data8[2] = CAN_TXBUF_MULTI_TURN_ANGLE; // Makes necessary configuration.
   canSimpleWrite(&txbuf); // Writes configuration.
+
   // If the answer came, it will convert the data into the necessary ones.
   if(canSimpleRead(&rxbuf) ==MSG_OK){
+    while(rxbuf.data8[2] != CAN_TXBUF_MULTI_TURN_ANGLE) {
+      canSimpleRead(&rxbuf);
+      palToggleLine(LINE_LED3);
+    }
+
     absoluteEncoder.MultiTurnAngleOfRotation = (int32_t)rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
   }
   else palToggleLine(LINE_LED1);
@@ -108,7 +114,7 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
       absoluteEncoderAngleOfRotation(); // Measures the rotation angle within one turn.
 
 
-      time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ENCODER_DATA_RATE ) );
+      time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
 }
 
@@ -181,7 +187,7 @@ float getAbsoluteEncoderRotationalSpeed(void){
  *                                      and negative.
  *
  */
-float getAbsoluteEncoderNumberOfTurns(void){
+int32_t getAbsoluteEncoderNumberOfTurns(void){
   return absoluteEncoder.NumberOfTurns;
 }
 
@@ -199,7 +205,7 @@ float getAbsoluteEncoderAngleOfRotation(void){
  *
  *  @param[out]  encoder.Angle  The rotation angle can be greater or less than 0 degrees.
  */
-float getAbsoluteEncoderMultiTurnAngleOfRotation(void){
+int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void){
   return absoluteEncoder.MultiTurnAngleOfRotation;
 }
 

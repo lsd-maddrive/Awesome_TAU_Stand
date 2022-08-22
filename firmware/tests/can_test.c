@@ -14,7 +14,7 @@ void test_can(void){
     dbgPrintf("Speed = %.5f\r\n",getAbsoluteEncoderRotationalSpeed());
     dbgPrintf("Number of turns = %d\r\n",getAbsoluteEncoderNumberOfTurns());
     dbgPrintf("Angle = %.5f\r\n",getAbsoluteEncoderAngleOfRotation());
-    dbgPrintf("Multi turn angle = %.5f\r\n",getAbsoluteEncoderMultiTurnAngleOfRotation());
+    dbgPrintf("Multi turn angle = %d\r\n",getAbsoluteEncoderMultiTurnAngleOfRotation());
 
     chThdSleepMilliseconds(100);
   }

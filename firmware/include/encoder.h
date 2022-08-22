@@ -77,7 +77,7 @@ float getAbsoluteEncoderRotationalSpeed(void);
  *                                      and negative.
  *
  */
-float getAbsoluteEncoderNumberOfTurns(void);
+int32_t getAbsoluteEncoderNumberOfTurns(void);
 
 /*
  *  @brief  Returns the rotation angle of the encoder in degrees within one turn.
@@ -91,7 +91,7 @@ float getAbsoluteEncoderAngleOfRotation(void);
  *
  *  @param[out]  encoder.Angle  The rotation angle can be greater or less than 0 degrees.
  */
-float getAbsoluteEncoderMultiTurnAngleOfRotation(void);
+int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void);
 
 /*
  *  @brief  Returns all characteristics from the encoder.
