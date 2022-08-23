@@ -1,8 +1,8 @@
-#include <lld_i2c.h>
-#include <math.h>
-
 #ifndef INCLUDE_SENSOR_M3421_H_
 #define INCLUDE_SENSOR_M3421_H_
+
+#include <lld_i2c.h>
+#include <math.h>
 
 #define SENSOR_M3421_ADDR 0b1101000 // Address of used ADC.
 

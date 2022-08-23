@@ -1,6 +1,35 @@
 #include <can_lld.h>
 
-// @brief   Setting the can configuration
+/* @brief   Setting the can configuration
+ *
+ * @note    mcr (master control register):
+ *          CAN_MCR_ABOM (Automatic bus-off management): This bit controls the behavior of the CAN hardware
+ *                                                       on leaving the Bus-Off state.
+ *
+ *          CAN_MCR_AWUM (Automatic wakeup mode): This bit controls the behavior of the CAN hardware on message
+ *                                                reception during Sleep mode.
+ *
+ *          CAN_MCR_TXFP (Transmit FIFO priority): This bit controls the transmission order when several mailboxes
+ *                                                 are pending at the same time.
+ *
+ * @note    btr (bit timing register):
+ *          CAN_BTR_SJW (Resynchronization jump width): These bits define the maximum number of time quanta the CAN
+ *                                                      hardware is allowed tolengthen or shorten a bit to perform
+ *                                                      the resynchronization.
+ *                                                      tRJW = tq x (SJW[1:0] + 1)
+ *
+ *          CAN_BTR_TS2 (Time segment 2): These bits define the number of time quanta in Time Segment 2
+ *                                        tBS2 = tq x (TS2[2:0] + 1)
+ *
+ *          CAN_BTR_TS1 (Time segment 1): These bits define the number of time quanta in Time Segment 1
+ *                                        tBS1 = tq x (TS1[3:0] + 1)
+ *
+ *          CAN_BTR_BRP (Baud rate prescaler): These bits define the length of a time quanta.
+ *                                             tq = (BRP[9:0]+1) x tPCLK
+ *
+ * @note    tq = (BRP[9:0] + 1) x tPCLK;
+ *          tPCLK = time period of the APB clock
+ */
 static const CANConfig can_conf = {
     .mcr = CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP,
     .btr = CAN_BTR_SJW(0) | CAN_BTR_TS2(2) | CAN_BTR_TS1(4) | CAN_BTR_BRP(11)

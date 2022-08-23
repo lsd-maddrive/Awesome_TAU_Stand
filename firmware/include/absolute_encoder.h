@@ -1,8 +1,8 @@
+#ifndef INCLUDE_ABSOLUTE_ENCODER_H_
+#define INCLUDE_ABSOLUTE_ENCODER_H_
+
 #include <common.h>
 #include <can_lld.h>
-
-#ifndef INCLUDE_ENCODER_H_
-#define INCLUDE_ENCODER_H_
 
 // Coefficients for counting measurements.
 #define COEF_VELOCITY 2.9296875 // Coef for encoder rotation speed. [60 / (1024 * 20 * 0.001)]
@@ -18,6 +18,7 @@
 // Command FUNC.
 #define CAN_TXBUF_ANGLE_BYTE        0x01
 #define CAN_TXBUF_MODE              0x04
+#define CAN_TXBUF_QUERY_MODE        0x00
 #define CAN_TXBUF_SET_ZERO_POSITION 0x06
 #define CAN_TXBUF_TURNS_BYTE        0x09
 #define CAN_TXBUF_VELOCITY_BYTE     0x0A
@@ -103,4 +104,5 @@ int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void);
 absoluteEncoderParam* getAbsoluteEncoderStruct(void);
 
 
-#endif /* INCLUDE_ENCODER_H_ */
+
+#endif /* INCLUDE_ABSOLUTE_ENCODER_H_ */

@@ -1,4 +1,4 @@
-#include <encoder.h>
+#include <absolute_encoder.h>
 
 
 static CANRxFrame rxbuf; // The result of reading from the device.
@@ -11,7 +11,7 @@ static CANTxFrame txbuf; // the transferred configuration.
  */
 static absoluteEncoderParam absoluteEncoder = {
   .RotationalSpeed = 0.0 , // Rotation speed in rpm
-  .NumberOfTurns = 0.0 , // Number of turns (can be both positive and negative).
+  .NumberOfTurns = 0 , // Number of turns (can be both positive and negative).
   .AngleOfRotation = 0.0 , // Angle of rotation witin one turn (in range from 0 to 360 degrees).
   .MultiTurnAngleOfRotation = 0.0 // Angle of rotation (greater or less than 0 degrees).
 };
@@ -23,16 +23,17 @@ static absoluteEncoderParam absoluteEncoder = {
  *
  *  @notapi
  */
-void absoluteEncoderRotationalSpeed(void){
+void absolute_encoder_read_rotational_speed(void){
   txbuf.data8[2] = CAN_TXBUF_VELOCITY_BYTE; // Makes necessary configuration.
-  canSimpleWrite(&txbuf); // Writes configuration.
-  // If the answer came, it will convert the data into the necessary ones.
-  if(canSimpleRead(&rxbuf) ==MSG_OK){
-    absoluteEncoder.RotationalSpeed = (float)(rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3]) * COEF_VELOCITY;
-    if (absoluteEncoder.NumberOfTurns < 0)absoluteEncoder.RotationalSpeed = -absoluteEncoder.RotationalSpeed;//Take into account the sign.
-//    encoder.Speed = encoder.Speed * COEF_VELOCITY;
+  if (canSimpleWrite(&txbuf) == MSG_OK){; // Writes configuration.
+    // If the answer came, it will convert the data into the necessary ones.
+    if(canSimpleRead(&rxbuf) ==MSG_OK){
+      absoluteEncoder.RotationalSpeed = (float)(rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3]) * COEF_VELOCITY;
+      if (absoluteEncoder.NumberOfTurns < 0)absoluteEncoder.RotationalSpeed = -absoluteEncoder.RotationalSpeed;//Take into account the sign.
+  //    encoder.Speed = encoder.Speed * COEF_VELOCITY;
+    }
+    else palToggleLine(LINE_LED1);
   }
-  else palToggleLine(LINE_LED1);
 }
 
 /*
@@ -42,8 +43,15 @@ void absoluteEncoderRotationalSpeed(void){
  *
  *  @notapi
  */
-void absoluteEncoderNumberOfTurns(void){
-  absoluteEncoder.NumberOfTurns = (int32_t)(absoluteEncoder.MultiTurnAngleOfRotation / 360);
+void absolute_encoder_read_number_of_turns(void){
+  txbuf.data8[2] = CAN_TXBUF_TURNS_BYTE; // Makes necessary configuration.
+  if (canSimpleWrite(&txbuf) == MSG_OK){; // Writes configuration.
+    // If the answer came, it will convert the data into the necessary ones.
+    if(canSimpleRead(&rxbuf) ==MSG_OK){
+      absoluteEncoder.NumberOfTurns = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
+    }
+    else palToggleLine(LINE_LED1);
+  }
 }
 
 /*
@@ -56,15 +64,16 @@ void absoluteEncoderNumberOfTurns(void){
  *
  *  @notapi
  */
-void absoluteEncoderAngleOfRotation(void){
+void absolute_encoder_read_angle_of_rotation(void){
   txbuf.data8[2] = CAN_TXBUF_ANGLE_BYTE; // Makes necessary configuration.
-  canSimpleWrite(&txbuf); // Writes configuration.
-  // If the answer came, it will convert the data into the necessary ones.
-  if(canSimpleRead(&rxbuf) ==MSG_OK){
-    absoluteEncoder.AngleOfRotation = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
-    absoluteEncoder.AngleOfRotation = absoluteEncoder.AngleOfRotation * COEF_ANGLE;
+  if (canSimpleWrite(&txbuf) == MSG_OK){; // Writes configuration.
+    // If the answer came, it will convert the data into the necessary ones.
+    if(canSimpleRead(&rxbuf) ==MSG_OK){
+      absoluteEncoder.AngleOfRotation = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
+      absoluteEncoder.AngleOfRotation = absoluteEncoder.AngleOfRotation * COEF_ANGLE;
+    }
+    else palToggleLine(LINE_LED1);
   }
-  else palToggleLine(LINE_LED1);
 }
 
 /*
@@ -77,20 +86,9 @@ void absoluteEncoderAngleOfRotation(void){
  *
  *  @notapi
  */
-void absoluteEncoderMultiAngleOfRotation(void){
-  txbuf.data8[2] = CAN_TXBUF_MULTI_TURN_ANGLE; // Makes necessary configuration.
-  canSimpleWrite(&txbuf); // Writes configuration.
-
-  // If the answer came, it will convert the data into the necessary ones.
-  if(canSimpleRead(&rxbuf) ==MSG_OK){
-    while(rxbuf.data8[2] != CAN_TXBUF_MULTI_TURN_ANGLE) {
-      canSimpleRead(&rxbuf);
-      palToggleLine(LINE_LED3);
-    }
-
-    absoluteEncoder.MultiTurnAngleOfRotation = (int32_t)rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
-  }
-  else palToggleLine(LINE_LED1);
+void absolute_encoder_calculate_multi_turn_angle_of_rotation(void){
+  if (absoluteEncoder.NumberOfTurns >= 0) absoluteEncoder.MultiTurnAngleOfRotation = (absoluteEncoder.NumberOfTurns * 360) + absoluteEncoder.AngleOfRotation;
+  else absoluteEncoder.MultiTurnAngleOfRotation = 360*(absoluteEncoder.NumberOfTurns + 1) - (360 - absoluteEncoder.AngleOfRotation);
 }
 
 /*
@@ -108,10 +106,10 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
 
     systime_t time = chVTGetSystemTime();
     while( true ){
-      absoluteEncoderMultiAngleOfRotation(); // Measures the multi-turn rotation angle.
-      absoluteEncoderNumberOfTurns(); // Measures the number of turns.
-      absoluteEncoderRotationalSpeed(); // Measures encoder rotation speed.
-      absoluteEncoderAngleOfRotation(); // Measures the rotation angle within one turn.
+      absolute_encoder_read_number_of_turns(); // Measures the number of turns.
+      absolute_encoder_read_rotational_speed(); // Measures encoder rotation speed.
+      absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
+      absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
 
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
@@ -149,12 +147,12 @@ void absoluteEncoderInit(void){
   txbuf.data8[3] = CAN_TXBUF_ZERO_BYTE;
   canSimpleWrite(&txbuf);
 
-  // Sets the zero position of the encoder.
+  // Sets the the encoder mode (query).
   txbuf.DLC = CAN_TXBUF_DATA_LEN_4;
   txbuf.data8[0] = CAN_TXBUF_DATA_LEN_BYTE_4;
   txbuf.data8[1] = CAN_TXBUF_DEVICE_ID;
   txbuf.data8[2] = CAN_TXBUF_MODE;
-  txbuf.data8[3] = 0x00;
+  txbuf.data8[3] = CAN_TXBUF_QUERY_MODE;
   canSimpleWrite(&txbuf);
 
   // Starts another thread.
@@ -219,7 +217,5 @@ int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void){
 absoluteEncoderParam* getAbsoluteEncoderStruct(void){
   return &absoluteEncoder;
 };
-
-
 
 

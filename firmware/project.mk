@@ -5,7 +5,7 @@ PROJECT_CSRC 	= src/main.c \
 				  src/terminal_write.c \
 				  src/current_sensor.c \
 				  srs/can_lld.c \
-				  srs/encoder.c \
+				  srs/absolute_encoder.c \
 				  tests/i2c_test.c \
 				  tests/sensor_m3421_test.c \
 				  tests/current_sensor_test.c \

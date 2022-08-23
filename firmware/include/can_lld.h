@@ -1,8 +1,7 @@
-#include <common.h>
-
-
 #ifndef INCLUDE_CAN_LLD_H_
 #define INCLUDE_CAN_LLD_H_
+
+#include <common.h>
 
 //Legs of the microcontroller (GPIOD 0 (RX) and GPIOD 1 (TX)) .
 #define CAN1_RX_PIN PAL_LINE(GPIOD, 0)
