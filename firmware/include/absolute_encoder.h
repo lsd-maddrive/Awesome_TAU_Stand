@@ -3,13 +3,15 @@
 
 #include <common.h>
 #include <can_lld.h>
+#include <stdlib.h>
 
 // Coefficients for counting measurements.
 #define COEF_VELOCITY 2.9296875 // Coef for encoder rotation speed. [60 / (1024 * 20 * 0.001)]
                                 // 20 * 0.001 is 20 milliseconds.
 #define COEF_ANGLE 0.3515625 // Coef for angle of rotation witin one turn. [360/1024]
+#define COEF_MULTI_TURN_ANGLE 0.3515625 //Coef for angle of rotation [360 / 1024]
 
-#define CAN_SID 1 // ???
+#define CAN_SID 1
 
 // Data length.
 #define CAN_TXBUF_DATA_LEN_5 5

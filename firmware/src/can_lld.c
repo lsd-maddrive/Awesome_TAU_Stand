@@ -29,6 +29,19 @@
  *
  * @note    tq = (BRP[9:0] + 1) x tPCLK;
  *          tPCLK = time period of the APB clock
+ *
+ * @note    CAN is tied to bus APB1. Its maximum frequency is 54 MHz.
+ *
+ * @note    Baud rate = 1 / (1 x tq + tBS1 + tBS2)
+ *          BRP = 11
+ *          TS1 = 4
+ *          TS2 = 2
+ *          tq = ((BRP[9:0] + 1) x tPCLK) = 12
+ *          tBS1 = tq x (TS1[3:0] + 1) = 5
+ *          tBS2 = tq x (TS2[2:0] + 1) = 3
+ *          Baud rate = 1 / (1 x tq + tBS1 + tBS2) = 1 / (tq x (tBS1 + tBS2 + 1)) = 1 / (12 x (5 + 3 +1)) = 1 / 108
+ *          max freq = 54 MHz
+ *          freq = max freq * Baud rate  = 54 MHz / 108 = 500 kHz
  */
 static const CANConfig can_conf = {
     .mcr = CAN_MCR_ABOM | CAN_MCR_AWUM | CAN_MCR_TXFP,
