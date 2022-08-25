@@ -10,6 +10,8 @@
                                 // 20 * 0.001 is 20 milliseconds.
 #define COEF_ANGLE 0.3515625 // Coef for angle of rotation witin one turn. [360/1024]
 #define COEF_MULTI_TURN_ANGLE 0.3515625 //Coef for angle of rotation [360 / 1024]
+#define COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE 100 //Threshold value for multi-turn angle calculation type.
+
 
 #define CAN_SID 1
 

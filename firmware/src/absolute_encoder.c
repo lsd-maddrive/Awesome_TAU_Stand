@@ -114,7 +114,7 @@ void absolute_encoder_read_angle_of_rotation(void){
  *  @notapi
  */
 void absolute_encoder_calculate_multi_turn_angle_of_rotation(void){
-  if (abs(absoluteEncoder.NumberOfTurns) < 100){ // Reads data from the encoder.
+  if (abs(absoluteEncoder.NumberOfTurns) < COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE){ // Reads data from the encoder.
     txbuf.data8[2] = CAN_TXBUF_MULTI_TURN_ANGLE; // Makes necessary configuration.
     do{
       canSimpleWrite(&txbuf); // Writes configuration.
@@ -130,8 +130,8 @@ void absolute_encoder_calculate_multi_turn_angle_of_rotation(void){
     absoluteEncoder.MultiTurnAngleOfRotation = absoluteEncoder.MultiTurnAngleOfRotation * COEF_MULTI_TURN_ANGLE;
   }
   //Counts the angle of rotation, taking into account the sign in order to avoid overflow.
-  else if(absoluteEncoder.NumberOfTurns >= 100)absoluteEncoder.MultiTurnAngleOfRotation = (absoluteEncoder.NumberOfTurns * 360) + absoluteEncoder.AngleOfRotation;
-  else absoluteEncoder.MultiTurnAngleOfRotation = 360 * absoluteEncoder.NumberOfTurns - (360 - absoluteEncoder.AngleOfRotation);
+  else if(absoluteEncoder.NumberOfTurns >= COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE)absoluteEncoder.MultiTurnAngleOfRotation = (absoluteEncoder.NumberOfTurns * 360) + absoluteEncoder.AngleOfRotation;
+  else if(absoluteEncoder.NumberOfTurns <= -COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE)absoluteEncoder.MultiTurnAngleOfRotation = 360 * absoluteEncoder.NumberOfTurns - (360 - absoluteEncoder.AngleOfRotation);
 }
 
 
