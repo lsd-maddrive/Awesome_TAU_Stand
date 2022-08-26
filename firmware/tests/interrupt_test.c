@@ -3,43 +3,62 @@
 #include <terminal_write.h>
 
 
-uint16_t arg = 0;
-GPTDriver *timer1 = &GPTD1;
+float IncrementalEncoderRotationalSpeed = 0.0;
+uint16_t IncrementalEncoderNumberOfInterrupts = 0;
+GPTDriver *timer = &GPTD1;
 
-void interrupt(void* args){
-    args = args;
-    palToggleLine(LINE_LED3);
-    arg = arg + 1;
+#define COEF_INCREMENTAL_ENCODER_VELOCITY 0.5
+#define COEF_TIMER_CONFIG_FREQUENCY 50000 // Hz.
+
+void incremental_encoder_interrupt_count_velocity(void* args){
+    (void)args;
+    IncrementalEncoderRotationalSpeed = IncrementalEncoderNumberOfInterrupts * COEF_INCREMENTAL_ENCODER_VELOCITY;
 }
 
 
-void cbgptfun1(GPTDriver *gptp)
+void incremental_encoder_timer_print_result(GPTDriver *gptp)
 {
     (void)gptp;
-    dbgPrintf("%d\r\n", arg);
-    arg = 0;
+    dbgPrintf("%.5f\r\n", IncrementalEncoderRotationalSpeed);
+    IncrementalEncoderNumberOfInterrupts = 0;
 }
 
-GPTConfig gpt1_conf = {
-    .frequency = 50000,
-    .callback = cbgptfun1,
+GPTConfig incremental_encoder_timer_config = {
+    .frequency = COEF_TIMER_CONFIG_FREQUENCY,
+    .callback = incremental_encoder_timer_print_result,
     .cr2 = 0,
     .dier = 0
 };
+
+void incremental_encoder_timer_start(void){
+  gptStart(timer, &incremental_encoder_timer_config);
+  gptStartContinuous(timer, 50000);
+}
+
+void IncrementalEncoderInterruptInit(void){
+  incremental_encoder_timer_start();
+  palSetPadMode(GPIOC, GPIOC_BUTTON, PAL_MODE_INPUT_PULLDOWN);
+  palEnablePadEvent(GPIOC, GPIOC_BUTTON, PAL_EVENT_MODE_RISING_EDGE);
+  palSetPadCallback(GPIOC, GPIOC_BUTTON, incremental_encoder_interrupt_count_velocity, NULL);
+}
+
+void incremental_encoder_timer_stop(void){
+  gptStopTimer(timer);
+  gptStop(timer);
+}
+
+void IncrementalEncoderInterruptUninit(void){
+  incremental_encoder_timer_stop();
+  palDisablePadEvent(GPIOC, GPIOC_BUTTON);
+  palSetPadMode(GPIOC, GPIOC_BUTTON, PAL_MODE_UNCONNECTED);
+}
 
 void test_interrupt(void) {
     halInit();
     chSysInit();
     debugStreamInit();
     dbgPrintf("start\r\n");
-    gptStart(timer1, &gpt1_conf);
-    gptStartContinuous(timer1, 50000);
-
-    palSetLineMode(LINE_LED3, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetPadMode(GPIOC, GPIOC_BUTTON, PAL_MODE_INPUT_PULLDOWN);
-    palEnablePadEvent(GPIOC, GPIOC_BUTTON, PAL_EVENT_MODE_RISING_EDGE);
-    palSetPadCallback(GPIOC, GPIOC_BUTTON, interrupt, NULL);
-
+    IncrementalEncoderInterruptInit();
     while (true) {
         chThdSleepMilliseconds(1000);
     }
