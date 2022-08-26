@@ -11,7 +11,8 @@
 #define COEF_ANGLE 0.3515625 // Coef for angle of rotation witin one turn. [360/1024]
 #define COEF_MULTI_TURN_ANGLE 0.3515625 //Coef for angle of rotation [360 / 1024]
 #define COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE 100 //Threshold value for multi-turn angle calculation type.
-
+#define CLOCKWISE_ROTATION 1 // Just for determining the direction of rotation.
+#define COUNTERCLOCKWISE_ROTATION -1 // Just for determining the direction of rotation.
 
 #define CAN_SID 1
 
@@ -50,6 +51,8 @@ typedef struct
     int32_t NumberOfTurns; // Number of turns (can be both positive and negative).
     float AngleOfRotation; // Angle of rotation witin one turn (in range from 0 to 360 degrees).
     int32_t MultiTurnAngleOfRotation; // Angle of rotation (greater or less than 0 degrees).
+    int32_t PreviousNumberOfTurns; // Number of turns in the previous count (Just for determining the direction of rotation).
+    float PreviousAngleOfRotation; // Angle of rotation witin one turn in the previous count (Just for determining the direction of rotation).
 } absoluteEncoderParam;
 
 /*

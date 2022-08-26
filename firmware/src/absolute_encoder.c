@@ -14,7 +14,9 @@ static absoluteEncoderParam absoluteEncoder = {
   .RotationalSpeed = 0.0 , // Rotation speed in rpm
   .NumberOfTurns = 0 , // Number of turns (can be both positive and negative).
   .AngleOfRotation = 0.0 , // Angle of rotation witin one turn (in range from 0 to 360 degrees).
-  .MultiTurnAngleOfRotation = 0.0 // Angle of rotation (greater or less than 0 degrees).
+  .MultiTurnAngleOfRotation = 0.0 , // Angle of rotation (greater or less than 0 degrees).
+  .PreviousNumberOfTurns = 0 , // Number of turns in the previous count (Just for determining the direction of rotation).
+  .PreviousAngleOfRotation = 0 // Angle of rotation witin one turn in the previous count (Just for determining the direction of rotation).
 };
 
 /*
@@ -40,10 +42,11 @@ void absolute_encoder_flush(void){
  */
 void absolute_encoder_read_rotational_speed(void){
   txbuf.data8[2] = CAN_TXBUF_VELOCITY_BYTE; // Makes necessary configuration.
+  uint8_t sign; // Direction of rotation.
   do{
     canSimpleWrite(&txbuf); // Writes configuration.
     // If the answer came, it will convert the data into the necessary ones.
-    if(canSimpleRead(&rxbuf) ==MSG_OK){
+    if(canSimpleRead(&rxbuf) == MSG_OK){
       // Checking for synchronization of sent and received data.
       if(rxbuf.data8[2] != CAN_TXBUF_VELOCITY_BYTE) absolute_encoder_flush(); // Synchronizes information.
       else break;
@@ -51,7 +54,17 @@ void absolute_encoder_read_rotational_speed(void){
     else palToggleLine(LINE_LED1);
   }while(1);
   absoluteEncoder.RotationalSpeed = (float)(rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3]) * COEF_VELOCITY;
-  if (absoluteEncoder.NumberOfTurns < 0)absoluteEncoder.RotationalSpeed = -absoluteEncoder.RotationalSpeed;//Take into account the sign.
+  // Take into account direction of rotation.
+  if (absoluteEncoder.NumberOfTurns == absoluteEncoder.PreviousNumberOfTurns){
+    if (absoluteEncoder.AngleOfRotation - absoluteEncoder.PreviousAngleOfRotation >= 0) sign = CLOCKWISE_ROTATION;
+    else sign = COUNTERCLOCKWISE_ROTATION;
+  }
+  else if (absoluteEncoder.NumberOfTurns - absoluteEncoder.PreviousNumberOfTurns > 0) sign = CLOCKWISE_ROTATION;
+  else if (absoluteEncoder.NumberOfTurns - absoluteEncoder.PreviousNumberOfTurns < 0) sign = COUNTERCLOCKWISE_ROTATION;
+
+  absoluteEncoder.RotationalSpeed = absoluteEncoder.RotationalSpeed * sign;
+  absoluteEncoder.PreviousNumberOfTurns = absoluteEncoder.NumberOfTurns;
+  absoluteEncoder.PreviousAngleOfRotation = absoluteEncoder.AngleOfRotation;
 }
 
 /*
