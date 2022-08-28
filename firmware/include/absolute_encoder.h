@@ -4,6 +4,7 @@
 #include <common.h>
 #include <can_lld.h>
 #include <stdlib.h>
+#include <terminal_write.h>
 
 // Coefficients for counting measurements.
 #define COEF_VELOCITY 2.9296875 // Coef for encoder rotation speed. [60 / (1024 * 20 * 0.001)]

@@ -168,7 +168,7 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
       absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
-
+      if (chThdShouldTerminateX() == TRUE) break;
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
 }
@@ -223,6 +223,9 @@ void absoluteEncoderInit(void){
  *  @note   Not verified.
  */
 void absoluteEncoderUninit(void){
+  chThdTerminate((thread_t *)absoluteEncoderThread);
+  if (chThdWait((thread_t *)absoluteEncoderThread) == MSG_OK) dbgPrintf("Absolute encoder thread has been stopped");
+  else dbgPrintf("Absolute encoder thread has NOT been stopped");
   canSimpleUninit();
 }
 
