@@ -69,7 +69,7 @@ void absoluteEncoderInit(void);
  *
  *  @note   Not verified.
  */
-void absoluteEncoderUninit(void);
+msg_t absoluteEncoderUninit(void);
 
 
 /*

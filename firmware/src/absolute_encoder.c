@@ -222,10 +222,9 @@ void absoluteEncoderInit(void){
  *
  *  @note   Not verified.
  */
-void absoluteEncoderUninit(void){
+msg_t absoluteEncoderUninit(void){
   chThdTerminate((thread_t *)absoluteEncoderThread);
-  if (chThdWait((thread_t *)absoluteEncoderThread) == MSG_OK) dbgPrintf("Absolute encoder thread has been stopped");
-  else dbgPrintf("Absolute encoder thread has NOT been stopped");
+  return chThdWait((thread_t *)absoluteEncoderThread);
   canSimpleUninit();
 }
 
