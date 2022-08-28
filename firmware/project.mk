@@ -13,6 +13,8 @@ PROJECT_CSRC 	= src/main.c \
 				  src/modbusTCP/modbusRegister.c \
 				  src/modbusTCP/modbusTCP.c \
 				  tests/interrupt_test.c \
+				  src/incremental_encoder.c \
+				  
 				  
 
 # C++ source files
