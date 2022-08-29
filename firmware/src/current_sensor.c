@@ -1,12 +1,9 @@
-#include "common.h"
-#include <sensor_m3421.h>
-#include "current_sensor.h"
-
+#include <current_sensor.h>
 
 static float current; // Current value calculated from the voltage in AMPS.
 
 /*
- *  @brief  Starts the second thread to read the voltage from the sensor and
+ *  @brief  Starts another thread to read the voltage from the sensor and
  *          converts it to a current value.
  *
  *  @notapi
@@ -25,7 +22,7 @@ static THD_FUNCTION(currentSensor, arg)
 }
 
 /*
- *  @brief  Initializes the current sensor and starts a second thread to read
+ *  @brief  Initializes the current sensor and starts another thread to read
  *          the current value from it.
  *
  *  @note   Used m3421 ADC.

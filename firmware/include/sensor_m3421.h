@@ -1,6 +1,9 @@
 #ifndef INCLUDE_SENSOR_M3421_H_
 #define INCLUDE_SENSOR_M3421_H_
 
+#include <lld_i2c.h>
+#include <math.h>
+
 #define SENSOR_M3421_ADDR 0b1101000 // Address of used ADC.
 
 #define ADC_DATA_RATE 20 // At 14 bits data rate is 60 PSP. 1/60 = 0.01666.

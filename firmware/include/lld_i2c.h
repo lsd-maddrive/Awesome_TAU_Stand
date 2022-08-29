@@ -1,7 +1,7 @@
-
 #ifndef INCLUDE_LLD_I2C_H_
 #define INCLUDE_LLD_I2C_H_
-#include "hal.h"
+
+#include <common.h>
 
 /*
  * @brief   Launches I2C and sets microcontroller legs.
