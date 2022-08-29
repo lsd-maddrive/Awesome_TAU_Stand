@@ -1,7 +1,7 @@
 #include <incremental_encoder.h>
 
 float IncrementalEncoderRotationalSpeed = 0.0; // Rotational speed that we calculate from the number of interrupts and coefficient which we ask.
-int16_t IncrementalEncoderNumberOfInterrupts = 0; // the number of interrupts that we get from the incremental encoder per period.
+int16_t IncrementalEncoderNumberOfInterrupts = 0; // The number of interrupts that we get from the incremental encoder per period.
 GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
 
 /*
@@ -11,7 +11,8 @@ GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
  */
 void incremental_encoder_interrupt_count_interrupts(void* args){
     (void)args; // Just to avoid warnings.
-    IncrementalEncoderNumberOfInterrupts = IncrementalEncoderNumberOfInterrupts +1;
+    if (palReadPad(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B) == 1) IncrementalEncoderNumberOfInterrupts += 1;
+    else IncrementalEncoderNumberOfInterrupts -= 1;
 }
 
 /*
@@ -54,7 +55,7 @@ GPTConfig incremental_encoder_timer_config = {
  */
 void incremental_encoder_timer_start(void){
   gptStart(timer, &incremental_encoder_timer_config);
-  gptStartContinuous(timer, TIMER_CONFIG_FREQUENCY * TIMER_OUTPUT_PERIOD);
+  gptStartContinuous(timer, TIMER_CONFIG_FREQUENCY * TIMER_PERIOD_OF_INCREMENTAL_ENCODER);
 }
 
 /*
@@ -64,9 +65,11 @@ void incremental_encoder_timer_start(void){
  */
 void IncrementalEncoderInterruptInit(void){
   incremental_encoder_timer_start();
-  palSetPadMode(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, INCREMENTAL_ENCODER_INTERRUPT_PAL_INPUT_MODE);
-  palEnablePadEvent(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, INCREMENTAL_ENCODER_INTERRUPT_PAL_EVENT_MODE);
-  palSetPadCallback(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, incremental_encoder_interrupt_count_interrupts, NULL);
+  palSetPadMode(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, INCREMENTAL_ENCODER_INPUT_MODE_A);
+  palEnablePadEvent(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, PAL_EVENT_MODE_RISING_EDGE);
+  palSetPadCallback(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, incremental_encoder_interrupt_count_interrupts, NULL);
+
+  palSetPadMode(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B, INCREMENTAL_ENCODER_INPUT_MODE_B);
 }
 
 /*
@@ -90,6 +93,8 @@ void incremental_encoder_timer_stop(void){
  */
 void IncrementalEncoderInterruptUninit(void){
   incremental_encoder_timer_stop();
-  palDisablePadEvent(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD);
-  palSetPadMode(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, PAL_MODE_UNCONNECTED);
+  palDisablePadEvent(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A);
+  palSetPadMode(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, PAL_MODE_UNCONNECTED);
+
+  palSetPadMode(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B, PAL_MODE_UNCONNECTED);
 }
