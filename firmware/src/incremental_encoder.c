@@ -1,8 +1,8 @@
 #include <incremental_encoder.h>
 
-float IncrementalEncoderRotationalSpeed = 0.0;
-uint16_t IncrementalEncoderNumberOfInterrupts = 0;
-GPTDriver *timer = &GPTD1;
+float IncrementalEncoderRotationalSpeed = 0.0; // Rotational speed that we calculate from the number of interrupts and coefficient which we ask.
+uint16_t IncrementalEncoderNumberOfInterrupts = 0; // the number of interrupts that we get from the incremental encoder per period.
+GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
 
 /*
  *  @brief  Count number of interrupts from the incremental encoder per period.
@@ -58,9 +58,8 @@ void incremental_encoder_timer_start(void){
 }
 
 /*
- *  @brief  Starts timer and initialize interrupts.
+ *  @brief  Starts the timer and initializes interrupts.
  *
- *  @note
  *  @note   GPTD1 is used.
  */
 void IncrementalEncoderInterruptInit(void){
@@ -70,11 +69,25 @@ void IncrementalEncoderInterruptInit(void){
   palSetPadCallback(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, incremental_encoder_interrupt_count_interrupts, NULL);
 }
 
+/*
+ *  @brief  Stops the timer running in continuous operation.
+ *
+ *  @note   GPTD1 is used.
+ *
+ *  @notapi
+ */
 void incremental_encoder_timer_stop(void){
   gptStopTimer(timer);
   gptStop(timer);
 }
 
+/*
+ *  @brief  Stops the timer running and interrupts.
+ *
+ *  @note   GPTD1 is used.
+ *
+ *  @note   Setting a safe state for used leg.
+ */
 void IncrementalEncoderInterruptUninit(void){
   incremental_encoder_timer_stop();
   palDisablePadEvent(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD);
