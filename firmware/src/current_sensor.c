@@ -18,7 +18,7 @@ static THD_FUNCTION(currentSensorThread, arg)
     while( true ){
       current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
 
-      if (chThdShouldTerminateX() == TRUE) break;
+      if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
     }
 }
