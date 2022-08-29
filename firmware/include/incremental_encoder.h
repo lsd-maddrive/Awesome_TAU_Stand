@@ -9,7 +9,7 @@
 
 // Timer configuration.
 #define TIMER_CONFIG_FREQUENCY 50000 // Hz. –¿«–≈ÿ¿ﬁŸ¿ﬂ —œŒ—Œ¡ÕŒ—“‹
-#define TIMER_OUTPUT_PERIOD 1 // seconds
+#define TIMER_PERIOD_OF_INCREMENTAL_ENCODER 1 // seconds
 
 // Interrupts configuration.
 #define INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT GPIOC // All legs of the same port that will be used for interrupts.
