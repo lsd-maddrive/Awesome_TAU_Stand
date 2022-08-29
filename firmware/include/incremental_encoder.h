@@ -5,6 +5,7 @@
 #include <terminal_write.h>
 
 
+
 #define COEF_INCREMENTAL_ENCODER_VELOCITY 0.5
 #define TIMER_CONFIG_FREQUENCY 50000 // Hz. –¿«–≈ÿ¿ﬁŸ¿ﬂ —œŒ—Œ¡ÕŒ—“‹
 #define TIMER_OUTPUT_PERIOD 1 // second
