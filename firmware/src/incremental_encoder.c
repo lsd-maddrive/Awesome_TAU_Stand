@@ -5,19 +5,19 @@ uint16_t IncrementalEncoderNumberOfInterrupts = 0;
 GPTDriver *timer = &GPTD1;
 
 /*
- *  @brief  Count ticks from the incremental encoder per period.
+ *  @brief  Count number of interrupts from the incremental encoder per period.
  *
  *  @notapi
  */
-void incremental_encoder_interrupt_count_ticks(void* args){
+void incremental_encoder_interrupt_count_interrupts(void* args){
     (void)args; // Just to avoid warnings.
     IncrementalEncoderNumberOfInterrupts = IncrementalEncoderNumberOfInterrupts +1;
 }
 
 /*
- *  @brief  Count and print incremental encoder velocity.
+ *  @brief  Converts from the number of interrpts per period to the rotational velocity of incremental encoder and print it.
  *
- *  @note   Print into the terminal encoder speed
+ *  @note   Outputs the encoder velocity to the terminal.
  *
  *  @notapi
  */
@@ -32,7 +32,7 @@ void incremental_encoder_timer_print_result(GPTDriver *gptp)
 /*
  *  @brief Configuration of incremental encoder timer.
  *
- *  @note   frequency   Tick frequency in Hz. Depends on resolution of timer.
+ *  @note   frequency   Tick frequency in Hz. Affects the resolution of the timer.
  *          callback    A pointer to the interrupt function that will trigger when the timer ends.
  *
  */
@@ -44,9 +44,11 @@ GPTConfig incremental_encoder_timer_config = {
 };
 
 /*
- *  @brief  Starts timer with needed configuration.
+ *  @brief  Starts the timer with selected configuration and period of operation.
  *
  *  @note   Timer works in continuos mode.
+ *
+ *  @note   GPTD1 is used.
  *
  *  @notapi
  */
@@ -56,15 +58,16 @@ void incremental_encoder_timer_start(void){
 }
 
 /*
- *  @brief  Starts timer and initialize interrupt.
+ *  @brief  Starts timer and initialize interrupts.
  *
  *  @note
+ *  @note   GPTD1 is used.
  */
 void IncrementalEncoderInterruptInit(void){
   incremental_encoder_timer_start();
   palSetPadMode(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, INCREMENTAL_ENCODER_INTERRUPT_PAL_INPUT_MODE);
   palEnablePadEvent(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, INCREMENTAL_ENCODER_INTERRUPT_PAL_EVENT_MODE);
-  palSetPadCallback(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, incremental_encoder_interrupt_count_tiks, NULL);
+  palSetPadCallback(INCREMENTAL_ENCODER_INTERRUPT_PAL_PORT, INCREMENTAL_ENCODER_INTERRUPT_PAL_PAD, incremental_encoder_interrupt_count_interrupts, NULL);
 }
 
 void incremental_encoder_timer_stop(void){
