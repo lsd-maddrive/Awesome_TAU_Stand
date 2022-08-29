@@ -1,7 +1,7 @@
 #include <incremental_encoder.h>
 
 float IncrementalEncoderRotationalSpeed = 0.0; // Rotational speed that we calculate from the number of interrupts and coefficient which we ask.
-uint16_t IncrementalEncoderNumberOfInterrupts = 0; // the number of interrupts that we get from the incremental encoder per period.
+int16_t IncrementalEncoderNumberOfInterrupts = 0; // the number of interrupts that we get from the incremental encoder per period.
 GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
 
 /*
