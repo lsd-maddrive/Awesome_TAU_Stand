@@ -1,6 +1,6 @@
 #include <incremental_encoder.h>
 
-float IncrementalEncoderRotationalSpeed = 0.0; // Rotational speed that we calculate from the number of interrupts and coefficient which we ask.
+float IncrementalEncoderRotationalSpeed = 0.0; // Rotational speed that we calculate from the number of interrupts and coefficient which we ask. In rpm.
 int16_t IncrementalEncoderNumberOfInterrupts = 0; // The number of interrupts that we get from the incremental encoder per period.
 GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
 
@@ -9,9 +9,9 @@ GPTDriver *timer = &GPTD1; // // Write a pointer to the timer in a variable
  *
  *  @notapi
  */
-void incremental_encoder_interrupt_count_interrupts(void* args){
+void incremental_encoder_count(void* args){
     (void)args; // Just to avoid warnings.
-    if (palReadPad(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B) == 1) IncrementalEncoderNumberOfInterrupts += 1;
+    if (palReadLine(INCREMENTAL_ENCODER_PAD_B) == 1) IncrementalEncoderNumberOfInterrupts += 1;
     else IncrementalEncoderNumberOfInterrupts -= 1;
 }
 
@@ -22,11 +22,10 @@ void incremental_encoder_interrupt_count_interrupts(void* args){
  *
  *  @notapi
  */
-void incremental_encoder_timer_print_result(GPTDriver *gptp)
+void incremental_encoder_speed_calculate(GPTDriver *gptp)
 {
     (void)gptp; // Just to avoid warnings.
     IncrementalEncoderRotationalSpeed = IncrementalEncoderNumberOfInterrupts * COEF_INCREMENTAL_ENCODER_VELOCITY;
-    dbgPrintf("%.5f\r\n", IncrementalEncoderRotationalSpeed);
     IncrementalEncoderNumberOfInterrupts = 0; // Set zero value for new period.
 }
 
@@ -39,7 +38,7 @@ void incremental_encoder_timer_print_result(GPTDriver *gptp)
  */
 GPTConfig incremental_encoder_timer_config = {
     .frequency = TIMER_CONFIG_FREQUENCY,
-    .callback = incremental_encoder_timer_print_result,
+    .callback = incremental_encoder_speed_calculate,
     .cr2 = 0,
     .dier = 0
 };
@@ -65,11 +64,12 @@ void incremental_encoder_timer_start(void){
  */
 void IncrementalEncoderInterruptInit(void){
   incremental_encoder_timer_start();
-  palSetPadMode(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, INCREMENTAL_ENCODER_INPUT_MODE_A);
-  palEnablePadEvent(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, PAL_EVENT_MODE_RISING_EDGE);
-  palSetPadCallback(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, incremental_encoder_interrupt_count_interrupts, NULL);
+  palSetLineMode(INCREMENTAL_ENCODER_PAD_A, INCREMENTAL_ENCODER_INPUT_MODE_A);
+  palEnableLineEvent(INCREMENTAL_ENCODER_PAD_A, PAL_EVENT_MODE_RISING_EDGE);
+  palSetLineCallback(INCREMENTAL_ENCODER_PAD_A, incremental_encoder_count, NULL);
 
-  palSetPadMode(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B, INCREMENTAL_ENCODER_INPUT_MODE_B);
+  palSetLineMode(INCREMENTAL_ENCODER_PAD_B, INCREMENTAL_ENCODER_INPUT_MODE_B);
+  dbgPrintf("ok\r\n");
 }
 
 /*
@@ -94,7 +94,16 @@ void incremental_encoder_timer_stop(void){
 void IncrementalEncoderInterruptUninit(void){
   incremental_encoder_timer_stop();
   palDisablePadEvent(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A);
-  palSetPadMode(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A, PAL_MODE_UNCONNECTED);
+  palSetLineMode(INCREMENTAL_ENCODER_PAD_A, PAL_MODE_UNCONNECTED);
 
-  palSetPadMode(INCREMENTAL_ENCODER_PORT_B, INCREMENTAL_ENCODER_PAD_B, PAL_MODE_UNCONNECTED);
+  palSetLineMode(INCREMENTAL_ENCODER_PAD_B, PAL_MODE_UNCONNECTED);
+}
+
+/*
+ *  @brief  Returns rotation speed in rpm.
+ *
+ *  @param[out]  IncrementalEncoderRotationalSpeed  Encoder rotation speed in rpm.
+ */
+float getMotorSpeed(void){
+  return IncrementalEncoderRotationalSpeed;
 }
