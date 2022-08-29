@@ -12,6 +12,13 @@
 void i2cStartUp(void);
 
 /*
+ * @brief   Stops I2C if it's running.
+ *
+ * @note    I2c1 is used.
+ */
+void i2cSimpleStop(void);
+
+/*
  * @ brief  Writes the needed information to the device.
  *
  * @ note   Uses standard i2c function.
