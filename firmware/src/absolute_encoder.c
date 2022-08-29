@@ -218,20 +218,22 @@ void absoluteEncoderInit(void){
 }
 
 /*
- *  @brief  Stops can if it's enabled.
+ *  @brief  Stops can (if it's enabled) and absolute encoder thread.
  *
+ *  @param[out]    msg   A message is about if thread is stopped or not.
  *  @note   Not verified.
  */
 msg_t absoluteEncoderUninit(void){
   chThdTerminate((thread_t *)absoluteEncoderThread);
-  return chThdWait((thread_t *)absoluteEncoderThread);
+  msg_t msg = chThdWait((thread_t *)absoluteEncoderThread);
   canSimpleUninit();
+  return msg;
 }
 
 /*
  *  @brief  Returns rotation speed in rpm.
  *
- *  @param[out]  encoder.Speed  Encoder rotation speed in rpm.
+ *  @param[out]  absoluteEncoder.RotationalSpeed  Encoder rotation speed in rpm.
  */
 float getAbsoluteEncoderRotationalSpeed(void){
   return absoluteEncoder.RotationalSpeed;
@@ -240,7 +242,7 @@ float getAbsoluteEncoderRotationalSpeed(void){
 /*
  *  @brief  Returns number of turns from the starting position.
  *
- *  @param[out]  encoder.NumberOfTurns  Number of turns  can be both positive
+ *  @param[out]  absoluteEncoder.NumberOfTurns  Number of turns  can be both positive
  *                                      and negative.
  *
  */
@@ -251,7 +253,7 @@ int32_t getAbsoluteEncoderNumberOfTurns(void){
 /*
  *  @brief  Returns the rotation angle of the encoder in degrees within one turn.
  *
- *  @param[out]  encoder.Angle  The rotation angle can be in the range from 0 to 360 degrees.
+ *  @param[out]  absoluteEncoder.AngleOfRotation  The rotation angle can be in the range from 0 to 360 degrees.
  */
 float getAbsoluteEncoderAngleOfRotation(void){
   return absoluteEncoder.AngleOfRotation;
@@ -260,7 +262,7 @@ float getAbsoluteEncoderAngleOfRotation(void){
 /*
  *  @brief  Returns the rotation angle of the encoder in degrees.
  *
- *  @param[out]  encoder.Angle  The rotation angle can be greater or less than 0 degrees.
+ *  @param[out]  absoluteEncoder.MultiTurnAngleOfRotation  The rotation angle can be greater or less than 0 degrees.
  */
 int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void){
   return absoluteEncoder.MultiTurnAngleOfRotation;
@@ -269,7 +271,7 @@ int32_t getAbsoluteEncoderMultiTurnAngleOfRotation(void){
 /*
  *  @brief  Returns all characteristics from the encoder.
  *
- *  @param[out]  encoder  Pointer to a structure where all characteristics are stored.
+ *  @param[out]  absoluteEncoder  Pointer to a structure where all characteristics are stored.
  *
  *  @note   Characteristics: rotation speed, number of turns, angle of rotation, multi-turn angle of rotation.
  */
