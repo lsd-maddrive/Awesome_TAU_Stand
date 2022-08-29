@@ -1,3 +1,4 @@
+
 // Header file to select program to run
 
 #ifndef INCLUDE_COMMON_H_
@@ -15,6 +16,7 @@
 #define SENSOR_M3421_TEST       2
 #define CURRENT_SENSOR_TEST     3
 #define CAN_TEST                4
+#define MODBUSTCP_TEST          5
 
 // Selection of program to run
 #define PROGRAM_ROUTINE CAN_TEST

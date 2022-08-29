@@ -10,6 +10,8 @@ static inline void testRoutines(void) {
     test_current_sensor();
 #elif(PROGRAM_ROUTINE == CAN_TEST)
     test_can();
+#elif(PROGRAM_ROUTINE == MODBUSTCP_TEST)
+    test_modbusTCP();
 #endif
 }
 
