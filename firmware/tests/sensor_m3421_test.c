@@ -1,5 +1,3 @@
-#include "common.h"
-#include "lld_i2c.h"
 #include <terminal_write.h>
 #include <sensor_m3421.h>
 

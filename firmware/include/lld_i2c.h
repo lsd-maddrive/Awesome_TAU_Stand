@@ -1,6 +1,7 @@
 #ifndef INCLUDE_LLD_I2C_H_
 #define INCLUDE_LLD_I2C_H_
-#include "hal.h"
+
+#include <common.h>
 
 /*
  * @brief   Launches I2C and sets microcontroller legs.
@@ -9,6 +10,13 @@
  * @note    We use the GPIOB 8 (SCL) and GPIOB 9 (SDA) leg of the microcontroller.
  */
 void i2cStartUp(void);
+
+/*
+ * @brief   Stops I2C if it's running.
+ *
+ * @note    I2c1 is used.
+ */
+void i2cSimpleStop(void);
 
 /*
  * @ brief  Writes the needed information to the device.

@@ -15,8 +15,6 @@ PROJECT_CSRC 	= src/main.c \
 				  tests/interrupt_test.c \
 				  src/incremental_encoder.c \
 				  
-				  
-
 # C++ source files
 PROJECT_CPPSRC 	= 
 # Directories to search headers in
