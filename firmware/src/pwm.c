@@ -7,9 +7,9 @@
 // —труктура конфигурации
 static PWMConfig pwmcfg = {
   // „астота 10к√ц
-  .frequency = 100000,
+  .frequency = 1000000,
   // ѕериод 5000 тактов, или 0,05с
-  .period = 5000,
+  .period = 1000,
   // —сылка на функцию
   .callback = NULL,
   .channels = {
@@ -27,13 +27,15 @@ static PWMConfig pwmcfg = {
 // —охран€ем указатель на первый драйвер в переменную
 static PWMDriver *pwm = &PWMD8;
 
-void pwmInit(void){
-  pwmStart(pwm, &pwmcfg);
+void pwmInitUp(void){
   palSetLineMode(PAL_LINE(GPIOC, 6), PAL_MODE_ALTERNATE(3));
   palSetLineMode(PAL_LINE(GPIOA, 7), PAL_MODE_ALTERNATE(3));
+  palSetLineMode(PAL_LINE(GPIOC, 7), PAL_MODE_ALTERNATE(3));
+  palSetLineMode(PAL_LINE(GPIOB, 0), PAL_MODE_ALTERNATE(3));
+  pwmStart(pwm, &pwmcfg);
 }
 
-void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint8_t Voltage){
+void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint16_t Voltage){
   if (DirectionOfRotation == CLOCKWISE_ROTATION){
     pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
     pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
@@ -42,4 +44,11 @@ void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint8_t Voltage
     pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
     pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
   }
+}
+
+void pwmStopEngine(void){
+  //pwmDisableChannel(pwm, 0);
+  //pwmDisableChannel(pwm, 1);
+  pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+  pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
 }

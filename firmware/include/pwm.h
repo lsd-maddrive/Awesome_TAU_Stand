@@ -6,9 +6,11 @@
 #define CLOCKWISE_ROTATION  0
 #define COUNTERCLOCKWISE_ROTATION 1
 
-void pwmInit(void);
+void pwmInitUp(void);
 
-void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint8_t Voltage);
+void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint16_t Voltage);
+
+void pwmStopEngine(void);
 
 
 #endif /* INCLUDE_PWM_H_ */
