@@ -13,3 +13,9 @@
 <p align="center">
 <img src="picture/24-5.png" width=700/>
 </p>
+
+Рекомендуемая схема включения:
+
+<p align="center">
+<img src="picture/switching_scheme.png" width=700/>
+</p>
