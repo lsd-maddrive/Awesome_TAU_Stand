@@ -11,9 +11,9 @@ void change_direction_of_rotation(void* args){
 void test_pwm(void) {
     halInit();
     chSysInit();
-    pwmInitUp();
+    pwmInitEngine();
     uint8_t DirectionOfRotation = CLOCKWISE_ROTATION;
-    uint16_t Voltage = 4000;//0...100
+    uint16_t Voltage = 4000;//0...10000
     palSetPadMode(GPIOC, GPIOC_BUTTON, PAL_MODE_INPUT_PULLDOWN);
     palEnablePadEvent(GPIOC, GPIOC_BUTTON, PAL_EVENT_MODE_RISING_EDGE);
     palSetPadCallback(GPIOC, GPIOC_BUTTON, change_direction_of_rotation, NULL);
@@ -24,7 +24,7 @@ void test_pwm(void) {
         else if (DirectionOfRotation == COUNTERCLOCKWISE_ROTATION)DirectionOfRotation = CLOCKWISE_ROTATION;
         flag = false;
       }
-      else pwmCheakingDirectionAndVoltage(DirectionOfRotation, Voltage);
+      else pwmSetEngineParams(DirectionOfRotation, Voltage);
       chThdSleepMilliseconds(200);
     }
 }

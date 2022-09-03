@@ -1,54 +1,137 @@
 #include <pwm.h>
 
+// Write a pointer to the timer (with a complementary mode) in a variable.
+static PWMDriver *pwm = &PWMD8;
 
-//uint8_t DirectionOfRotation = CLOCKWISE_ROTATION;
-//uint8_t Voltage = 70; // 0....100
-
-// Структура конфигурации
+/*
+ *  @brief  PWM configuration for engine.
+ *
+ *  @note   frequency   Frequency for calculating the generated meander. In Hz.
+ *          period      Pperiod for calculating the generated meander. In ticks.
+ *          channels    Array of structures, where each structure describes the operation of one channel.
+ *          bdtr        This is a dead time which sets the pause between the state change of two complementary legs of the same channel.
+ *
+ *  @note   Used the first and second channel in complementary mode.
+ *
+ *  @note   We don't use callbacks, cr2 and dier.
+ */
 static PWMConfig pwmcfg = {
-  // Частота 10кГц
-  .frequency = 1000000,
-  // Период 5000 тактов, или 0,05с
-  .period = 1000,
-  // Ссылка на функцию
+  .frequency = PWM_CONFIG_FREQUENCY,
+  .period = PWM_CONFIG_PERIOD,
   .callback = NULL,
   .channels = {
-   // Включаем первый канал в комплементарном режиме, с вызовом второй функции
+   // Turn on the first and second channel in complementary mode
    {PWM_OUTPUT_ACTIVE_HIGH | PWM_COMPLEMENTARY_OUTPUT_ACTIVE_HIGH, NULL},
    {PWM_OUTPUT_ACTIVE_HIGH | PWM_COMPLEMENTARY_OUTPUT_ACTIVE_HIGH, NULL},
    {PWM_OUTPUT_DISABLED, NULL},
    {PWM_OUTPUT_DISABLED, NULL}
   },
   .cr2 = 0,
-  // Задаем мёртвое время 2мкс
-  .bdtr = 0b11010110,
+  .bdtr = PWM_CONFIG_DEAD_TIME,
   .dier = 0
 };
-// Сохраняем указатель на первый драйвер в переменную
-static PWMDriver *pwm = &PWMD8;
 
-void pwmInitUp(void){
-  palSetLineMode(PAL_LINE(GPIOC, 6), PAL_MODE_ALTERNATE(3));
-  palSetLineMode(PAL_LINE(GPIOA, 7), PAL_MODE_ALTERNATE(3));
-  palSetLineMode(PAL_LINE(GPIOC, 7), PAL_MODE_ALTERNATE(3));
-  palSetLineMode(PAL_LINE(GPIOB, 0), PAL_MODE_ALTERNATE(3));
+/*
+ *  @brief  Sets the operating mode to the selected legs and initializes the PWM.
+ *
+ *  @note   PWMD8 is used.
+ *
+ *  @note   For PWMD8 timer and such selected legs: PA7(3) - TIM8_CH1N
+ *                                                  PC6(3) - TIM8_CH1
+ *                                                  PB0(3) - TIM8_CH2N
+ *                                                  PC7(3) - TIM8_CH2
+ *
+ *          The following diagram for connecting the legs to the driver:
+ *
+ *                                  | V+
+ *                                  |
+ *                           ---------------
+ *                           |             |
+ *                           |             |
+ *      PA7(3) - TIM8_CH1N  \             \   PB0(3) - TIM8_CH2N
+ *                           |             |
+ *                           |-------------|
+ *                           |             |
+ *       PC6(3) - TIM8_CH1  \             \   PC7(3) - TIM8_CH2
+ *                           |             |
+ *                           |             |
+ *                           ---------------
+ *                                  |
+ *                                  | GND
+ */
+void pwmInitEngine(void){
+  palSetLineMode(PWM_LINE_CH1N, PWM_MODE_CH1N);
+  palSetLineMode(PWM_LINE_CH1, PWM_MODE_CH1);
+  palSetLineMode(PWM_LINE_CH2N, PWM_MODE_CH2N);
+  palSetLineMode(PWM_LINE_CH2, PWM_MODE_CH2);
+
   pwmStart(pwm, &pwmcfg);
 }
 
-void pwmCheakingDirectionAndVoltage(uint8_t DirectionOfRotation, uint16_t Voltage){
+/*
+ *  @brief  Sets voltage and direction of rotation for the engine.
+ *
+ *  @param[in]  DirectionOfRotation     Direction of rotation of the engine. Can be clockwise and counterclockwise rotation.
+ *              Voltage                 Engine voltage. It is setted as a percentage of the maximum voltage value of engine.
+ *                                      Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
+ *
+ *  @note   Max voltage value of engine is 24 V.
+ *
+ *  @note   If you change the direction of rotation you need consider the time to stop the engine. There is no such function.
+ *
+ *  @note   PWMD8 is used.
+ */
+void pwmSetEngineParams(uint8_t DirectionOfRotation, uint16_t Voltage){
+  // Check a percentage of the maximum voltage value.
+  if (Voltage > MAX_VOLTAGE_VALUE) Voltage = MAX_VOLTAGE_VALUE;
+
+  // Take into account the direction of rotation.
   if (DirectionOfRotation == CLOCKWISE_ROTATION){
-    pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
-    pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+    pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
+    pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
   }
   else if (DirectionOfRotation == COUNTERCLOCKWISE_ROTATION){
-    pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
-    pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
+    pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+    pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
   }
 }
 
+/*
+ *  @brief  Stops the engine completly.
+ *
+ *  @note   When you stop the engine you need consider the time to stop the engine. There is no such function.
+ *
+ *  @note   PWMD8 is used.
+ */
 void pwmStopEngine(void){
-  //pwmDisableChannel(pwm, 0);
-  //pwmDisableChannel(pwm, 1);
-  pwmEnableChannel(pwm, 0, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
-  pwmEnableChannel(pwm, 1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+  pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+  pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
+}
+
+/*
+ *  @brief  Stops the engine, all used channels and PWM.
+ *
+ *  @note   You don't need to think about waiting after the engine to stop.
+ *
+ *  @note   Setting a safe state for used leg.
+ *
+ *  @note   PWMD8 is used.
+ */
+void pwmUninitEngine(void){
+  pwmStopEngine(); // Stop engine completly.
+  chThdSleepMilliseconds(ENGINE_STOP_TIME); // Waiting for the engine to stop.
+
+  //Disable all used channels.
+  pwmDisableChannel(pwm, PWM_CH1);
+  pwmDisableChannel(pwm, PWM_CH1);
+
+  // Stops PWM.
+  pwmStop(pwm);
+
+  // Setting a safe state for used leg.
+  palSetLineMode(PWM_LINE_CH1N, PAL_MODE_UNCONNECTED);
+  palSetLineMode(PWM_LINE_CH1, PAL_MODE_UNCONNECTED);
+  palSetLineMode(PWM_LINE_CH2N, PAL_MODE_UNCONNECTED);
+  palSetLineMode(PWM_LINE_CH2, PAL_MODE_UNCONNECTED);
+
 }
