@@ -1,5 +1,5 @@
-#ifndef INCLUDE_PWM_H_
-#define INCLUDE_PWM_H_
+#ifndef INCLUDE_MOTOR_LLD_H_
+#define INCLUDE_MOTOR_LLD_H_
 
 #include <common.h>
 
@@ -34,7 +34,6 @@
 #define PWM_CH2                     1
 
 #define MAX_VOLTAGE_VALUE           9500 // A percentage of the maximum voltage value that you should not exeed. 9500 is 95%.
-#define ENGINE_STOP_TIME            500 // The time to wait untill the engine will be stopped completly. In milliseconds.
 
 
 /*
@@ -65,42 +64,40 @@
  *                                  |
  *                                  | GND
  */
-void pwmInitEngine(void);
+void motorInit(void);
 
 /*
- *  @brief  Sets voltage and direction of rotation for the engine.
+ *  @brief  Sets voltage and direction of rotation for the motor.
  *
- *  @param[in]  DirectionOfRotation     Direction of rotation of the engine. Can be clockwise and counterclockwise rotation.
- *              Voltage                 Engine voltage. It is setted as a percentage of the maximum voltage value of engine.
+ *  @param[in]  DirectionOfRotation     Direction of rotation of the motor. Can be clockwise and counterclockwise rotation.
+ *              Voltage                 Motor voltage. It is setted as a percentage of the maximum voltage value of motor.
  *                                      Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
  *
- *  @note   Max voltage value of engine is 24 V.
+ *  @note   Max voltage value of motor is 24 V.
  *
  *  @note   If you change the direction of rotation you need consider the time to stop the engine. There is no such function.
  *
  *  @note   PWMD8 is used.
  */
-void pwmSetEngineParams(uint8_t DirectionOfRotation, uint16_t Voltage);
+void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage);
 
 /*
- *  @brief  Stops the engine completly.
+ *  @brief  Stops the motor completly.
  *
- *  @note   When you stop the engine you need consider the time to stop the engine. There is no such function.
+ *  @note   When you stop the motor you need consider the time to stop the motor. There is no such function.
  *
  *  @note   PWMD8 is used.
  */
-void pwmStopEngine(void);
+void motorStop(void);
 
 /*
- *  @brief  Stops the engine, all used channels and PWM.
- *
- *  @note   You don't need to think about waiting after the engine to stop.
+ *  @brief  Stops the motor, all used channels and PWM.
  *
  *  @note   Setting a safe state for used leg.
  *
  *  @note   PWMD8 is used.
  */
-void pwmUninitEngine(void);
+void motorUninit(void);
 
 
-#endif /* INCLUDE_PWM_H_ */
+#endif /* INCLUDE_MOTOR_LLD_H_ */

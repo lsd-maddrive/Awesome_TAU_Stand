@@ -8,7 +8,7 @@ void test_current_sensor(void);
 void test_can(void);
 void test_modbusTCP(void);
 void test_interrupt(void);
-void test_pwm(void);
+void test_motor(void);
 
 
 #endif /* INCLUDE_TESTS_H_ */

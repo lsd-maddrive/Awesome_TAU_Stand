@@ -14,8 +14,8 @@ PROJECT_CSRC 	= src/main.c \
 				  src/modbusTCP/modbusTCP.c \
 				  tests/interrupt_test.c \
 				  src/incremental_encoder.c \
-				  tests/pwm_test.c \
-				  src/pwm.c \
+				  tests/motor_test.c \
+				  src/motor_lld.c \
 				  
 				  
 				  
