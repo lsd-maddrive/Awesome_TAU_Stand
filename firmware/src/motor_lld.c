@@ -116,11 +116,7 @@ void motorStop(void){
  *  @note   PWMD8 is used.
  */
 void motorUninit(void){
-  motorStop(); // Stop engine completly.
-
-  //Disable all used channels.
-  pwmDisableChannel(pwm, PWM_CH1);
-  pwmDisableChannel(pwm, PWM_CH1);
+  motorStop(); // Stop the motor completly.
 
   // Stops PWM.
   pwmStop(pwm);
