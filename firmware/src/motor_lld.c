@@ -59,7 +59,7 @@ static PWMConfig pwmcfg = {
  *                                  |
  *                                  | GND
  */
-void motorInit(void){
+void motorSimpleInit(void){
   palSetLineMode(PWM_LINE_CH1N, PWM_MODE_CH1N);
   palSetLineMode(PWM_LINE_CH1, PWM_MODE_CH1);
   palSetLineMode(PWM_LINE_CH2N, PWM_MODE_CH2N);
@@ -103,7 +103,7 @@ void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage){
  *
  *  @note   PWMD8 is used.
  */
-void motorStop(void){
+void motorSimpleStop(void){
   pwmDisableChannel(pwm, PWM_CH1);
   pwmDisableChannel(pwm, PWM_CH2);
 }
@@ -115,8 +115,8 @@ void motorStop(void){
  *
  *  @note   PWMD8 is used.
  */
-void motorUninit(void){
-  motorStop(); // Stop the motor completly.
+void motorSimpleUninit(void){
+  motorSimpleStop(); // Stop the motor completly.
 
   // Stops PWM.
   pwmStop(pwm);

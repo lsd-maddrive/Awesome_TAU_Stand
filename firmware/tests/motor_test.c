@@ -11,7 +11,7 @@ void change_direction_of_rotation(void* args){
 void test_motor(void) {
     halInit();
     chSysInit();
-    motorInit();
+    motorSimpleInit();
     uint8_t DirectionOfRotation = CLOCKWISE_ROTATION;
     uint16_t Voltage = 4000;//0...10000
     palSetPadMode(GPIOC, GPIOC_BUTTON, PAL_MODE_INPUT_PULLDOWN);
@@ -19,7 +19,7 @@ void test_motor(void) {
     palSetPadCallback(GPIOC, GPIOC_BUTTON, change_direction_of_rotation, NULL);
     while (true) {
       if (flag == true){
-        motorStop();
+        motorSimpleStop();
         if (DirectionOfRotation == CLOCKWISE_ROTATION)DirectionOfRotation = COUNTERCLOCKWISE_ROTATION;
         else if (DirectionOfRotation == COUNTERCLOCKWISE_ROTATION)DirectionOfRotation = CLOCKWISE_ROTATION;
         flag = false;

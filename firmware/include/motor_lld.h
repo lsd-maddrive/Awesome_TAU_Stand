@@ -64,7 +64,7 @@
  *                                  |
  *                                  | GND
  */
-void motorInit(void);
+void motorSimpleInit(void);
 
 /*
  *  @brief  Sets voltage and direction of rotation for the motor.
@@ -88,7 +88,7 @@ void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage);
  *
  *  @note   PWMD8 is used.
  */
-void motorStop(void);
+void motorSimpleStop(void);
 
 /*
  *  @brief  Stops the motor, all used channels and PWM.
@@ -97,7 +97,7 @@ void motorStop(void);
  *
  *  @note   PWMD8 is used.
  */
-void motorUninit(void);
+void motorSimpleUninit(void);
 
 
 #endif /* INCLUDE_MOTOR_LLD_H_ */
