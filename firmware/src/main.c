@@ -14,6 +14,8 @@ static inline void testRoutines(void) {
     test_modbusTCP();
 #elif(PROGRAM_ROUTINE == INTERRUPT_WITH_TIMER_TEST)
     test_interrupt();
+#elif(PROGRAM_ROUTINE == MOTOR_TEST)
+    test_motor();
 #endif
 }
 
