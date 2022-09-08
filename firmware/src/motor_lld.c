@@ -105,7 +105,7 @@ void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage){
  */
 void motorStop(void){
   pwmDisableChannel(pwm, PWM_CH1);
-  pwmDisableChannel(pwm, PWM_CH1);
+  pwmDisableChannel(pwm, PWM_CH2);
 }
 
 /*
