@@ -1,6 +1,7 @@
 # Регистры Modbus
 
  Для чтения аналоговых или дискретных регистров используем define
+ 
  MB_READ_ANALOG_REG(addr) и MB_READ_DISCRET_REG(addr),
  где addr define адреса регистра(см. ниже в таблице)
 
