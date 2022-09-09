@@ -1,16 +1,16 @@
 # Регистры Modbus
 
- Для чтения аналоговых или дискретных регистров используем define MB_READ_ANALOG_REG(i) и MB_READ_DISCRET_REG(i) соответственно, где i define номера регистра(см. ниже в таблице)
+ Для чтения аналоговых или дискретных регистров используем define MB_READ_ANALOG_REG(addr) и MB_READ_DISCRET_REG(addr) соответственно, где addr define адреса регистра(см. ниже в таблице)
 
  Для записи в аналоговый регистр исходя из типа данных используем define:
  
-  MB_WRITE_REG_FLOAT(i,val)
+  MB_WRITE_REG_FLOAT(i,addr)
   
-  MB_WRITE_REG_INT32(i,val)
+  MB_WRITE_REG_INT32(i,addr)
   
-  MB_WRITE_REG_INT16(i,val)
+  MB_WRITE_REG_INT16(i,addr)
   
-  где i опять же define номера регистра и val значение
+  где addr опять же define адреса регистра и val значение
 
 ## Аналоговые регистры
 
