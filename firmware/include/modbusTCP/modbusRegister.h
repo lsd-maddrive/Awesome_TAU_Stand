@@ -10,13 +10,16 @@
 extern int16_t Analog_Register[REGISTER_LEN];
 extern uint8_t Discrete_Register[REGISTER_LEN];
 
-#define MB_READ_ANALOG_REG(addr)        (*(Analog_register+addr))
+#define MB_READ_REG_FLOAT(addr)         (*(float*)(Analog_Register+addr))
+#define MB_READ_REG_INT32(addr)         (*(int32_t*)(Analog_Register+addr))
+#define MB_READ_REG_INT16(addr)         (*(Analog_register+addr))
 #define MB_WRITE_REG_FLOAT(addr,val)    (*(float*)(Analog_Register+addr)=val)
 #define MB_WRITE_REG_INT32(addr,val)    (*(int32_t*)(Analog_Register+addr)=val)
-#define MB_WRITE_REG_INT16(addr,val)    (*(Analog_register+addr)=val)
+#define MB_WRITE_REG_INT16(addr,val)    (*(Analog_Register+addr)=val)
 
 
 #define MB_READ_DISCRET_REG(addr)       (*(Discrete_Register+addr))
+#define MB_WRITE_DISCRET_REG(addr,val)  (*(Discrete_Register+addr)=val)
 
 //discrete_reg
 #define SYSTEM_STOP                     0
@@ -26,12 +29,17 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define FLAG_LOAD_1                     3
 #define FLAG_LOAD_2                     4
 #define FLAG_LOAD_3                     5
+#define FLAG_CURRENT                    6
+#define FLAG_ABS_ENCODER                7
+#define FLAG_INC_ENCODER                8
 
-#define FLAG_CONTROLLER_1               6
-#define FLAG_CONTROLLER_2               7
-#define FLAG_CURRENT                    8
-#define FLAG_ABS_ENCODER                9
-#define FLAG_INC_ENCODER                10
+#define FLAG_CONTROLLER_1               9
+#define FLAG_CONTROLLER_2               10
+#define FLAG_SPEED                      11
+#define FLAG_ANGLE                      12
+#define FLAG_ROTATE                     13
+#define FLAG_VOLT                       14
+
 
 
 
