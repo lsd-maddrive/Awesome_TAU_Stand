@@ -51,9 +51,13 @@
 | FLAG_LOAD_1			|  3	|
 |  FLAG_LOAD_2			|  4	|	
 |  FLAG_LOAD_3			|  5	|
-|  FLAG_CONTROLLER_1		|  6	|
-|  FLAG_CONTROLLER_2		|  7	|
-|  FLAG_CURRENT			|  8	|
-|  FLAG_ABS_ENCODER		|  9	| 
-|  FLAG_INC_ENCODER  	                  |  10	|
+| FLAG_CURRENT			|  6	|
+|  FLAG_ABS_ENCODER			|  7	|	
+|  FLAG_INC_ENCODER			|  8	|
+|  FLAG_CONTROLLER_1		|  9	|
+|  FLAG_CONTROLLER_2		|  10	|
+|  FLAG_SPEED			|  11	|
+|  FLAG_ANGLE		|  12	| 
+|  FLAG_ROTATE  	                  |  13	|
+|  FLAG_VOLT  	                  |  14	|
 
