@@ -32,25 +32,6 @@
 
 
 /*
- *  @brief  User defined values placed in variables.
- *
- *  @note   Values: The direction of rotation, the voltage and the state.
- *
- *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
- *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
- *
- *  @note   They are used to control the motor.
- */
-typedef struct
-{
-    uint8_t NewDirectionOfRotation ; // New direction of rotation that is set by the user.
-    uint8_t PresentDirectionOfRotation; // The current direction of motor rotation.
-    uint16_t NewVoltage; // New voltage that is set by the user.
-    uint16_t PresentVoltage; // The current value of motor voltage.
-    bool State; // The state of the motor that indicates whether it is running or not.
-} motorParam;
-
-/*
  *  @brief  Initializes the motor and starts another thread to set specified voltage to the motor.
  *
  *  @note   You need to set: the voltage, the direction of rotation and the state of the motor.
@@ -72,19 +53,31 @@ msg_t motorUninit(void);
 /*
  *  @brief  Returns the current voltage value.
  *
- *  @param[out]   motor.PresentVoltage  The current value of motor voltage.
+ *  @param[out]   MotorCurrentVoltage  The current value of motor voltage.
  *
  *  @note   For debugging only.
  */
-uint16_t getMotorPresentVoltage(void);
+int16_t getMotorCurrentVoltage(void);
 
 /*
  *  @brief  Returns the current direction of rotation.
  *
- *  @param[out]   motor.PresentDirectionOfRotation  The current direction of motor rotation.
+ *  @param[out]   MotorDirectionOfRotation  The current direction of motor rotation.
  *
  *  @note   For debugging only.
  */
-uint8_t getMotorPresentDirectionOfRotation(void);
+uint8_t getMotorDirectionOfRotation(void);
+
+/*
+ *  @brief  Sets the current motor voltage.
+ *
+ *  @param[in]   Voltage   New voltage that is set by the user.
+ *
+ *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
+ *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
+ *
+ *  @note   For debugging only.
+ */
+void setMotorVoltage(int16_t Voltage);
 
 #endif /* INCLUDE_MOTOR_CONTROL_H_ */

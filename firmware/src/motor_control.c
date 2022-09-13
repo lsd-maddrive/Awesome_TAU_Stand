@@ -10,13 +10,12 @@
  *
  *  @note   They are used to control the motor.
  */
-static motorParam motor = {
-  .NewDirectionOfRotation = MOTOR_NEW_DIRECTION_OF_ROTATION , // New direction of rotation that is set by the user.
-  .PresentDirectionOfRotation = MOTOR_PRESENT_DIRECTION_OF_ROTATION , // The current direction of motor rotation.
-  .NewVoltage = MOTOR_NEW_VOLTAGE , // New voltage that is set by the user.
-  .PresentVoltage = MOTOR_PRESENT_VOLTAGE , // The current value of motor voltage.
-  .State = MOTOR_STATE // The state of the motor that indicates whether it is running or not.
-};
+
+int16_t MotorRequiredVoltage; // New voltage that is set by the user.
+int16_t MotorCurrentVoltage; // The current value of motor voltage.
+bool MotorState// The state of the motor that indicates whether it is running or not.
+uint8_t MotorDirectionOfRotation; // The current direction of motor rotation.
+
 
 /*
  *  @brief  Gradually changes the motor voltage from current value to setpoint.
@@ -28,46 +27,42 @@ static motorParam motor = {
  *
  *  @note   If the value doesn't change, then nothing happens.
  *
+ *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
+ *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
+ *
  *  @notapi
  */
 void update_motor_voltage(void){
-  // When the voltage should be increased. And the voltage difference is greater than MOTOR_STEP_TO_CHANGE_VOLTAGE.
-  if ((motor.NewVoltage - motor.PresentVoltage) >= MOTOR_STEP_TO_CHANGE_VOLTAGE){
-    motor.PresentVoltage += MOTOR_STEP_TO_CHANGE_VOLTAGE;
-    motorSetVoltage(motor.PresentDirectionOfRotation, motor.PresentVoltage);
+  // Checking if the motor is running.
+  if (MotorState == true){
+
+    // Check a percentage of the maximum voltage value.
+    if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
+
+    // Take into account the direction of rotation.
+    if (MotorRequiredVoltage >= MotorCurrentVoltage) MotorDirectionOfRotation = CLOCKWISE_ROTATION;
+    else if (MotorRequiredVoltage < MotorCurrentVoltage) MotorDirectionOfRotation =COUNTERCLOCKWISE_ROTATION;
+
+    // When the voltage should be increased. And the voltage difference is greater than MOTOR_STEP_TO_CHANGE_VOLTAGE.
+    if ((MotorRequiredVoltage - MotorCurrentVoltage) >= MOTOR_STEP_TO_CHANGE_VOLTAGE){
+      MotorCurrentVoltage += MOTOR_STEP_TO_CHANGE_VOLTAGE;
+      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
+    }
+    // When the voltage should be decreased. And the voltage difference is less than minus MOTOR_STEP_TO_CHANGE_VOLTAGE.
+    else if ((MotorRequiredVoltage - MotorCurrentVoltage) <= -MOTOR_STEP_TO_CHANGE_VOLTAGE){
+      MotorCurrentVoltage -= MOTOR_STEP_TO_CHANGE_VOLTAGE;
+      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
+    }
+    // When the voltage should be increased or decreased. And the voltage difference is in range:
+    // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, 0) or (0, MOTOR_STEP_TO_CHANGE_VOLTAGE).
+    else if ((MotorRequiredVoltage - MotorCurrentVoltage) != 0){
+      MotorCurrentVoltage += (MotorRequiredVoltage - MotorCurrentVoltage);
+      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
+    }
   }
-  // When the voltage should be decreased. And the voltage difference is less than minus MOTOR_STEP_TO_CHANGE_VOLTAGE.
-  else if ((motor.NewVoltage - motor.PresentVoltage) <= -MOTOR_STEP_TO_CHANGE_VOLTAGE){
-    motor.PresentVoltage -= MOTOR_STEP_TO_CHANGE_VOLTAGE;
-    motorSetVoltage(motor.PresentDirectionOfRotation, motor.PresentVoltage);
-  }
-  // When the voltage should be increased or decreased. And the voltage difference is in range:
-  // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, 0) or (0, MOTOR_STEP_TO_CHANGE_VOLTAGE).
-  else if ((motor.NewVoltage - motor.PresentVoltage) != 0){
-    motor.PresentVoltage += (motor.NewVoltage - motor.PresentVoltage);
-    motorSetVoltage(motor.PresentDirectionOfRotation, motor.PresentVoltage);
-  }
+  else motorSimpleStop(); // If the motor is not running.
 }
 
-/*
- *  @brief  Checks if the direction of rotation has changed or not.
- *
- *  @note   If the direction of rotation has changed, the motor will stop and set the current
- *          voltage to zero and change the current direction of rotation to the specified one.
- *
- *  @note   It takes some time for the motor to stop. This time is set in the MOTOR_STOP_SLEEP_MILLISECONDS variable.
- *
- *  @notapi
- */
-void check_direction_of_rotation(void){
-  if (motor.NewDirectionOfRotation != motor.PresentDirectionOfRotation){
-    motorSimpleStop();
-    chThdSleepMilliseconds(MOTOR_STOP_SLEEP_MILLISECONDS);
-
-    motor.PresentVoltage = 0;
-    motor.PresentDirectionOfRotation = motor.NewDirectionOfRotation;
-  }
-}
 
 /*
  *  @brief  Starts another thread to set the specified voltage to the motor.
@@ -86,13 +81,8 @@ static THD_FUNCTION(motorThread, arg)
     (void)arg; // just to avoid warnings
     systime_t time = chVTGetSystemTime();
     while( true ){
-      // Checking if the motor is running.
-      if (motor.State == true){
-        // Check if the voltage or the direction of rotation was changed.
-        check_direction_of_rotation();
-        update_motor_voltage();
-      }
-      else motorSimpleStop(); // If the motor is not running.
+      update_motor_voltage();
+
       if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( MOTOR_DATA_RATE ) );
     }
@@ -108,6 +98,8 @@ static THD_FUNCTION(motorThread, arg)
  */
 void motorInit(void){
   motorSimpleInit();
+  MotorRequiredVoltage
+  MotorCurrentVoltage
   chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
 }
 
@@ -128,22 +120,36 @@ msg_t motorUninit(void){
 /*
  *  @brief  Returns the current voltage value.
  *
- *  @param[out]   motor.PresentVoltage  The current value of motor voltage.
+ *  @param[out]   MotorCurrentVoltage  The current value of motor voltage.
  *
  *  @note   For debugging only.
  */
-uint16_t getMotorPresentVoltage(void){
-  return motor.PresentVoltage;
+int16_t getMotorCurrentVoltage(void){
+  return MotorCurrentVoltage;
 }
 
 /*
  *  @brief  Returns the current direction of rotation.
  *
- *  @param[out]   motor.PresentDirectionOfRotation  The current direction of motor rotation.
+ *  @param[out]   MotorDirectionOfRotation  The current direction of motor rotation.
  *
  *  @note   For debugging only.
  */
-uint8_t getMotorPresentDirectionOfRotation(void){
-  return motor.PresentDirectionOfRotation;
+uint8_t getMotorDirectionOfRotation(void){
+  return MotorDirectionOfRotation;
+}
+
+/*
+ *  @brief  Sets the current motor voltage.
+ *
+ *  @param[in]   Voltage   New voltage that is set by the user.
+ *
+ *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
+ *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
+ *
+ *  @note   For debugging only.
+ */
+void setMotorVoltage(int16_t Voltage){
+  MotorRequiredVoltage = Voltage;
 }
 
