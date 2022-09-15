@@ -12,8 +12,8 @@
 #define MOTOR_ZERO_VOLTAGE 0 // Zero voltage value for motor start position.
 
 // Possible state of the motor.
-#define MOTOR_STATE_TRUE true
-#define MOTOR_STATE_FALSE false
+#define MOTOR_STATE_RUNNING true
+#define MOTOR_STATE_STOPPED false
 
 
 
@@ -44,15 +44,6 @@ msg_t motorUninit(void);
  *  @note   For debugging only.
  */
 int16_t getMotorCurrentVoltage(void);
-
-/*
- *  @brief  Returns the current direction of rotation.
- *
- *  @param[out]   MotorDirectionOfRotation  The current direction of motor rotation.
- *
- *  @note   For debugging only.
- */
-uint8_t getMotorDirectionOfRotation(void);
 
 /*
  *  @brief  Sets the current motor voltage.

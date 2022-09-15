@@ -15,7 +15,6 @@ int16_t MotorRequiredVoltage; // New voltage that is set by the user.
 int16_t MotorCurrentVoltage; // The current value of motor voltage.
 bool MotorState; // The state of the motor that indicates whether it is running or not.
 
-uint8_t MotorDirectionOfRotation; // The current direction of motor rotation.
 
 
 /*
@@ -43,27 +42,23 @@ void update_motor_voltage(void){
 
     // Check a percentage of the maximum voltage value.
     if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
-
-    // Take into account the direction of rotation.
-    if (MotorRequiredVoltage >= MotorCurrentVoltage) MotorDirectionOfRotation = CLOCKWISE_ROTATION;
-    else if (MotorRequiredVoltage < MotorCurrentVoltage) MotorDirectionOfRotation =COUNTERCLOCKWISE_ROTATION;
+    else if (MotorRequiredVoltage < -MAX_VOLTAGE_VALUE) MotorRequiredVoltage = -MAX_VOLTAGE_VALUE;
 
     // When the voltage should be increased. And the voltage difference is greater than MOTOR_STEP_TO_CHANGE_VOLTAGE.
     if ((MotorRequiredVoltage - MotorCurrentVoltage) >= MOTOR_STEP_TO_CHANGE_VOLTAGE){
       MotorCurrentVoltage += MOTOR_STEP_TO_CHANGE_VOLTAGE;
-      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
     }
     // When the voltage should be decreased. And the voltage difference is less than minus MOTOR_STEP_TO_CHANGE_VOLTAGE.
     else if ((MotorRequiredVoltage - MotorCurrentVoltage) <= -MOTOR_STEP_TO_CHANGE_VOLTAGE){
       MotorCurrentVoltage -= MOTOR_STEP_TO_CHANGE_VOLTAGE;
-      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
     }
     // When the voltage should be increased or decreased. And the voltage difference is in range:
-    // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, 0) or (0, MOTOR_STEP_TO_CHANGE_VOLTAGE).
-    else if ((MotorRequiredVoltage - MotorCurrentVoltage) != 0){
-      MotorCurrentVoltage += (MotorRequiredVoltage - MotorCurrentVoltage);
-      motorSetVoltage(MotorDirectionOfRotation, MotorCurrentVoltage);
+    // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, MOTOR_STEP_TO_CHANGE_VOLTAGE).
+    else{
+      MotorCurrentVoltage = MotorRequiredVoltage;
     }
+
+    motorSetVoltage(MotorCurrentVoltage);
   }
   else motorSimpleStop(); // If the motor is not running.
 }
@@ -106,7 +101,7 @@ void motorInit(void){
   // Set the start motor parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
-  MotorState = MOTOR_STATE_FALSE;
+  MotorState = MOTOR_STATE_STOPPED;
   chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
 }
 
@@ -124,7 +119,7 @@ msg_t motorUninit(void){
   // Resetting the motor current parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
-  MotorState = MOTOR_STATE_FALSE;
+  MotorState = MOTOR_STATE_STOPPED;
   return msg;
 }
 
@@ -139,16 +134,7 @@ int16_t getMotorCurrentVoltage(void){
   return MotorCurrentVoltage;
 }
 
-/*
- *  @brief  Returns the current direction of rotation.
- *
- *  @param[out]   MotorDirectionOfRotation  The current direction of motor rotation.
- *
- *  @note   For debugging only.
- */
-uint8_t getMotorDirectionOfRotation(void){
-  return MotorDirectionOfRotation;
-}
+
 
 /*
  *  @brief  Sets the current motor voltage.

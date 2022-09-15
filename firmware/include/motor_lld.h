@@ -3,8 +3,6 @@
 
 #include <common.h>
 
-#define CLOCKWISE_ROTATION          0 // Just for determining the direction of rotation.
-#define COUNTERCLOCKWISE_ROTATION   1 // Just for determining the direction of rotation.
 
 /*
  *  @brief  PWN configuration.
@@ -79,7 +77,7 @@ void motorSimpleInit(void);
  *
  *  @note   PWMD8 is used.
  */
-void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage);
+void motorSetVoltage(int16_t Voltage);
 
 /*
  *  @brief  Stops the motor completly.

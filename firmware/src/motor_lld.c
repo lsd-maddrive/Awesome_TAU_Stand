@@ -81,16 +81,17 @@ void motorSimpleInit(void){
  *
  *  @note   PWMD8 is used.
  */
-void motorSetVoltage(uint8_t DirectionOfRotation, uint16_t Voltage){
+void motorSetVoltage(int16_t Voltage){
   // Check a percentage of the maximum voltage value.
   if (Voltage > MAX_VOLTAGE_VALUE) Voltage = MAX_VOLTAGE_VALUE;
+  else if (Voltage < -MAX_VOLTAGE_VALUE) Voltage = -MAX_VOLTAGE_VALUE;
 
   // Take into account the direction of rotation.
-  if (DirectionOfRotation == CLOCKWISE_ROTATION){
+  if (Voltage >= 0){
     pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
     pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
   }
-  else if (DirectionOfRotation == COUNTERCLOCKWISE_ROTATION){
+  else if (Voltage < 0){
     pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
     pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
   }
