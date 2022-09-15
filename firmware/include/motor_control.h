@@ -6,28 +6,14 @@
 
 // Motor configuration.
 #define MOTOR_DATA_RATE 20 // Data rate is 50. [1/50 is 20 milliseconds].
-#define MOTOR_STOP_SLEEP_MILLISECONDS 1000  // It takes some time for the motor to stop.
-#define MOTOR_STEP_TO_CHANGE_VOLTAGE 100 // The step size by which we will change the voltage during the period.
+#define MOTOR_STEP_TO_CHANGE_VOLTAGE 100 // The step size by which we will change the voltage during the period. 100 - 1%
 
 
-#define MOTOR_PRESENT_DIRECTION_OF_ROTATION CLOCKWISE_ROTATION // The current direction of motor rotation.
-#define MOTOR_PRESENT_VOLTAGE 0 // Current voltage value.
+#define MOTOR_ZERO_VOLTAGE 0 // Zero voltage value for motor start position.
 
 // Possible state of the motor.
 #define MOTOR_STATE_TRUE true
 #define MOTOR_STATE_FALSE false
-
-
-// Is set by user
-#define MOTOR_NEW_DIRECTION_OF_ROTATION CLOCKWISE_ROTATION
-/*
- *  @brief  New voltage that is set by the user.
- *
- *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
- *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
- */
-#define MOTOR_NEW_VOLTAGE 5000
-#define MOTOR_STATE MOTOR_STATE_TRUE // The state of the motor that indicates whether it is running or not.
 
 
 

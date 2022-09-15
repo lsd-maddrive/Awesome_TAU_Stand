@@ -13,7 +13,8 @@
 
 int16_t MotorRequiredVoltage; // New voltage that is set by the user.
 int16_t MotorCurrentVoltage; // The current value of motor voltage.
-bool MotorState// The state of the motor that indicates whether it is running or not.
+bool MotorState; // The state of the motor that indicates whether it is running or not.
+
 uint8_t MotorDirectionOfRotation; // The current direction of motor rotation.
 
 
@@ -33,6 +34,10 @@ uint8_t MotorDirectionOfRotation; // The current direction of motor rotation.
  *  @notapi
  */
 void update_motor_voltage(void){
+//  read from the table
+//  MotorRequiredVoltage = ...
+//  MotorState = ....
+
   // Checking if the motor is running.
   if (MotorState == true){
 
@@ -98,8 +103,10 @@ static THD_FUNCTION(motorThread, arg)
  */
 void motorInit(void){
   motorSimpleInit();
-  MotorRequiredVoltage
-  MotorCurrentVoltage
+  // Set the start motor parameters.
+  MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
+  MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
+  MotorState = MOTOR_STATE_FALSE;
   chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
 }
 
@@ -114,6 +121,10 @@ msg_t motorUninit(void){
   chThdTerminate((thread_t *)motorThread);
   msg_t msg = chThdWait((thread_t *)motorThread);
   motorSimpleUninit();
+  // Resetting the motor current parameters.
+  MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
+  MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
+  MotorState = MOTOR_STATE_FALSE;
   return msg;
 }
 
