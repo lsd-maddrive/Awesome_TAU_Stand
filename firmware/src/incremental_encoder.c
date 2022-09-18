@@ -26,6 +26,7 @@ void incremental_encoder_speed_calculate(GPTDriver *gptp)
 {
     (void)gptp; // Just to avoid warnings.
     IncrementalEncoderRotationalSpeed = IncrementalEncoderNumberOfInterrupts * COEF_INCREMENTAL_ENCODER_VELOCITY;
+    MB_WRITE_REG_FLOAT(DATA_INC_ENCODER_ROTATIONAL_SPEED, IncrementalEncoderRotationalSpeed); // Writing data to the modbus
     IncrementalEncoderNumberOfInterrupts = 0; // Set zero value for new period.
 }
 

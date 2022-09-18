@@ -2,6 +2,7 @@
 #define INCLUDE_CURRENT_SENSOR_H_
 
 #include <sensor_m3421.h>
+#include <modbusRegister.h>
 
 #define CURRENT_COEF 5/(8*0.075) // 8 - gain ofisolation amplifier.
                                        // Shunt operates 5 A at 75 mV.

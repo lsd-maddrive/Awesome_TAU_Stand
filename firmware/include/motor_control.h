@@ -2,19 +2,32 @@
 #define INCLUDE_MOTOR_CONTROL_H_
 
 #include <motor_lld.h>
+#include <modbusRegister.h>
 
 
 // Motor configuration.
-#define MOTOR_DATA_RATE 20 // Data rate is 50. [1/50 is 20 milliseconds].
-#define MOTOR_STEP_TO_CHANGE_VOLTAGE 100 // The step size by which we will change the voltage during the period. 100 - 1%
+#define MOTOR_DATA_RATE                     20 // Data rate is 50. [1/50 is 20 milliseconds].
+#define MOTOR_STEP_TO_CHANGE_VOLTAGE        100 // The step size by which we will change the voltage during the period. 100 - 1%
 
 
-#define MOTOR_ZERO_VOLTAGE 0 // Zero voltage value for motor start position.
+#define MOTOR_ZERO_VOLTAGE                  0 // Zero voltage value for motor start position.
 
 // Possible state of the motor.
-#define MOTOR_STATE_RUNNING true
-#define MOTOR_STATE_STOPPED false
-
+#define MOTOR_STATE_RUNNING                 1
+#define MOTOR_STATE_STOPPED                 0
+/*
+ *  @brief  Coefficients for converting speed in revolutions per minute
+ *          to voltage as a percentage of the maximum voltage and vice versa.
+ *
+ *  @note   Max voltage value of motor is 24 V.
+ *
+ *  @notr   Max rotational speed is 1000 rpm.
+ *
+ *  @note   COEF_RPM_TO_VOLTS_IN_PERSENTAGE     10  [10000 / 1000 rpm| 10000 is 100%]
+ *          COEF_RPM_TO_VOLTS_IN_PERSENTAGE     0.1 [1000 rpm / 10000| 10000 is 100%]
+ */
+#define COEF_RPM_TO_VOLTS_IN_PERSENTAGE     10
+#define COEF_VOLTS_IN_PERSENTAGE_TO_RPM     0.1
 
 
 /*

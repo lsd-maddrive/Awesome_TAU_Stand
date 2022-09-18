@@ -3,6 +3,7 @@
 
 #include <common.h>
 #include <terminal_write.h>
+#include <modbusRegister.h>
 
 #define INCREMENTAL_ENCODER_PPR 500
 #define GEAR_RATIO 5
