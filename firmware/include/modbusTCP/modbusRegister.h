@@ -72,7 +72,9 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_FORCE_KI                                       32
 #define DATA_FORCE_KD                                       34
 
-#define DATA_MOTOR_REQUIRED_SPEED                           36
-#define DATA_MOTOR_CURRENT_SPEED                            37
+//#define DATA_MOTOR_REQUIRED_SPEED                           36
+//#define DATA_MOTOR_CURRENT_SPEED                            37
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         38
+#define DATA_MOTOR_CURRENT_VOLTAGE                          39
 
 #endif /* MODBUSREGISTER */

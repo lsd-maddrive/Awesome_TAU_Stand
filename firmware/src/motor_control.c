@@ -36,7 +36,7 @@ void update_motor_voltage(void){
   MotorState = MB_READ_REG_INT16(STATUS_MOTOR); // Reading from the modbus
   // Checking if the motor is running.
   if (MotorState == MOTOR_STATE_RUNNING){
-    MotorRequiredVoltage = (MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_SPEED))*COEF_RPM_TO_VOLTS_IN_PERSENTAGE; // Reading from the modbus
+    MotorRequiredVoltage = MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE); // Reading from the modbus
     // Check a percentage of the maximum voltage value.
     if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
     else if (MotorRequiredVoltage < -MAX_VOLTAGE_VALUE) MotorRequiredVoltage = -MAX_VOLTAGE_VALUE;
@@ -56,7 +56,7 @@ void update_motor_voltage(void){
     }
 
     motorSetVoltage(MotorCurrentVoltage);
-    MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED, MotorCurrentVoltage*COEF_VOLTS_IN_PERSENTAGE_TO_RPM); // Writing from the modbus
+    MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage); // Writing from the modbus
   }
   else motorSimpleStop(); // If the motor is not running.
 }
@@ -120,8 +120,8 @@ msg_t motorUninit(void){
   MotorState = MOTOR_STATE_STOPPED;
   // Writing data to the modbus
   MB_WRITE_REG_INT16(STATUS_MOTOR, MotorState);
-  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_SPEED, MotorRequiredVoltage);
-  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED, MotorCurrentVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE, MotorRequiredVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage);
 
   return msg;
 }

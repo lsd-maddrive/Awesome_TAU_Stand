@@ -15,19 +15,6 @@
 // Possible state of the motor.
 #define MOTOR_STATE_RUNNING                 1
 #define MOTOR_STATE_STOPPED                 0
-/*
- *  @brief  Coefficients for converting speed in revolutions per minute
- *          to voltage as a percentage of the maximum voltage and vice versa.
- *
- *  @note   Max voltage value of motor is 24 V.
- *
- *  @notr   Max rotational speed is 1000 rpm.
- *
- *  @note   COEF_RPM_TO_VOLTS_IN_PERSENTAGE     10  [10000 / 1000 rpm| 10000 is 100%]
- *          COEF_RPM_TO_VOLTS_IN_PERSENTAGE     0.1 [1000 rpm / 10000| 10000 is 100%]
- */
-#define COEF_RPM_TO_VOLTS_IN_PERSENTAGE     10
-#define COEF_VOLTS_IN_PERSENTAGE_TO_RPM     0.1
 
 
 /*
