@@ -13,8 +13,8 @@
 #define MOTOR_ZERO_VOLTAGE                  0 // Zero voltage value for motor start position.
 
 // Possible state of the motor.
-#define MOTOR_STATE_RUNNING                 1
-#define MOTOR_STATE_STOPPED                 0
+#define MOTOR_STATE_RUNNING                 true
+#define MOTOR_STATE_STOPPED                 false
 
 
 /*
