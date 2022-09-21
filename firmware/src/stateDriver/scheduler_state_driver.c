@@ -1,6 +1,6 @@
 #include "scheduler_state_driver.h"
 
-sdDriver_t sdDriver={
+stateDriver_t sdDriver={
                  .state=STATE_UNINIT,
                  .config={NONE_LOAD,0},
 };
@@ -8,8 +8,6 @@ sdDriver_t sdDriver={
 thread_t *tp_scheduler_sd;
 
 extern mailbox_t main_mb;
-
-
 
 static THD_WORKING_AREA(waStateDriver, 256);
 static THD_FUNCTION(stateDriver, arg)
@@ -27,7 +25,7 @@ static THD_FUNCTION(stateDriver, arg)
   }
 }
 
-void disStateDriverStart(void)
+void schStateDriverStart(void)
 {
   tp_scheduler_sd=chThdCreateStatic(waStateDriver, sizeof(waStateDriver), NORMALPRIO, stateDriver, NULL);
 }

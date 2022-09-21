@@ -17,7 +17,7 @@ static inline void testRoutines(void) {
 #elif(PROGRAM_ROUTINE == MOTOR_TEST)
     test_motor();
 #elif(PROGRAM_ROUTINE == STATE_DRIVER_TEST)
-    sd_test();
+    test_sd();
 #endif
 }
 

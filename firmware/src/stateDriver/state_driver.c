@@ -13,7 +13,7 @@ msg_t sen_mb_buffer[SEN_BUFFER_SIZE];
  *
  * @init
  */
-msg_t stateDriverInit(sdDriver_t *sdstruct)
+msg_t stateDriverInit(stateDriver_t *sdstruct)
 {
   if(sdstruct->state == STATE_UNINIT)
   {
@@ -35,7 +35,7 @@ msg_t stateDriverInit(sdDriver_t *sdstruct)
  *
  * @api
  */
-msg_t stateDriverStart(sdDriver_t *sdstruct)
+msg_t stateDriverStart(stateDriver_t *sdstruct)
 {
   if(sdstruct->state == STATE_STOP)
     {
@@ -59,7 +59,7 @@ msg_t stateDriverStart(sdDriver_t *sdstruct)
  *
  * @api
  */
-msg_t stateDriverStop(sdDriver_t *sdstruct)
+msg_t stateDriverStop(stateDriver_t *sdstruct)
 {
   if(sdstruct->state == STATE_READY)
     {
@@ -83,7 +83,7 @@ msg_t stateDriverStop(sdDriver_t *sdstruct)
  *
  * @api
  */
-msg_t setNewLoad(sdDriver_t *sdstruct,load_t new_load)
+msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load)
 {
   if(sdstruct->state == STATE_STOP)
     {
@@ -107,7 +107,7 @@ msg_t setNewLoad(sdDriver_t *sdstruct,load_t new_load)
  *
  * @api
  */
-msg_t setNewSen(sdDriver_t *sdstruct,senlist_t sen,senstep_t step){
+msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step){
   if(sdstruct->state == STATE_READY || sdstruct->state == STATE_ACTIVE || sdstruct->state == STATE_STOP)
    {
     if((sdstruct->config.load & (1<<sen))!=0)

@@ -11,7 +11,8 @@ typedef enum {
   STATE_UNINIT = 0,     /**< @brief Not initialized.    */
   STATE_STOP = 1,       /**< @brief Stopped.            */
   STATE_READY = 2,      /**< @brief Ready.              */
-  STATE_ACTIVE = 3      /**< @brief Active.             */
+  STATE_ACTIVE = 3,     /**< @brief Active.             */
+  STATE_ERROR = 4
 } dstate_t;
 
 /**
@@ -32,7 +33,7 @@ typedef struct {
    * @note    Leave zero if the regulator is not used.
    */
 //  controller_t controller;
-}sdConfig_t;
+}stateConfig_t;
 
 
 /**
@@ -46,18 +47,18 @@ typedef struct {
   /**
    * @brief   Current configuration data.
    */
-  sdConfig_t config;
-}sdDriver_t;
+  stateConfig_t config;
+}stateDriver_t;
 
 
 
-msg_t stateDriverInit(sdDriver_t *sdstruct);
-msg_t stateDriverStart(sdDriver_t *sdstruct);
-msg_t stateDriverStop(sdDriver_t *sdstruct);
+msg_t stateDriverInit(stateDriver_t *sdstruct);
+msg_t stateDriverStart(stateDriver_t *sdstruct);
+msg_t stateDriverStop(stateDriver_t *sdstruct);
 
-msg_t stateDriverActivateMotor(sdDriver_t *sdstruct);
-msg_t stateDriverDeactivateMotor(sdDriver_t *sdstruct);
+msg_t stateDriverActivateMotor(stateDriver_t *sdstruct);
+msg_t stateDriverDeactivateMotor(stateDriver_t *sdstruct);
 
-msg_t setNewLoad(sdDriver_t *sdstruct,load_t new_load);
-msg_t setNewSen(sdDriver_t *sdstruct,senlist_t sen,senstep_t step);
+msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load);
+msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step);
 #endif

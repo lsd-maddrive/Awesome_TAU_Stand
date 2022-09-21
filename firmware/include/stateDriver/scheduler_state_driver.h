@@ -8,7 +8,7 @@
 #include <terminal_write.h>
 
 
-void disStateDriverStart(void);
+void schStateDriverStart(void);
 void whatToDo(msg_t received_msg);
 
 #endif

@@ -1,4 +1,3 @@
-#include <common.h>
 #include <tests.h>
 #include <terminal_write.h>
 #include "modbusTCP.h"
@@ -9,13 +8,13 @@
 mailbox_t main_mb;
 msg_t main_mb_buffer[BUFFER_SIZE];
 
-void sd_test(void){
+void test_sd(void){
   halInit();
   chSysInit();
   debugStreamInit();
 
   chMBObjectInit(&main_mb, main_mb_buffer, BUFFER_SIZE);
-  disStateDriverStart();
+  schStateDriverStart();
 
   modbustcp_init();
   modbustcp_start();

@@ -41,7 +41,7 @@ typedef  enum
   SEN_ON = 1
 }senstep_t;
 
-typedef void (*callback_function_sensor)(void);
+typedef msg_t (*callback_function_sensor)(void);
 
 /**
  * @brief Structure of function pointers.
