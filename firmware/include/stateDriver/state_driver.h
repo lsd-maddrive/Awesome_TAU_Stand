@@ -26,7 +26,7 @@ typedef struct {
   /**
    * @brief   Sensor status mask.
    */
-  uint8_t sens;
+  uint16_t sens;
   /**
    * @brief   controller selecting the controller settings.
    * @note    Leave zero if the regulator is not used.

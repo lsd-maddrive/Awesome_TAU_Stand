@@ -3,8 +3,8 @@
 mailbox_t *sensors_mb;
 
 senaction_t sen_table_fun[NUMBER_SENSORS] = {
-    [SEN_CURRENT] = {0,0},
-    [SEN_ABS_ENCODER] = {0,0},
+    [SEN_CURRENT] = {currentSensorInit,0},
+    [SEN_ABS_ENCODER] = {absoluteEncoderInit,0},
     [SEN_INC_ENCODER] = {IncrementalEncoderInterruptInit,IncrementalEncoderInterruptUninit},
 };
 
@@ -17,7 +17,7 @@ static THD_FUNCTION(sensContr, sens)
   msg_t received_msg;
   for(uint8_t i=0;i<NUMBER_SENSORS;i++)
   {
-    if((*(uint8_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_init();
+    if((*(uint16_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_init();
   }
   while(!chThdShouldTerminateX()){
     msg_t msg_mb = chMBFetchTimeout(sensors_mb, &received_msg, TIME_INFINITE);
@@ -37,7 +37,7 @@ static THD_FUNCTION(sensContr, sens)
   }
   for(uint8_t i=0;i<NUMBER_SENSORS;i++)
   {
-    if((*(uint8_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_uninit();
+    if((*(uint16_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_uninit();
   }
 
   chThdExit(MSG_OK);
@@ -51,7 +51,7 @@ static THD_FUNCTION(sensContr, sens)
  *
  * @init
  */
-void measurementsStart(mailbox_t *get_mb,uint8_t* sens)
+void measurementsStart(mailbox_t *get_mb,uint16_t* sens)
 {
   sensors_mb=get_mb;
   tp_measur=chThdCreateStatic(waSensContr, sizeof(waSensContr), NORMALPRIO, sensContr, (void *)sens);

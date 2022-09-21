@@ -59,15 +59,7 @@ typedef struct
 }senaction_t;
 
 
-void measurementsStart(mailbox_t *get_mb,uint8_t* sens);
+void measurementsStart(mailbox_t *get_mb,uint16_t* sens);
 void measurementsStop(void);
-
-
-void senCurrentInit(void);
-void senCurrentUninit(void);
-void senABSEncoderInit(void);
-void senABSEncoderUninit(void);
-void senINCEncoderInit(void);
-void senINCEncoderUninit(void);
 
 #endif
