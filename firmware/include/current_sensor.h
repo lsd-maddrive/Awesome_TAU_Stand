@@ -13,7 +13,7 @@
  *  @note   Used m3421 ADC.
  *  @note   One-Shot mode may not be working.
  */
-void currentSensorInit(void);
+msg_t currentSensorInit(void);
 
 /*
  * @brief  Stops I2C (if it's enabled) and current sensor thread.

@@ -2,7 +2,6 @@
 #define INCLUDE_INCREMENTAL_ENCODER_H_
 
 #include <common.h>
-#include <terminal_write.h>
 #include <modbusRegister.h>
 
 #define INCREMENTAL_ENCODER_PPR 500
@@ -39,7 +38,7 @@
  *
  *  @note   GPTD1 is used.
  */
-void IncrementalEncoderInterruptInit(void);
+msg_t IncrementalEncoderInterruptInit(void);
 
 /*
  *  @brief  Stops the timer running and interrupts.
@@ -48,7 +47,7 @@ void IncrementalEncoderInterruptInit(void);
  *
  *  @note   Setting a safe state for used leg.
  */
-void IncrementalEncoderInterruptUninit(void);
+msg_t IncrementalEncoderInterruptUninit(void);
 
 /*
  *  @brief  Returns rotation speed in rpm.

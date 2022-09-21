@@ -94,13 +94,14 @@ static THD_FUNCTION(motorThread, arg)
  *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
  *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
  */
-void motorInit(void){
+msg_t motorInit(void){
   motorSimpleInit();
   // Set the start motor parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
   MotorState = MOTOR_STATE_STOPPED;
   chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
+  return MSG_OK;
 }
 
 /*

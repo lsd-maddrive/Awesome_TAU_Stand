@@ -183,7 +183,7 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
  *  @note   Set encoder angular velocity sampling time (20 milliseconds).
  *  @note   Sets the zero position of the encoder.
  */
-void absoluteEncoderInit(void){
+msg_t absoluteEncoderInit(void){
   canSimpleInit(); // Launches can.
 
   // General encoder settings.
@@ -218,7 +218,7 @@ void absoluteEncoderInit(void){
 
   // Starts another thread.
   chThdCreateStatic(waAbsoluteEncoder, sizeof(waAbsoluteEncoder), NORMALPRIO, absoluteEncoderThread, NULL);
-
+  return MSG_OK;
 }
 
 /*

@@ -25,7 +25,7 @@
  *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
  *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
  */
-void motorInit(void);
+msg_t motorInit(void);
 
 /*
  *  @brief  Stops the motor and the motor thread.

@@ -31,11 +31,11 @@ static THD_FUNCTION(currentSensorThread, arg)
  *  @note   Used m3421 ADC.
  *  @note   One-Shot mode may not be working.
  */
-void currentSensorInit(void){
+msg_t currentSensorInit(void){
   sensorM3421Init();
   if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)
     chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
-
+  return MSG_OK;
 }
 
 /*
