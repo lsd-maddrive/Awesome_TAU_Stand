@@ -17,9 +17,10 @@ static THD_FUNCTION(currentSensorThread, arg)
     systime_t time = chVTGetSystemTime();
     while( true ){
       current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
-
+      MB_WRITE_REG_FLOAT(DATA_CURRENT_SENSOR_CURRENT, current); // Writing data to the modbus
       if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
+
     }
 }
 
@@ -30,11 +31,11 @@ static THD_FUNCTION(currentSensorThread, arg)
  *  @note   Used m3421 ADC.
  *  @note   One-Shot mode may not be working.
  */
-void currentSensorInit(void){
+msg_t currentSensorInit(void){
   sensorM3421Init();
   if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)
     chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
-
+  return MSG_OK;
 }
 
 /*

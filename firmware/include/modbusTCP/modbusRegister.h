@@ -12,7 +12,7 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 
 #define MB_READ_REG_FLOAT(addr)         (*(float*)(Analog_Register+addr))
 #define MB_READ_REG_INT32(addr)         (*(int32_t*)(Analog_Register+addr))
-#define MB_READ_REG_INT16(addr)         (*(Analog_register+addr))
+#define MB_READ_REG_INT16(addr)         (*(Analog_Register+addr))
 #define MB_WRITE_REG_FLOAT(addr,val)    (*(float*)(Analog_Register+addr)=val)
 #define MB_WRITE_REG_INT32(addr,val)    (*(int32_t*)(Analog_Register+addr)=val)
 #define MB_WRITE_REG_INT16(addr,val)    (*(Analog_Register+addr)=val)
@@ -40,37 +40,46 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define FLAG_ROTATE                     13
 #define FLAG_VOLT                       14
 
+#define STATUS_MOTOR                    15
+#define STATUS_CURRENT                  16
+#define STATUS_INC_ENCODER              17
+#define STATUS_ABS_ENCODER              18
+
 
 
 
 //analog_reg
-#define DATA_SPEED                      0
 
-#define DATA_CURRENT                    1
-#define STATUS_CURRENT                  2
 
-#define DATA_INC_ENCODER                3
-#define STATUS_INC_ENCODER              5
+#define DATA_CURRENT_SENSOR_CURRENT                         0
 
-#define DATA_ABS_ENCODER_ANGLE          6
-#define DATA_ABS_ENCODER_ANGLEMULTI     8
-#define DATA_ABS_ENCODER_SPEED          10
-#define DATA_ABS_ENCODER_ROTATE         12
-#define STATUS_ABS_ENCODER              14
 
-#define DATA_CONTR_KP                   15
-#define DATA_CONTR_KI                   17
-#define DATA_CONTR_KD                   19
+#define DATA_INC_ENCODER_ROTATIONAL_SPEED                   2
 
-#define DATA_CONTR_KP_2                 21
-#define DATA_CONTR_KI_2                 23
-#define DATA_CONTR_KD_2                 25
-#define CONTR_USE_SEN                   27
 
-#define DATA_FORCE_PID                  28
-#define DATA_FORCE_KP                   30
-#define DATA_FORCE_KI                   32
-#define DATA_FORCE_KD                   34
+#define DATA_ABS_ENCODER_ANGLE_OF_ROTATION                  4
+#define DATA_ABS_ENCODER_MULTI_TURN_ANGLE_OF_ROTATION       6
+#define DATA_ABS_ENCODER_ROTATIONAL_SPEED                   8
+#define DATA_ABS_ENCODER_NUMBER_OF_TURNS                    10
 
+
+#define DATA_CONTR_KP                                       12
+#define DATA_CONTR_KI                                       14
+#define DATA_CONTR_KD                                       16
+
+#define DATA_CONTR_KP_2                                     18
+#define DATA_CONTR_KI_2                                     20
+#define DATA_CONTR_KD_2                                     22
+#define CONTR_USE_SEN                                       24
+
+#define DATA_FORCE_PID                                      26
+#define DATA_FORCE_KP                                       28
+#define DATA_FORCE_KI                                       30
+#define DATA_FORCE_KD                                       32
+
+#define DATA_MOTOR_REQUIRED_SPEED                           33
+#define DATA_MOTOR_CURRENT_SPEED                            34
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         35
+#define DATA_MOTOR_CURRENT_VOLTAGE                          36
 
 #endif /* MODBUSREGISTER */

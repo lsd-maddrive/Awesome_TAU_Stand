@@ -1,4 +1,5 @@
 #include <incremental_encoder.h>
+#include <terminal_write.h>
 
 void test_interrupt(void) {
     halInit();
