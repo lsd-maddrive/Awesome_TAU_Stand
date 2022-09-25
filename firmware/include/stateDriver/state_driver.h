@@ -1,7 +1,8 @@
 #ifndef INCLUDE_STATE_DRIVER_H_
 #define INCLUDE_STATE_DRIVER_H_
 #include "hal.h"
-#include "measurements.h"
+#include <measurements.h>
+#include <controllers.h>
 #include <terminal_write.h>
 
 /**
@@ -32,7 +33,7 @@ typedef struct {
    * @brief   controller selecting the controller settings.
    * @note    Leave zero if the regulator is not used.
    */
-//  controller_t controller;
+  controller_t controller;
 }stateConfig_t;
 
 
@@ -53,6 +54,7 @@ typedef struct {
 
 
 msg_t stateDriverInit(stateDriver_t *sdstruct);
+
 msg_t stateDriverStart(stateDriver_t *sdstruct);
 msg_t stateDriverStop(stateDriver_t *sdstruct);
 
@@ -61,4 +63,7 @@ msg_t stateDriverDeactivateMotor(stateDriver_t *sdstruct);
 
 msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load);
 msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step);
+
+msg_t setNewControll(stateDriver_t *sdstruct,contrlist_t new_controll);
+msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,paramstep_t step);
 #endif

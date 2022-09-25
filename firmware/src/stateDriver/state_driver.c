@@ -69,6 +69,51 @@ msg_t stateDriverStop(stateDriver_t *sdstruct)
     }
   else return MSG_RESET;
 }
+/**
+ * @brief   Switching to the state when the engine is running.
+ *
+ * @param[in] sdstruct    structure representing an state driver
+ *
+ * @return              The operation status
+ * @retval MSG_OK       if the function succeeded
+ * @retval MSG_RESET    there were some problems
+ *
+ *
+ * @api
+ */
+msg_t stateDriverActivateMotor(stateDriver_t *sdstruct)
+{
+  if(sdstruct->state == STATE_READY)
+  {
+    controllersStart(&sdstruct-> config.controller);
+    sdstruct->state = STATE_ACTIVE;
+    return MSG_OK;
+   }
+  else return MSG_RESET;
+}
+
+/**
+ * @brief   Stopping the motor.
+ *
+ * @param[in] sdstruct    structure representing an state driver
+ *
+ * @return              The operation status
+ * @retval MSG_OK       if the function succeeded
+ * @retval MSG_RESET    there were some problems
+ *
+ *
+ * @api
+ */
+msg_t stateDriverDeactivateMotor(stateDriver_t *sdstruct)
+{
+  if(sdstruct->state == STATE_ACTIVE)
+    {
+      controllersStop(&sdstruct-> config.controller);
+      sdstruct->state = STATE_READY;
+      return MSG_OK;
+    }
+  else return MSG_RESET;
+}
 
 /**
  * @brief   Selecting a new load.
@@ -124,6 +169,54 @@ msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step){
    else return MSG_RESET;
 }
 
+/**
+ * @brief   Selecting a new controller.
+ *
+ * @param[in] sdstruct          structure representing an state driver
+ * @param[in] new_controll      new controller to be included
+ *
+ * @return              The operation status
+ * @retval MSG_OK       if the function succeeded
+ * @retval MSG_RESET    there were some problems
+ *
+ *
+ * @api
+ */
+msg_t setNewControll(stateDriver_t *sdstruct,contrlist_t new_controll)
+{
+  if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY)
+    {
+      sdstruct->config.controller.type=new_controll;
+      return MSG_OK;
+    }
+  else return MSG_RESET;
+}
+
+/**
+ * @brief   Changes to the controller parameters.
+ *
+ * @param[in] sdstruct                structure representing an state driver
+ * @param[in] new_param_controll      new controller parameter
+ * @param[in] step                    action on the parameter
+ *
+ * @return              The operation status
+ * @retval MSG_OK       if the function succeeded
+ * @retval MSG_RESET    there were some problems
+ *
+ *
+ * @api
+ */
+msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,paramstep_t step)
+{
+  if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY)
+    {
+      if(step==TRUE)sdstruct->config.controller.param|=(1<<new_param_controll);
+      else sdstruct->config.controller.param &=~(1<<new_param_controll);
+
+      return MSG_OK;
+    }
+  else return MSG_RESET;
+}
 
 
 

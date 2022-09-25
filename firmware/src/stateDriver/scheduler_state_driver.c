@@ -44,6 +44,7 @@ void  whatToDo(msg_t received_msg)
       case SYSTEM_STOP:
         if(value)
         {
+          stateDriverDeactivateMotor(&sdDriver);
           stateDriverStop(&sdDriver);
           MB_WRITE_DISCRET_REG(MEASURE,FALSE);
           MB_WRITE_DISCRET_REG(MOTOR,FALSE);
@@ -55,6 +56,12 @@ void  whatToDo(msg_t received_msg)
         if(value)msg=stateDriverStart(&sdDriver);
         else msg = stateDriverStop(&sdDriver);
         if(msg==MSG_OK)MB_WRITE_DISCRET_REG(MEASURE,value);
+        break;
+
+      case MOTOR:
+        if(value)msg = stateDriverActivateMotor(&sdDriver);
+        else msg = stateDriverDeactivateMotor(&sdDriver);
+        if(msg==MSG_OK)MB_WRITE_DISCRET_REG(MOTOR,value);
         break;
 
       case FLAG_LOAD_1:
@@ -91,14 +98,37 @@ void  whatToDo(msg_t received_msg)
               break;
 
       case FLAG_CURRENT:
-        if(setNewSen(&sdDriver,SEN_CURRENT,(senstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_CURRENT,value);
-        break;
+              if(setNewSen(&sdDriver,SEN_CURRENT,(senstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_CURRENT,value);
+              break;
       case FLAG_ABS_ENCODER:
-        if(setNewSen(&sdDriver,SEN_ABS_ENCODER,(senstep_t)value)==MSG_OK)MB_WRITE_DISCRET_REG(FLAG_ABS_ENCODER,value);
-        break;
+              if(setNewSen(&sdDriver,SEN_ABS_ENCODER,(senstep_t)value)==MSG_OK)MB_WRITE_DISCRET_REG(FLAG_ABS_ENCODER,value);
+              break;
       case FLAG_INC_ENCODER:
-        if(setNewSen(&sdDriver,SEN_INC_ENCODER,(senstep_t)value)==MSG_OK)MB_WRITE_DISCRET_REG(FLAG_INC_ENCODER,value);
-        break;
+              if(setNewSen(&sdDriver,SEN_INC_ENCODER,(senstep_t)value)==MSG_OK)MB_WRITE_DISCRET_REG(FLAG_INC_ENCODER,value);
+              break;
+
+      case FLAG_CONTROLLER_1:
+             if(!value || (setNewControll(&sdDriver,PID)!=MSG_OK)) value=FALSE;
+             MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,value);
+             if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_2,!value);
+             break;
+      case FLAG_CONTROLLER_2:
+             if(!value || (setNewControll(&sdDriver,CONTROL2)!=MSG_OK)) value=FALSE;
+             MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_2,value);
+             if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,!value);
+             break;
+      case FLAG_SPEED:
+             if(setNewParamControll(&sdDriver,PARAM_SPEED,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
+             break;
+      case FLAG_ANGLE:
+             if(setNewParamControll(&sdDriver,PARAM_ANGLE,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
+             break;
+      case FLAG_ROTATE:
+             if(setNewParamControll(&sdDriver,PARAM_ROTATE,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
+             break;
+      case FLAG_VOLT:
+             if(setNewParamControll(&sdDriver,PARAM_VOLT,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
+             break;
     }
 
   }
