@@ -3,8 +3,8 @@
 mailbox_t *sensors_mb;
 
 senaction_t sen_table_fun[NUMBER_SENSORS] = {
-    [SEN_CURRENT] = {currentSensorInit,0},
-    [SEN_ABS_ENCODER] = {absoluteEncoderInit,0},
+    [SEN_CURRENT] = {currentSensorInit,currentSensorUninit},
+    [SEN_ABS_ENCODER] = {absoluteEncoderInit,absoluteEncoderUninit},
     [SEN_INC_ENCODER] = {IncrementalEncoderInterruptInit,IncrementalEncoderInterruptUninit},
 };
 
