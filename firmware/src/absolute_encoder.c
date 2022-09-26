@@ -65,6 +65,7 @@ void absolute_encoder_read_rotational_speed(void){
   absoluteEncoder.RotationalSpeed = absoluteEncoder.RotationalSpeed * sign;
   absoluteEncoder.PreviousNumberOfTurns = absoluteEncoder.NumberOfTurns;
   absoluteEncoder.PreviousAngleOfRotation = absoluteEncoder.AngleOfRotation;
+  MB_WRITE_REG_FLOAT(DATA_ABS_ENCODER_ROTATIONAL_SPEED, absoluteEncoder.RotationalSpeed); // Writing data to the modbus
 }
 
 /*
@@ -87,6 +88,7 @@ void absolute_encoder_read_number_of_turns(void){
     else palToggleLine(LINE_LED1);
   }while(1);
   absoluteEncoder.NumberOfTurns = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
+  MB_WRITE_REG_INT32(DATA_ABS_ENCODER_NUMBER_OF_TURNS, absoluteEncoder.NumberOfTurns); // Writing data to the modbus
 }
 
 /*
@@ -113,6 +115,7 @@ void absolute_encoder_read_angle_of_rotation(void){
   }while(1);
   absoluteEncoder.AngleOfRotation = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
   absoluteEncoder.AngleOfRotation = absoluteEncoder.AngleOfRotation * COEF_ANGLE;
+  MB_WRITE_REG_FLOAT(DATA_ABS_ENCODER_ANGLE_OF_ROTATION, absoluteEncoder.AngleOfRotation); // Writing data to the modbus
 }
 
 
@@ -145,6 +148,7 @@ void absolute_encoder_calculate_multi_turn_angle_of_rotation(void){
   //Counts the angle of rotation, taking into account the sign in order to avoid overflow.
   else if(absoluteEncoder.NumberOfTurns >= COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE)absoluteEncoder.MultiTurnAngleOfRotation = (absoluteEncoder.NumberOfTurns * 360) + absoluteEncoder.AngleOfRotation;
   else if(absoluteEncoder.NumberOfTurns <= -COEF_THRESHOLD_FOR_MULTI_TURN_ANGLE)absoluteEncoder.MultiTurnAngleOfRotation = 360 * absoluteEncoder.NumberOfTurns - (360 - absoluteEncoder.AngleOfRotation);
+  MB_WRITE_REG_INT32(DATA_ABS_ENCODER_MULTI_TURN_ANGLE_OF_ROTATION, absoluteEncoder.MultiTurnAngleOfRotation); // Writing data to the modbus
 }
 
 
@@ -179,7 +183,7 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
  *  @note   Set encoder angular velocity sampling time (20 milliseconds).
  *  @note   Sets the zero position of the encoder.
  */
-void absoluteEncoderInit(void){
+msg_t absoluteEncoderInit(void){
   canSimpleInit(); // Launches can.
 
   // General encoder settings.
@@ -214,7 +218,7 @@ void absoluteEncoderInit(void){
 
   // Starts another thread.
   chThdCreateStatic(waAbsoluteEncoder, sizeof(waAbsoluteEncoder), NORMALPRIO, absoluteEncoderThread, NULL);
-
+  return MSG_OK;
 }
 
 /*

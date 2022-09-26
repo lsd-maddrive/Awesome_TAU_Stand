@@ -12,7 +12,7 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 
 #define MB_READ_REG_FLOAT(addr)         (*(float*)(Analog_Register+addr))
 #define MB_READ_REG_INT32(addr)         (*(int32_t*)(Analog_Register+addr))
-#define MB_READ_REG_INT16(addr)         (*(Analog_register+addr))
+#define MB_READ_REG_INT16(addr)         (*(Analog_Register+addr))
 #define MB_WRITE_REG_FLOAT(addr,val)    (*(float*)(Analog_Register+addr)=val)
 #define MB_WRITE_REG_INT32(addr,val)    (*(int32_t*)(Analog_Register+addr)=val)
 #define MB_WRITE_REG_INT16(addr,val)    (*(Analog_Register+addr)=val)
@@ -46,8 +46,8 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define STATUS_ABS_ENCODER              18
 
 
-
 //analog_reg
+
 #define DATA_CURRENT_SENSOR_CURRENT                         0
 
 #define DATA_INC_ENCODER_ROTATIONAL_SPEED                   2
@@ -77,5 +77,9 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_MOTOR_REQUIRED_VOLTAGE                         35
 #define DATA_MOTOR_CURRENT_VOLTAGE                          36
 
+#define DATA_MOTOR_REQUIRED_SPEED                           33
+#define DATA_MOTOR_CURRENT_SPEED                            34
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         35
+#define DATA_MOTOR_CURRENT_VOLTAGE                          36
 
 #endif /* MODBUSREGISTER */

@@ -21,25 +21,29 @@
 
 ## Аналоговые регистры
 
-|    Имя 				  | Адрес | Тип данных | Модуль  |
-|:----------------------------------------------:|:--------:|:--------------:|:-----------:|
-| DATA_SPEED			  |  0  	|    int16	| пользователь?		|
-| DATA_CURRENT			  |  1	|    int16	| датчик тока		|
-| STATUS_CURRENT	 	  |  2	|    int16	| датчик тока		|
-| DATA_INC_ENCODER		  |  3	|    float	|инкрементальный энкодер|
-| STATUS_INC_ENCODER		  |  5	|    int16	|инкрементальный энкодер|	
-|  DATA_ABS_ENCODER_ANGLE	  |  6	|    float	|абсолютный энкодер	|
-|  DATA_ABS_ENCODER_ANGLEMULTI	  |  8	|    int32	|абсолютный энкодер	|
-|  DATA_ABS_ENCODER_SPEED	  |  10	|    float	|абсолютный энкодер	|
-|  DATA_ABS_ENCODER_ROTATE	  |  12	|    int32	|абсолютный энкодер	|
-|  STATUS_ABS_ENCODER		  |  14	|    int16	|абсолютный энкодер	|
-|  DATA_CONTR_KP	  	                    |  15	|    float	|регулятор		|
-|  DATA_CONTR_KI			  |  17	|    float	|регулятор		|
-|  DATA_CONTR_KD		  |  19	|    float	|регулятор		|
-|  DATA_CONTR_KP_2		  |  21	|    float	|регулятор		|
-|  DATA_CONTR_KI_2		  |  23	|    float	|регулятор		|
-|  DATA_CONTR_KD_2		  |  25	|    float	|регулятор		|
-|  CONTR_USE_SEN		  |  27	|    int16	|регулятор		|
+|    Имя 				         | Адрес |  Тип данных |       Модуль           | Тип взаимодействия |
+|:----------------------------------------------:|:-----:|:-----------:|:----------------------:|:------------------:|
+| STATUS_MOTOR			  		 |   0   |    int16    | пользователь?		|    Read/Write	     |
+| DATA_CURRENT_SENSOR_CURRENT 	   		 |   1	 |    int16    | датчик тока		|    Read only	     |
+| STATUS_CURRENT	 	   		 |   2	 |    int16    | датчик тока		|		     |
+| DATA_INC_ENCODER_ROTATIONAL_SPEED		 |   3	 |    float    | инкрементальный энкодер|    Read only	     |
+| STATUS_INC_ENCODER		  		 |   5	 |    int16    | инкрементальный энкодер|    		     |	
+| DATA_ABS_ENCODER_ANGLE_OF_ROTATION		 |   6	 |    float    | абсолютный энкодер	|    Read only	     |
+| DATA_ABS_ENCODER_MULTI_TURN_ANGLE_OF_ROTATION  |   8	 |    int32    | абсолютный энкодер	|    Read only	     |
+| DATA_ABS_ENCODER_ROTATIONAL_SPEED		 |   10  |    float    | абсолютный энкодер	|    Read only	     |
+| DATA_ABS_ENCODER_NUMBER_OF_TURNS		 |   12  |    int32    | абсолютный энкодер	|    Read only	     |
+| STATUS_ABS_ENCODER		  		 |   14  |    int16    | абсолютный энкодер	|    		     |
+| DATA_CONTR_KP	  	  			 |   15  |    float    | регулятор		|    		     |
+| DATA_CONTR_KI		  			 |   17  |    float    | регулятор		|    		     |
+| DATA_CONTR_KD		  			 |   19  |    float    | регулятор		|    		     |
+| DATA_CONTR_KP_2				 |   21  |    float    | регулятор		|    		     |
+| DATA_CONTR_KI_2		  		 |   23  |    float    | регулятор		|    		     |
+| DATA_CONTR_KD_2		  		 |   25  |    float    | регулятор		|    		     |
+| CONTR_USE_SEN		  			 |   27  |    int16    | регулятор		|    		     |
+| DATA_MOTOR_REQUIRED_SPEED			 |   36  |    int16    | двигатель		|    Read/Write	     |
+| DATA_MOTOR_CURRENT_SPEED			 |   37  |    int16    | двигатель		|    Read only	     |
+| DATA_MOTOR_REQUIRED_VOLTAGE			 |   38  |    int16    | двигатель		|    Read/Write	     |
+| DATA_MOTOR_CURRENT_VOLTAGE			 |   39  |    int16    | двигатель		|    Read only	     |
 
 ## Дискретные регистры
 

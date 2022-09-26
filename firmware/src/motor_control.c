@@ -13,7 +13,6 @@
 
 int16_t MotorRequiredVoltage; // New voltage that is set by the user.
 int16_t MotorCurrentVoltage; // The current value of motor voltage.
-bool MotorState; // The state of the motor that indicates whether it is running or not.
 
 
 
@@ -33,34 +32,27 @@ bool MotorState; // The state of the motor that indicates whether it is running 
  *  @notapi
  */
 void update_motor_voltage(void){
-//  read from the table
-//  MotorRequiredVoltage = ...
-//  MotorState = ....
+  MotorRequiredVoltage = MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE); // Reading from the modbus
+  // Check a percentage of the maximum voltage value.
+  if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
+  else if (MotorRequiredVoltage < -MAX_VOLTAGE_VALUE) MotorRequiredVoltage = -MAX_VOLTAGE_VALUE;
 
-  // Checking if the motor is running.
-  if (MotorState == true){
-
-    // Check a percentage of the maximum voltage value.
-    if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
-    else if (MotorRequiredVoltage < -MAX_VOLTAGE_VALUE) MotorRequiredVoltage = -MAX_VOLTAGE_VALUE;
-
-    // When the voltage should be increased. And the voltage difference is greater than MOTOR_STEP_TO_CHANGE_VOLTAGE.
-    if ((MotorRequiredVoltage - MotorCurrentVoltage) >= MOTOR_STEP_TO_CHANGE_VOLTAGE){
-      MotorCurrentVoltage += MOTOR_STEP_TO_CHANGE_VOLTAGE;
-    }
-    // When the voltage should be decreased. And the voltage difference is less than minus MOTOR_STEP_TO_CHANGE_VOLTAGE.
-    else if ((MotorRequiredVoltage - MotorCurrentVoltage) <= -MOTOR_STEP_TO_CHANGE_VOLTAGE){
-      MotorCurrentVoltage -= MOTOR_STEP_TO_CHANGE_VOLTAGE;
-    }
-    // When the voltage should be increased or decreased. And the voltage difference is in range:
-    // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, MOTOR_STEP_TO_CHANGE_VOLTAGE).
-    else{
-      MotorCurrentVoltage = MotorRequiredVoltage;
-    }
-
-    motorSetVoltage(MotorCurrentVoltage);
+  // When the voltage should be increased. And the voltage difference is greater than MOTOR_STEP_TO_CHANGE_VOLTAGE.
+  if ((MotorRequiredVoltage - MotorCurrentVoltage) >= MOTOR_STEP_TO_CHANGE_VOLTAGE){
+    MotorCurrentVoltage += MOTOR_STEP_TO_CHANGE_VOLTAGE;
   }
-  else motorSimpleStop(); // If the motor is not running.
+  // When the voltage should be decreased. And the voltage difference is less than minus MOTOR_STEP_TO_CHANGE_VOLTAGE.
+  else if ((MotorRequiredVoltage - MotorCurrentVoltage) <= -MOTOR_STEP_TO_CHANGE_VOLTAGE){
+    MotorCurrentVoltage -= MOTOR_STEP_TO_CHANGE_VOLTAGE;
+  }
+  // When the voltage should be increased or decreased. And the voltage difference is in range:
+  // (-MOTOR_STEP_TO_CHANGE_VOLTAGE, MOTOR_STEP_TO_CHANGE_VOLTAGE).
+  else{
+    MotorCurrentVoltage = MotorRequiredVoltage;
+  }
+
+  motorSetVoltage(MotorCurrentVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage); // Writing from the modbus
 }
 
 
@@ -96,13 +88,13 @@ static THD_FUNCTION(motorThread, arg)
  *  @note   The voltage is setted as a percentage of the maximum voltage value of motor.
  *          Can be in range [0, 9500]. 100 is 1%. 100% is not used because it can led to breakdowns.
  */
-void motorInit(void){
+msg_t motorInit(void){
   motorSimpleInit();
   // Set the start motor parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
-  MotorState = MOTOR_STATE_STOPPED;
   chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
+  return MSG_OK;
 }
 
 /*
@@ -119,7 +111,10 @@ msg_t motorUninit(void){
   // Resetting the motor current parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
-  MotorState = MOTOR_STATE_STOPPED;
+  // Writing data to the modbus
+  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE, MotorRequiredVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage);
+
   return msg;
 }
 

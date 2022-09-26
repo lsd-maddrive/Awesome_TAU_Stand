@@ -62,7 +62,7 @@ typedef struct
  *  @note   Set encoder angular velocity sampling time (20 milliseconds).
  *  @note   Sets the zero position of the encoder.
  */
-void absoluteEncoderInit(void);
+msg_t absoluteEncoderInit(void);
 
 /*
  *  @brief  Stops can if it's enabled.
