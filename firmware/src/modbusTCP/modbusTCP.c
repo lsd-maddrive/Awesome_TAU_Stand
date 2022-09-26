@@ -35,6 +35,8 @@
   
 uint8_t modbus_out_buf[100];
 
+extern mailbox_t main_mb;
+
 
 THD_WORKING_AREA(wa_tcp_server, 1024);
 
@@ -157,7 +159,8 @@ int16_t modbustcp_go(uint8_t* data)
     break;
     case MB_FUN_WRITE_DISCRETE_REGISTER:
     {
-      Discrete_Register[address]=modbustcp_get_boll_value(data);
+      msg_t perem=(modbustcp_get_boll_value(data)<<16)+(address);
+      chMBPostTimeout(&main_mb, perem, TIME_IMMEDIATE);
       len=modbusTCP_Write_Discrete_Register(tid,pid,uid,func,address,Discrete_Register[address]);
       return len;
     }
@@ -176,7 +179,8 @@ int16_t modbustcp_go(uint8_t* data)
     break;
     case MB_FUN_WRITE_ANALOG_REGISTER:
     {
-      Analog_Register[address]=modbustcp_get_value(data);
+      msg_t perem=(modbustcp_get_value(data)<<16)+(address+100);
+      chMBPostTimeout(&main_mb, perem, TIME_IMMEDIATE);
       len=modbusTCP_Write_Analog_Register(tid,pid,uid,func, address,Analog_Register[address]);
       return len;
     }

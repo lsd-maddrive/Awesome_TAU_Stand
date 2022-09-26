@@ -13,10 +13,18 @@ PROJECT_CSRC 	= src/main.c \
 				  src/modbusTCP/modbusRegister.c \
 				  src/modbusTCP/modbusTCP.c \
 				  tests/interrupt_test.c \
+				  src/can_lld.c\
 				  src/incremental_encoder.c \
+				  src/absolute_encoder.c \
 				  tests/motor_test.c \
 				  src/motor_lld.c \
 				  src/motor_control.c \
+				  tests/state_driver_test.c\
+				  src/stateDriver/state_driver.c\
+				  src/stateDriver/measurements.c\
+				  src/stateDriver/scheduler_state_driver.c\
+				  src/stateDriver/controllers.c\
+				  src/controllFunc/noneControll.c\
 				  
 				  
 				  
@@ -26,7 +34,10 @@ PROJECT_CPPSRC 	=
 # Directories to search headers in
 PROJECT_INCDIR	= include \
                   tests \
-                  include/modbusTCP 
+                  include/stateDriver \
+                  include/controllFunc\
+                  include/modbusTCP \
+ 
 
 # Additional libraries
 PROJECT_LIBS	= -lm
@@ -34,3 +45,7 @@ PROJECT_LIBS	= -lm
 PROJECT_OPT     = -DCHPRINTF_USE_FLOAT=1 -specs=nano.specs -specs=nosys.specs
 
 # Additional .mk files are included here
+CSRC = $(ALLCSRC) \
+       $(TESTSRC) \
+       $(PROJECT_CSRC) \
+       $(CHIBIOS)/os/various/evtimer.c

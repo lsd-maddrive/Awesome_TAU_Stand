@@ -46,16 +46,11 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define STATUS_ABS_ENCODER              18
 
 
-
-
 //analog_reg
-
 
 #define DATA_CURRENT_SENSOR_CURRENT                         0
 
-
 #define DATA_INC_ENCODER_ROTATIONAL_SPEED                   2
-
 
 #define DATA_ABS_ENCODER_ANGLE_OF_ROTATION                  4
 #define DATA_ABS_ENCODER_MULTI_TURN_ANGLE_OF_ROTATION       6
@@ -76,6 +71,11 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_FORCE_KP                                       28
 #define DATA_FORCE_KI                                       30
 #define DATA_FORCE_KD                                       32
+
+#define DATA_MOTOR_REQUIRED_SPEED                           33
+#define DATA_MOTOR_CURRENT_SPEED                            34
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         35
+#define DATA_MOTOR_CURRENT_VOLTAGE                          36
 
 #define DATA_MOTOR_REQUIRED_SPEED                           33
 #define DATA_MOTOR_CURRENT_SPEED                            34
