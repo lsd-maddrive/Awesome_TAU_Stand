@@ -1,5 +1,5 @@
 function[]=modbuswrite(matlab,address,value)
-Register=[0 0 0 1 1 0 1 1 2 2 1 1 2 2 0 1 1 1 1 1 1 1 1 1 1 1 1 0 3 3 3 3 3 3 3 3 0 0 0 0];
+Register=[0 3 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 0 3 1 1 1 1 1 1 1 1 0 0 0 0];
 if Register(address+1)==0
     write(matlab,'holdingregs',address+1,double(floor(value)),'uint16');
 end

@@ -1,5 +1,5 @@
 function[Res]=modbusread(matlab,address)
-Register=[0 0 0 1 1 0 1 1 2 2 1 1 2 2 0 1 1 1 1 1 1 1 1 1 1 1 1 0 3 3 3 3 3 3 3 3 0 0 0 0];
+Register=[0 3 1 1 1 1 2 2 1 1 2 2 1 1 1 1 1 1 1 1 1 1 1 1 0 3 1 1 1 1 1 1 1 1 0 0 0 0];
 if Register(address+1)==0
     Res=read(matlab,'holdingregs',address+1,1,'uint16');
 end
