@@ -32,7 +32,7 @@ int16_t MotorCurrentVoltage; // The current value of motor voltage.
  *  @notapi
  */
 void update_motor_voltage(void){
-  MotorRequiredVoltage = MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE); // Reading from the modbus
+//  MotorRequiredVoltage = MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE); // Reading from the modbus
   // Check a percentage of the maximum voltage value.
   if (MotorRequiredVoltage > MAX_VOLTAGE_VALUE) MotorRequiredVoltage = MAX_VOLTAGE_VALUE;
   else if (MotorRequiredVoltage < -MAX_VOLTAGE_VALUE) MotorRequiredVoltage = -MAX_VOLTAGE_VALUE;
@@ -52,7 +52,7 @@ void update_motor_voltage(void){
   }
 
   motorSetVoltage(MotorCurrentVoltage);
-  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage); // Writing from the modbus
+//  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage); // Writing from the modbus
 }
 
 
