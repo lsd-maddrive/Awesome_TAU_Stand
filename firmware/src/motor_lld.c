@@ -93,7 +93,7 @@ void motorSetVoltage(int16_t Voltage){
   }
   else if (Voltage < 0){
     pwmEnableChannel(pwm, PWM_CH1, PWM_PERCENTAGE_TO_WIDTH(pwm, 0));
-    pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, Voltage));
+    pwmEnableChannel(pwm, PWM_CH2, PWM_PERCENTAGE_TO_WIDTH(pwm, abs(Voltage)));
   }
 }
 

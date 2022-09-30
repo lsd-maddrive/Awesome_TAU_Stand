@@ -66,18 +66,18 @@ void update_motor_voltage(void){
  *
  *  @notapi
  */
+static thread_t *tp_motor;
 static THD_WORKING_AREA(waMotor, 256);// 256 - stack size
 
 static THD_FUNCTION(motorThread, arg)
 {
     (void)arg; // just to avoid warnings
     systime_t time = chVTGetSystemTime();
-    while( true ){
+    while( !chThdShouldTerminateX() ){
       update_motor_voltage();
-
-      if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( MOTOR_DATA_RATE ) );
     }
+    chThdExit(MSG_OK);
 }
 
 /*
@@ -93,7 +93,7 @@ msg_t motorInit(void){
   // Set the start motor parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
-  chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
+  tp_motor = chThdCreateStatic(waMotor, sizeof(waMotor), NORMALPRIO, motorThread, NULL);
   return MSG_OK;
 }
 
@@ -105,8 +105,8 @@ msg_t motorInit(void){
  *  @note   Not verified.
  */
 msg_t motorUninit(void){
-  chThdTerminate((thread_t *)motorThread);
-  msg_t msg = chThdWait((thread_t *)motorThread);
+  chThdTerminate(tp_motor);
+  msg_t msg = chThdWait(tp_motor);
   motorSimpleUninit();
   // Resetting the motor current parameters.
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;

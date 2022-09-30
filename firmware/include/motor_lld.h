@@ -2,6 +2,7 @@
 #define INCLUDE_MOTOR_LLD_H_
 
 #include <common.h>
+#include <stdlib.h>
 
 
 /*
