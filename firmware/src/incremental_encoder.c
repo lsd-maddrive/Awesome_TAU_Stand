@@ -63,7 +63,7 @@ void incremental_encoder_timer_start(void){
  *
  *  @note   GPTD1 is used.
  */
-msg_t IncrementalEncoderInterruptInit(void){
+msg_t incrementalEncoderInterruptInit(void){
   incremental_encoder_timer_start();
   palSetLineMode(INCREMENTAL_ENCODER_PAD_A, INCREMENTAL_ENCODER_INPUT_MODE_A);
   palEnableLineEvent(INCREMENTAL_ENCODER_PAD_A, PAL_EVENT_MODE_RISING_EDGE);
@@ -92,7 +92,7 @@ void incremental_encoder_timer_stop(void){
  *
  *  @note   Setting a safe state for used leg.
  */
-msg_t IncrementalEncoderInterruptUninit(void){
+msg_t incrementalEncoderInterruptUninit(void){
   incremental_encoder_timer_stop();
   palDisablePadEvent(INCREMENTAL_ENCODER_PORT_A, INCREMENTAL_ENCODER_PAD_A);
   palSetLineMode(INCREMENTAL_ENCODER_PAD_A, PAL_MODE_UNCONNECTED);

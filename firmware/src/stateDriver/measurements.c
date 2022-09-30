@@ -5,7 +5,7 @@ mailbox_t *sensors_mb;
 senaction_t sen_table_fun[NUMBER_SENSORS] = {
     [SEN_CURRENT] = {currentSensorInit,currentSensorUninit},
     [SEN_ABS_ENCODER] = {absoluteEncoderInit,absoluteEncoderUninit},
-    [SEN_INC_ENCODER] = {IncrementalEncoderInterruptInit,IncrementalEncoderInterruptUninit},
+    [SEN_INC_ENCODER] = {incrementalEncoderInterruptInit,incrementalEncoderInterruptUninit},
 };
 
 static thread_t *tp_measur;
