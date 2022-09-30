@@ -48,11 +48,11 @@ static PWMConfig pwmcfg = {
  *                           ---------------
  *                           |             |
  *                           |             |
- *      PA7(3) - TIM8_CH1N  \             \   PB0(3) - TIM8_CH2N
+ *      PC6(3) - TIM8_CH1   \             \   PC7(3) - TIM8_CH2
  *                           |             |
  *                           |-------------|
  *                           |             |
- *       PC6(3) - TIM8_CH1  \             \   PC7(3) - TIM8_CH2
+ *      PA7(3) - TIM8_CH1N  \             \   PB0(3) - TIM8_CH2N
  *                           |             |
  *                           |             |
  *                           ---------------
