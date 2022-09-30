@@ -21,6 +21,7 @@ void test_motor(void) {
     palSetPadCallback(GPIOC, GPIOC_BUTTON, change_direction_of_rotation, NULL);
     setMotorVoltage(Voltage);
     while (true) {
+      palToggleLine(LINE_LED2);
       if (flag == true){
         motorSimpleStop();
         Voltage = -Voltage;
