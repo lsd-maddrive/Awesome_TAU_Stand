@@ -159,6 +159,8 @@ void absolute_encoder_calculate_multi_turn_angle_of_rotation(void){
  *
  *  @notapi
  */
+
+static thread_t *tp_absolute_encoder;
 static THD_WORKING_AREA(waAbsoluteEncoder, 256);// 256 - stack size
 
 static THD_FUNCTION(absoluteEncoderThread, arg)
@@ -166,15 +168,15 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
     arg = arg; // just to avoid warnings
 
     systime_t time = chVTGetSystemTime();
-    while( true ){
+    while( !chThdShouldTerminateX() ){
       absolute_encoder_read_number_of_turns(); // Measures the number of turns.
       absolute_encoder_read_rotational_speed(); // Measures encoder rotation speed.
       absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
-      if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
+    chThdExit(MSG_OK);
 }
 
 /*
@@ -217,7 +219,7 @@ msg_t absoluteEncoderInit(void){
   canSimpleWrite(&txbuf);
 
   // Starts another thread.
-  chThdCreateStatic(waAbsoluteEncoder, sizeof(waAbsoluteEncoder), NORMALPRIO, absoluteEncoderThread, NULL);
+  tp_absolute_encoder = chThdCreateStatic(waAbsoluteEncoder, sizeof(waAbsoluteEncoder), NORMALPRIO, absoluteEncoderThread, NULL);
   return MSG_OK;
 }
 
@@ -228,8 +230,8 @@ msg_t absoluteEncoderInit(void){
  *  @note   Not verified.
  */
 msg_t absoluteEncoderUninit(void){
-  chThdTerminate((thread_t *)absoluteEncoderThread);
-  msg_t msg = chThdWait((thread_t *)absoluteEncoderThread);
+  chThdTerminate(tp_absolute_encoder);
+  msg_t msg = chThdWait(tp_absolute_encoder);
   canSimpleUninit();
   return msg;
 }
