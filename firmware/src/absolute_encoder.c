@@ -166,7 +166,7 @@ static THD_WORKING_AREA(waAbsoluteEncoder, 256);// 256 - stack size
 static THD_FUNCTION(absoluteEncoderThread, arg)
 {
     arg = arg; // just to avoid warnings
-    chRegSetThreadNameX(tp_absolute_encoder, "Absolute encoder thread");
+    chRegSetThreadName("Absolute encoder thread");
     systime_t time = chVTGetSystemTime();
     while( !chThdShouldTerminateX() ){
       absolute_encoder_read_number_of_turns(); // Measures the number of turns.
