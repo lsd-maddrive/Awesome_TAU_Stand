@@ -2,6 +2,7 @@
 #define INCLUDE_MOTOR_LLD_H_
 
 #include <common.h>
+#include <stdlib.h>
 
 
 /*
@@ -51,16 +52,16 @@
  *                           ---------------
  *                           |             |
  *                           |             |
- *      PA7(3) - TIM8_CH1N  \             \   PB0(3) - TIM8_CH2N
+ *  1.  PC6(3) - TIM8_CH1   \             \   3.  PC7(3) - TIM8_CH2
  *                           |             |
  *                           |-------------|
  *                           |             |
- *       PC6(3) - TIM8_CH1  \             \   PC7(3) - TIM8_CH2
+ *  2.  PA7(3) - TIM8_CH1N  \             \   4.  PB0(3) - TIM8_CH2N
  *                           |             |
  *                           |             |
  *                           ---------------
  *                                  |
- *                                  | GND
+ *                                  | 5. GND
  */
 void motorSimpleInit(void);
 
