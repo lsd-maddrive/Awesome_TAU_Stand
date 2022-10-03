@@ -25,6 +25,7 @@ PROJECT_CSRC 	= src/main.c \
 				  src/stateDriver/scheduler_state_driver.c\
 				  src/stateDriver/controllers.c\
 				  src/controllFunc/noneControll.c\
+				  tests/can_test.c\
 				  
 				  
 				  

@@ -30,7 +30,7 @@ typedef enum {
  */
 typedef enum{
     NONE_LOAD = 0,
-    FIRST_LOAD = (1<<SEN_CURRENT) | (1<<SEN_INC_ENCODER),
+    FIRST_LOAD = (1<<SEN_CURRENT) | (1<<SEN_INC_ENCODER)| (1<<SEN_ABS_ENCODER),
     SECOND_LOAD = (1<<SEN_INC_ENCODER) | (1<<SEN_ABS_ENCODER),
     THIRD_LOAD = (1<<SEN_INC_ENCODER)
   }load_t;

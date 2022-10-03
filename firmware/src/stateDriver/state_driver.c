@@ -18,6 +18,10 @@ msg_t stateDriverInit(stateDriver_t *sdstruct)
   if(sdstruct->state == STATE_UNINIT)
   {
     sdstruct->state = STATE_STOP;
+    sdstruct->config.load=NONE_LOAD;
+    sdstruct->config.sens=0;
+    sdstruct->config.controller.type=NONE_CONTROL;
+    sdstruct->config.controller.param=0;
     return MSG_OK;
   }
   else return MSG_RESET;

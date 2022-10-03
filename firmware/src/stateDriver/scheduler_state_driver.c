@@ -28,6 +28,7 @@ static THD_FUNCTION(stateDriver, arg)
 void schStateDriverStart(void)
 {
   tp_scheduler_sd=chThdCreateStatic(waStateDriver, sizeof(waStateDriver), NORMALPRIO, stateDriver, NULL);
+  chRegSetThreadName("scheduler");
 }
 
 void  whatToDo(msg_t received_msg)
@@ -71,8 +72,8 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_2,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_3,!value);
-                setNewSen(&sdDriver,SEN_CURRENT,SEN_ON);
-                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
+//                setNewSen(&sdDriver,SEN_CURRENT,SEN_ON);
+//                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
               }
               break;
       case FLAG_LOAD_2:

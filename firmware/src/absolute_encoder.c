@@ -172,9 +172,11 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
       absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
-      if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
+      if (chThdShouldTerminateX() == TRUE)break;
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
+//    dbgPrintf("abs_enc_stop \r\n");
+    chThdExit(MSG_OK);
 }
 
 /*
@@ -185,7 +187,7 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
  */
 msg_t absoluteEncoderInit(void){
   canSimpleInit(); // Launches can.
-
+//  dbgPrintf("abs_enc_init \r\n");
   // General encoder settings.
   txbuf.RTR = CAN_RTR_DATA; // Frame type (Data frame).
   txbuf.IDE = CAN_IDE_STD; // Identifier type (Standard id).
@@ -228,6 +230,7 @@ msg_t absoluteEncoderInit(void){
  *  @note   Not verified.
  */
 msg_t absoluteEncoderUninit(void){
+//  dbgPrintf("abs_enc_uninit \r\n");
   chThdTerminate((thread_t *)absoluteEncoderThread);
   msg_t msg = chThdWait((thread_t *)absoluteEncoderThread);
   canSimpleUninit();
