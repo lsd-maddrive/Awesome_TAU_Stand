@@ -21,6 +21,6 @@
 #define STATE_DRIVER_TEST         8
 
 // Selection of program to run
-#define PROGRAM_ROUTINE CAN_TEST
+#define PROGRAM_ROUTINE MOTOR_TEST
 
 #endif /* INCLUDE_COMMON_H_ */

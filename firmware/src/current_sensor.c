@@ -8,6 +8,7 @@ static float current; // Current value calculated from the voltage in AMPS.
  *
  *  @notapi
  */
+static thread_t *tp_current_sensor;
 static THD_WORKING_AREA(waCurrentSensor, 256);// 256 - stack size
 
 static THD_FUNCTION(currentSensorThread, arg)
@@ -15,13 +16,12 @@ static THD_FUNCTION(currentSensorThread, arg)
     arg = arg; // just to avoid warnings
 
     systime_t time = chVTGetSystemTime();
-    while( true ){
+    while( !chThdShouldTerminateX() ){
       current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
       MB_WRITE_REG_FLOAT(DATA_CURRENT_SENSOR_CURRENT, current); // Writing data to the modbus
-      if (chThdShouldTerminateX() == TRUE) chThdExit(MSG_OK);
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
-
     }
+    chThdExit(MSG_OK);
 }
 
 /*
@@ -34,7 +34,7 @@ static THD_FUNCTION(currentSensorThread, arg)
 msg_t currentSensorInit(void){
   sensorM3421Init();
   if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)
-    chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
+    tp_current_sensor = chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
   return MSG_OK;
 }
 
@@ -44,8 +44,8 @@ msg_t currentSensorInit(void){
  * @param[out]    msg   A message is about if thread is stopped or not.
  */
 msg_t currentSensorUninit(void){
-  chThdTerminate((thread_t *)currentSensorThread);
-  msg_t msg = chThdWait((thread_t *)currentSensorThread);
+  chThdTerminate(tp_current_sensor);
+  msg_t msg = chThdWait(tp_current_sensor);
   i2cSimpleStop();
   return msg;
 }
