@@ -2,19 +2,12 @@
 #define INCLUDE_MEASUREMENTS_H_
 #include "hal.h"
 
+#include<system_setup.h>
+
 #include <current_sensor.h>
 #include <absolute_encoder.h>
 #include <incremental_encoder.h>
 
-/**
- * @brief   Possible sensors.
- */
-typedef enum {
-  SEN_CURRENT = 0,
-  SEN_ABS_ENCODER = 1,
-  SEN_INC_ENCODER = 2,
-  NUMBER_SENSORS
-}senlist_t;
 
 /**
  * @brief   Possible sensor statuses.
@@ -25,15 +18,6 @@ typedef enum {
   SEN_TIMEOUT =2,
 }senstatus_t;
 
-/**
- * @brief   Possible loads and related sensors.
- */
-typedef enum{
-    NONE_LOAD = 0,
-    FIRST_LOAD = (1<<SEN_CURRENT) | (1<<SEN_INC_ENCODER)| (1<<SEN_ABS_ENCODER),
-    SECOND_LOAD = (1<<SEN_INC_ENCODER) | (1<<SEN_ABS_ENCODER),
-    THIRD_LOAD = (1<<SEN_INC_ENCODER)
-  }load_t;
 
 typedef  enum
 {

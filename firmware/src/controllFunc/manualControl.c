@@ -1,11 +1,12 @@
-#include <noneControll.h>
+#include <manualControl.h>
 
+thread_t * th_manualControl;
 /**
  * @brief   Motor speed change function without regulator.
  *
  * @api
  */
-static THD_FUNCTION(contrNoneAct,arg) {
+static THD_FUNCTION(manualControlThread,arg) {
   (void)arg;
   float required_speed=0;
   systime_t time = chVTGetSystemTime();
@@ -31,10 +32,10 @@ static THD_FUNCTION(contrNoneAct,arg) {
  *
  * @init
  */
-msg_t contrNoneInit(void *arg)
+msg_t manualControlInit(void *arg)
 {
   arg=arg;
-  chThdCreateFromHeap(NULL,512,"noneControllMotor",NORMALPRIO,contrNoneAct, NULL);
+  th_manualControl=chThdCreateFromHeap(NULL,512,"manualControllMotor",NORMALPRIO,manualControlThread, NULL);
   return MSG_OK;
 }
 
@@ -48,10 +49,10 @@ msg_t contrNoneInit(void *arg)
  *
  * @init
  */
-msg_t contrNoneUninit(void)
+msg_t manualControlUninit(void)
 {
-  chThdTerminate((thread_t *)contrNoneAct);
-  msg_t msg=chThdWait((thread_t *)contrNoneAct);
+  chThdTerminate(th_manualControl);
+  msg_t msg=chThdWait(th_manualControl);
   return msg;
 }
 

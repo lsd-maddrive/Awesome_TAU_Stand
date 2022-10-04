@@ -20,8 +20,8 @@ msg_t stateDriverInit(stateDriver_t *sdstruct)
     sdstruct->state = STATE_STOP;
     sdstruct->config.load=NONE_LOAD;
     sdstruct->config.sens=0;
-    sdstruct->config.controller.type=NONE_CONTROL;
-    sdstruct->config.controller.param=0;
+    sdstruct->config.controller.type=MANUAL_CONTROL;
+    sdstruct->config.controller.statevariable=0;
     return MSG_OK;
   }
   else return MSG_RESET;
@@ -210,12 +210,12 @@ msg_t setNewControll(stateDriver_t *sdstruct,contrlist_t new_controll)
  *
  * @api
  */
-msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,paramstep_t step)
+msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,variablestep_t step)
 {
   if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY)
     {
-      if(step==TRUE)sdstruct->config.controller.param|=(1<<new_param_controll);
-      else sdstruct->config.controller.param &=~(1<<new_param_controll);
+      if(step==TRUE)sdstruct->config.controller.statevariable|=(1<<new_param_controll);
+      else sdstruct->config.controller.statevariable &=~(1<<new_param_controll);
 
       return MSG_OK;
     }

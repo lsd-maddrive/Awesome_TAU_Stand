@@ -1,7 +1,7 @@
 #include <tests.h>
 #include <terminal_write.h>
-#include "modbusTCP.h"
-#include "scheduler_state_driver.h"
+#include <scheduler.h>
+#include <modbusTCP.h>
 
 
 #define BUFFER_SIZE 100
@@ -14,7 +14,7 @@ void test_sd(void){
   debugStreamInit();
 
   chMBObjectInit(&main_mb, main_mb_buffer, BUFFER_SIZE);
-  schStateDriverStart();
+  schedulerStart();
 
   modbustcp_init();
   modbustcp_start();

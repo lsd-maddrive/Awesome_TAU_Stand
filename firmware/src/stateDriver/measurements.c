@@ -1,5 +1,5 @@
 #include "measurements.h"
-#include <terminal_write.h>/////////////////////////////////////////
+
 mailbox_t *sensors_mb;
 
 senaction_t sen_table_fun[NUMBER_SENSORS] = {
@@ -19,12 +19,12 @@ static THD_FUNCTION(sensContr, sens)
   {
     if((*(uint16_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_init();
   }
-  while(!chThdShouldTerminateX()){dbgPrintf("sens_mask = %d \r\n",*(uint16_t*)sens);
+  while(!chThdShouldTerminateX()){
     msg_t msg_mb = chMBFetchTimeout(sensors_mb, &received_msg, TIME_INFINITE);
     if(msg_mb==MSG_OK && received_msg!=-1)
       {
         step=(senstep_t)(received_msg>>16);
-        sen=(senlist_t)(received_msg & 0xFF);dbgPrintf("sen=%d  step = %d \r\n",sen,step);
+        sen=(senlist_t)(received_msg & 0xFF);
         switch (step){
         case SEN_ON:
           sen_table_fun[sen].sen_init();

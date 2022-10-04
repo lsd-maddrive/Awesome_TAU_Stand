@@ -1,7 +1,7 @@
 #include <controllers.h>
 
 contraction_t contr_table_fun[NUMBER_CONTROL] = {
-    [NONE_CONTROL] = {contrNoneInit,contrNoneUninit},
+    [MANUAL_CONTROL] = {manualControlInit,manualControlUninit},
     [PID] = {0,0},
     [CONTROL2] = {0,0},
 };
@@ -16,7 +16,7 @@ contraction_t contr_table_fun[NUMBER_CONTROL] = {
 void controllersStart(controller_t* set_contr)
 {
   motorInit();
-  contr_table_fun[set_contr->type].contr_init((void*)&set_contr->param);
+  contr_table_fun[set_contr->type].contr_init((void*)&set_contr->statevariable);
 }
 /**
  * @brief   Stopping and removing thread the regulator .
@@ -25,6 +25,6 @@ void controllersStart(controller_t* set_contr)
  */
 void controllersStop(controller_t* set_contr)
 {
-  contr_table_fun[set_contr->type].contr_uninit;
+  contr_table_fun[set_contr->type].contr_uninit();
   motorUninit();
 }

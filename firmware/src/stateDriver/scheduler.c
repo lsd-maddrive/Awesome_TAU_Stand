@@ -1,4 +1,4 @@
-#include "scheduler_state_driver.h"
+#include <scheduler.h>
 
 stateDriver_t sdDriver={
                  .state=STATE_UNINIT,
@@ -25,7 +25,7 @@ static THD_FUNCTION(stateDriver, arg)
   }
 }
 
-void schStateDriverStart(void)
+void schedulerStart(void)
 {
   tp_scheduler_sd=chThdCreateStatic(waStateDriver, sizeof(waStateDriver), NORMALPRIO, stateDriver, NULL);
   chRegSetThreadName("scheduler");
@@ -83,8 +83,8 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_1,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_3,!value);
-                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
-                setNewSen(&sdDriver,SEN_ABS_ENCODER,SEN_ON);
+//                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
+//                setNewSen(&sdDriver,SEN_ABS_ENCODER,SEN_ON);
               }
               break;
       case FLAG_LOAD_3:
@@ -94,7 +94,6 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_1,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_2,!value);
-                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
               }
               break;
 
@@ -119,16 +118,16 @@ void  whatToDo(msg_t received_msg)
              if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,!value);
              break;
       case FLAG_SPEED:
-             if(setNewParamControll(&sdDriver,PARAM_SPEED,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
+             if(setNewParamControll(&sdDriver,PARAM_SPEED,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
              break;
       case FLAG_ANGLE:
-             if(setNewParamControll(&sdDriver,PARAM_ANGLE,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
+             if(setNewParamControll(&sdDriver,PARAM_ANGLE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
              break;
       case FLAG_ROTATE:
-             if(setNewParamControll(&sdDriver,PARAM_ROTATE,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
+             if(setNewParamControll(&sdDriver,PARAM_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
              break;
       case FLAG_VOLT:
-             if(setNewParamControll(&sdDriver,PARAM_VOLT,(paramstep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
+             if(setNewParamControll(&sdDriver,PARAM_VOLT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
              break;
     }
 

@@ -189,7 +189,6 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
  */
 msg_t absoluteEncoderInit(void){
   canSimpleInit(); // Launches can.
-//  dbgPrintf("abs_enc_init \r\n");
   // General encoder settings.
   txbuf.RTR = CAN_RTR_DATA; // Frame type (Data frame).
   txbuf.IDE = CAN_IDE_STD; // Identifier type (Standard id).
