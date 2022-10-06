@@ -38,7 +38,7 @@
  *
  *  @note   GPTD1 is used.
  */
-msg_t IncrementalEncoderInterruptInit(void);
+msg_t incrementalEncoderInterruptInit(void);
 
 /*
  *  @brief  Stops the timer running and interrupts.
@@ -47,7 +47,7 @@ msg_t IncrementalEncoderInterruptInit(void);
  *
  *  @note   Setting a safe state for used leg.
  */
-msg_t IncrementalEncoderInterruptUninit(void);
+msg_t incrementalEncoderInterruptUninit(void);
 
 /*
  *  @brief  Returns rotation speed in rpm.

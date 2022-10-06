@@ -6,7 +6,7 @@ void test_interrupt(void) {
     chSysInit();
     debugStreamInit();
     dbgPrintf("start\r\n");
-    IncrementalEncoderInterruptInit();
+    incrementalEncoderInterruptInit();
     while (true) {
         chThdSleepMilliseconds(1000);
     }

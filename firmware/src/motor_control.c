@@ -72,6 +72,7 @@ static THD_WORKING_AREA(waMotor, 256);// 256 - stack size
 static THD_FUNCTION(motorThread, arg)
 {
     (void)arg; // just to avoid warnings
+    chRegSetThreadName("Motor control thread");
     systime_t time = chVTGetSystemTime();
     while( !chThdShouldTerminateX() ){
       update_motor_voltage();

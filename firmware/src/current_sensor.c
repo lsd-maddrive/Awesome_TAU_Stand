@@ -14,7 +14,7 @@ static THD_WORKING_AREA(waCurrentSensor, 256);// 256 - stack size
 static THD_FUNCTION(currentSensorThread, arg)
 {
     arg = arg; // just to avoid warnings
-
+    chRegSetThreadName("Current sensor thread");
     systime_t time = chVTGetSystemTime();
     while( !chThdShouldTerminateX() ){
       current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
