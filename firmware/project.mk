@@ -22,9 +22,10 @@ PROJECT_CSRC 	= src/main.c \
 				  tests/state_driver_test.c\
 				  src/stateDriver/state_driver.c\
 				  src/stateDriver/measurements.c\
-				  src/stateDriver/scheduler_state_driver.c\
+				  src/stateDriver/scheduler.c\
 				  src/stateDriver/controllers.c\
-				  src/controllFunc/noneControll.c\
+				  src/controllFunc/manualControl.c\
+				  tests/can_test.c\
 				  
 				  
 				  

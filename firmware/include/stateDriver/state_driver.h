@@ -1,6 +1,9 @@
 #ifndef INCLUDE_STATE_DRIVER_H_
 #define INCLUDE_STATE_DRIVER_H_
 #include "hal.h"
+
+#include<system_setup.h>
+
 #include <measurements.h>
 #include <controllers.h>
 #include <terminal_write.h>
@@ -65,5 +68,5 @@ msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load);
 msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step);
 
 msg_t setNewControll(stateDriver_t *sdstruct,contrlist_t new_controll);
-msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,paramstep_t step);
+msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,variablestep_t step);
 #endif

@@ -174,8 +174,10 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
       absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
+
       time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
+
     chThdExit(MSG_OK);
 }
 
@@ -187,7 +189,6 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
  */
 msg_t absoluteEncoderInit(void){
   canSimpleInit(); // Launches can.
-
   // General encoder settings.
   txbuf.RTR = CAN_RTR_DATA; // Frame type (Data frame).
   txbuf.IDE = CAN_IDE_STD; // Identifier type (Standard id).
@@ -230,6 +231,7 @@ msg_t absoluteEncoderInit(void){
  *  @note   Not verified.
  */
 msg_t absoluteEncoderUninit(void){
+
   chThdTerminate(tp_absolute_encoder);
   msg_t msg = chThdWait(tp_absolute_encoder);
   canSimpleUninit();

@@ -8,6 +8,10 @@ void test_can(void){
   absoluteEncoderInit();
   debugStreamInit();
   dbgPrintf("Start\r\n");
+  chThdSleepMilliseconds(5000);
+  dbgPrintf("Stop\r\n");
+      absoluteEncoderUninit();
+      dbgPrintf("Speed = %.5f\r\n",getAbsoluteEncoderRotationalSpeed());
 
   while(true){
 
@@ -16,7 +20,9 @@ void test_can(void){
     dbgPrintf("Angle = %.5f\r\n",getAbsoluteEncoderAngleOfRotation());
     dbgPrintf("Multi turn angle = %d\r\n",getAbsoluteEncoderMultiTurnAngleOfRotation());
 
-    chThdSleepMilliseconds(100);
+    chThdSleepMilliseconds(5000);
+    absoluteEncoderUninit();
+//    dbgPrintf("Speed = %.5f\r\n",getAbsoluteEncoderRotationalSpeed());
   }
 }
 

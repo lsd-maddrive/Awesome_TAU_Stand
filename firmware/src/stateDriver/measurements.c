@@ -55,6 +55,7 @@ void measurementsStart(mailbox_t *get_mb,uint16_t* sens)
 {
   sensors_mb=get_mb;
   tp_measur=chThdCreateStatic(waSensContr, sizeof(waSensContr), NORMALPRIO, sensContr, (void *)sens);
+  chRegSetThreadName("measure");
 }
 
 /**
