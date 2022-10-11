@@ -26,6 +26,7 @@ PROJECT_CSRC 	= src/main.c \
 				  src/stateDriver/controllers.c\
 				  src/controllFunc/manualControl.c\
 				  tests/can_test.c\
+				  src/controllFunc/slaveControl.c\
 				  
 				  
 				  

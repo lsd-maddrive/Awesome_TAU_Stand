@@ -108,7 +108,7 @@ void  whatToDo(msg_t received_msg)
               break;
 
       case FLAG_CONTROLLER_1:
-             if(!value || (setNewControll(&sdDriver,PID)!=MSG_OK)) value=FALSE;
+             if(!value || (setNewControll(&sdDriver,SLAVE_CONTROL)!=MSG_OK)) value=FALSE;
              MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,value);
              if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_2,!value);
              break;
@@ -118,22 +118,28 @@ void  whatToDo(msg_t received_msg)
              if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,!value);
              break;
       case FLAG_SPEED:
-             if(setNewParamControll(&sdDriver,PARAM_SPEED,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
+             if(setNewParamControll(&sdDriver,VARIABLE_SPEED,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
              break;
       case FLAG_ANGLE:
-             if(setNewParamControll(&sdDriver,PARAM_ANGLE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
+             if(setNewParamControll(&sdDriver,VARIABLE_ANGLE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
              break;
       case FLAG_ROTATE:
-             if(setNewParamControll(&sdDriver,PARAM_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
+             if(setNewParamControll(&sdDriver,VARIABLE_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
              break;
       case FLAG_VOLT:
-             if(setNewParamControll(&sdDriver,PARAM_VOLT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
+             if(setNewParamControll(&sdDriver,VARIABLE_VOLT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
              break;
     }
 
   }
   else if(address>99)//addresses of analog registers : 0-99
   {
+    switch(address-100)
+    {
+      case  DATA_MOTOR_REQUIRED_SPEED:
+        if(value>=-24 && value<=24)MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED,value);
+        break;
+    }
 
   }
 }

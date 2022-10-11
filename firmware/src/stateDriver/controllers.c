@@ -2,7 +2,7 @@
 
 contraction_t contr_table_fun[NUMBER_CONTROL] = {
     [MANUAL_CONTROL] = {manualControlInit,manualControlUninit},
-    [PID] = {0,0},
+    [SLAVE_CONTROL] = {slaveControlInit,slaveControlUninit},
     [CONTROL2] = {0,0},
 };
 
