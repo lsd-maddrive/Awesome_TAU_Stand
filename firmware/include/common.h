@@ -17,8 +17,9 @@
 #define CURRENT_SENSOR_TEST       4
 #define MODBUSTCP_TEST            5
 #define INTERRUPT_WITH_TIMER_TEST 6
+#define MOTOR_TEST                  7
 
 // Selection of program to run
-#define PROGRAM_ROUTINE MODBUSTCP_TEST
+#define PROGRAM_ROUTINE MOTOR_TEST
 
 #endif /* INCLUDE_COMMON_H_ */
