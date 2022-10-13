@@ -15,6 +15,9 @@ static inline void testRoutines(void) {
 #elif(PROGRAM_ROUTINE == INTERRUPT_WITH_TIMER_TEST)
     test_interrupt();
 #endif
+#elif(PROGRAM_ROUTINE == MOTOR_TEST)
+    test_motor();
+#endif
 }
 
 
