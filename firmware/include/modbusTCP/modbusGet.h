@@ -11,5 +11,7 @@ int16_t modbustcp_get_address(uint8_t* data);
 int16_t modbustcp_get_count(uint8_t* data);
 uint8_t modbustcp_get_boll_value(uint8_t* data);
 int16_t modbustcp_get_value(uint8_t* data);
+int8_t modbustcp_get_count_byte(uint8_t* data);
+int16_t modbustcp_get_multiple_register(uint8_t* data,uint8_t count);
 
 #endif /* MODBUSGET */

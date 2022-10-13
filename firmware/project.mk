@@ -28,8 +28,6 @@ PROJECT_CSRC 	= src/main.c \
 				  tests/can_test.c\
 				  
 				  
-				  
-				  
 # C++ source files
 PROJECT_CPPSRC 	= 
 # Directories to search headers in
