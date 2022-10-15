@@ -37,6 +37,12 @@ int16_t modbusTCP_Write_Analog_Register(int16_t tid, int16_t pid, uint8_t uid, u
 	return modbustcp_send_answer_fun_0x06( tid, pid, uid, func, address, value);
 }
 
+//Formation of the response to the recording of the multiple analog register. Modbus TCP function-0x10.
+int16_t modbusTCP_Write_Multiple_Analog_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,int16_t count)
+{
+    return modbustcp_send_answer_fun_0x10(tid, pid, uid, func, address, count);
+}
+
 //Formation of a response to the recording of a discrete register. Modbus TCP function-0x05.
 int16_t modbusTCP_Write_Discrete_Register(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,uint8_t boole)
 {
@@ -147,5 +153,22 @@ int16_t modbustcp_send_answer_fun_0x06(int16_t tid, int16_t pid, uint8_t uid, ui
   modbus_out_buf[MB_TCP_ADDRESS+1]=address;
   modbus_out_buf[MB_TCP_Take_Data]=value>>8;
   modbus_out_buf[MB_TCP_Take_Data+1]=value;
+  return  12;
+}
+
+int16_t modbustcp_send_answer_fun_0x10(int16_t tid, int16_t pid, uint8_t uid, uint8_t func, int16_t address,int16_t count)
+{
+  modbus_out_buf[MB_TCP_TID]=tid>>8;
+  modbus_out_buf[MB_TCP_TID+1]=tid;
+  modbus_out_buf[MB_TCP_PID]=pid>>8;
+  modbus_out_buf[MB_TCP_PID+1]=pid;
+  modbus_out_buf[MB_TCP_LEN]=0x00;
+  modbus_out_buf[MB_TCP_LEN+1]=0x06;
+  modbus_out_buf[MB_TCP_UID]=uid;
+  modbus_out_buf[MB_TCP_FUNC]=func;
+  modbus_out_buf[MB_TCP_ADDRESS]=address>>8;
+  modbus_out_buf[MB_TCP_ADDRESS+1]=address;
+  modbus_out_buf[MB_TCP_Take_Data]=count>>8;
+  modbus_out_buf[MB_TCP_Take_Data+1]=count;
   return  12;
 }

@@ -35,7 +35,7 @@
 | DATA_CONTR_KP_2				 |   18  |    float    | регулятор		|    		     |
 | DATA_CONTR_KI_2		  		 |   20  |    float    | регулятор		|    		     |
 | DATA_CONTR_KD_2		  		 |   22  |    float    | регулятор		|    		     |
-| CONTR_USE_SEN		  			 |   24  |    int16    | регулятор		|    		     |
+| DATA_CONTROL_TIME		  		 |   24  |    int16    | регулятор		|    		     |
 | DATA_FORCE_PID		  		 |   26  |    float    | регулятор		|    		     |
 | DATA_FORCE_KP					 |   28  |    float    | регулятор		|    		     |
 | DATA_FORCE_KI					 |   30  |    float    | регулятор		|    		     |

@@ -6,8 +6,6 @@
 #include <modbusRegister.h>
 
 
-#define SLAVE_CONTROL_TIME 50 //ms
-
 /**
 * @brief Errors used by the PID regulator.
 */

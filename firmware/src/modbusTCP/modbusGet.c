@@ -71,3 +71,19 @@ int16_t modbustcp_get_value(uint8_t* data)
   value |= data[MB_TCP_Take_Data + 1];
   return value;
 }
+
+//The Function returns count byte
+int8_t modbustcp_get_count_byte(uint8_t* data)
+{
+  int8_t value = data[MB_TCP_COUNT_BYTE];
+  return value;
+}
+
+//The Function returns multiple register
+int16_t modbustcp_get_multiple_register(uint8_t* data,uint8_t count)
+{
+  uint8_t multiple=MB_TCP_MULTIPLE_REGISTER+count*2;
+  int16_t value = data[multiple] << 8U;
+  value |= data[multiple + 1];
+  return value;
+}

@@ -16,10 +16,10 @@ static THD_FUNCTION(manualControlThread,arg) {
     required_speed = MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED);
 
     //Conversion of the user speed in the range -24..+24 to 0..100%
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,SPEED_TO_VOLTAGE(required_speed));
+    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,VOLTAGE_TO_PERCENT(required_speed));
 
     MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,required_speed);
-    time = chThdSleepUntilWindowed( time, time + TIME_MS2I(MANUAL_CONTROLL_TIME) );
+    time = chThdSleepUntilWindowed( time, time + TIME_MS2I(DATA_CONTROL_TIME) );
    }
     chThdExit(MSG_OK);
 }

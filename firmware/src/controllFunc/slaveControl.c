@@ -22,36 +22,40 @@ static THD_FUNCTION(slaveControlThread,stateVariable) {
         switch(i)
         {
         case VARIABLE_ROTATE:
-          pid_data.error_speed.prev=pid_data.error_speed.prev;
+          pid_data.error_speed.prev=pid_data.error_speed.current;
           pid_data.error_speed.current=required_output-MB_READ_REG_FLOAT(DATA_INC_ENCODER_ROTATIONAL_SPEED);
 
           //Finding the proportional component of the regulator
           pid_data.force_speed.pr=MB_READ_REG_FLOAT(DATA_CONTR_KP)*pid_data.error_speed.current;
+          MB_WRITE_REG_FLOAT(DATA_FORCE_KP,pid_data.force_speed.pr);
 
           //Finding the differential component of the regulator
-          pid_data.error_speed.prev_del=pid_data.error_speed.current_del;
           pid_data.error_speed.current_del=pid_data.error_speed.current-pid_data.error_speed.prev;
-          pid_data.force_speed.dif=MB_READ_REG_FLOAT(DATA_CONTR_KD)*(pid_data.error_speed.current_del)/(SLAVE_CONTROL_TIME*0.001);
+          pid_data.force_speed.dif=MB_READ_REG_FLOAT(DATA_CONTR_KD)*(pid_data.error_speed.current_del)/(DATA_CONTROL_TIME*0.001);
+          MB_WRITE_REG_FLOAT(DATA_FORCE_KD,pid_data.force_speed.dif);
 
           //Finding the integral component of the regulator
           pid_data.error_speed.sum+=pid_data.error_speed.current;
-//          if(pid_data.error_speed.sum>pid_data.error_speed.sum_lim)pid_data.error_speed.sum=pid_data.error_speed.sum_lim;
-//          if(pid_data.error_speed.sum<pid_data.error_speed.sum_lim)pid_data.error_speed.sum=-pid_data.error_speed.sum_lim;
-          pid_data.force_speed.integ=MB_READ_REG_FLOAT(DATA_CONTR_KI)*pid_data.error_speed.sum*SLAVE_CONTROL_TIME*0.001;
+          if(pid_data.error_speed.sum>pid_data.error_speed.sum_lim)pid_data.error_speed.sum=pid_data.error_speed.sum_lim;
+          if(pid_data.error_speed.sum<pid_data.error_speed.sum_lim)pid_data.error_speed.sum=-pid_data.error_speed.sum_lim;
+          pid_data.force_speed.integ=MB_READ_REG_FLOAT(DATA_CONTR_KI)*pid_data.error_speed.sum*DATA_CONTROL_TIME*0.001;
+          MB_WRITE_REG_FLOAT(DATA_FORCE_KI,pid_data.force_speed.integ);
 
           //Final reaction of the PID regulator
           pid_data.sum_force=pid_data.force_speed.pr+pid_data.force_speed.dif+pid_data.force_speed.integ;
 
           break;
-        case VARIABLE_VOLT:
+        case VARIABLE_CURRENT:
           break;
         }
       }
     }
+    MB_WRITE_REG_FLOAT(DATA_FORCE_PID,pid_data.sum_force);
+
     MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE)+pid_data.sum_force);
     MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,MB_READ_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED)+pid_data.sum_force);
 
-    time = chThdSleepUntilWindowed( time, time + TIME_MS2I( SLAVE_CONTROL_TIME ) );
+    time = chThdSleepUntilWindowed( time, time + TIME_MS2I( DATA_CONTROL_TIME ) );
    }
     chThdExit(MSG_OK);
 }

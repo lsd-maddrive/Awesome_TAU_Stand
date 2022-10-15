@@ -127,7 +127,7 @@ void  whatToDo(msg_t received_msg)
              if(setNewParamControll(&sdDriver,VARIABLE_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
              break;
       case FLAG_VOLT:
-             if(setNewParamControll(&sdDriver,VARIABLE_VOLT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
+             if(setNewParamControll(&sdDriver,VARIABLE_CURRENT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
              break;
     }
 
@@ -138,6 +138,18 @@ void  whatToDo(msg_t received_msg)
     {
       case  DATA_MOTOR_REQUIRED_SPEED:
         if(value>=-24 && value<=24)MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED,value);
+        break;
+      case DATA_CONTR_KP:
+        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,value);
+        break;
+      case DATA_CONTR_KI:
+        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,value);
+        break;
+      case DATA_CONTR_KD:
+        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,value);
+        break;
+      case DATA_CONTROL_TIME:
+        if(value>=5 && value<=500)MB_WRITE_REG_INT16(DATA_CONTROL_TIME,value);
         break;
     }
 
