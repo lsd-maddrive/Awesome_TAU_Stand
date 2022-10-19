@@ -9,12 +9,10 @@
   
  4) Попинговать плату, если пингуется то все подключилось. 
   
- [Modbuss Poll](https://www.modbustools.com/download.html)
-
  
  5) Запустить приложение в App Designer "testgui.mlapp"
    <p align="center">
-  <img src="/modbusTCP/pictures/Приложение.jpg" width=300/>
+  <img src="/Matlab GUI/pictures/Приложение.jpg" width=300/>
   </p>
   
  6) Для работы приложения необходима библиотека MODBUS для Matlab.
