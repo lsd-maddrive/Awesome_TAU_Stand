@@ -7,12 +7,12 @@
   <img src="/Matlab GUI/pictures/Настройки.jpg" width=300/>
   </p>
   
- 4) Попинговать плату, если пингуется то все подключилось. Для проверки Modbus TCP запустить программу Modbuss Poll 
+ 4) Попинговать плату, если пингуется то все подключилось. 
   
  [Modbuss Poll](https://www.modbustools.com/download.html)
 
  
- 5) Выбрать желаемые регистры. Тут указывается адрес платы и адрес первого желаемого регистра и количество регистров на чтение.
+ 5) Запустить приложение в App Designer "testgui.mlapp"
    <p align="center">
   <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
   </p>
