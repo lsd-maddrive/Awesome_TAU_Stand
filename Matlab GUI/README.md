@@ -14,17 +14,7 @@
  
  5) Запустить приложение в App Designer "testgui.mlapp"
    <p align="center">
-  <img src="/modbusTCP/pictures/выбор регистров.jpg" width=300/>
+  <img src="/modbusTCP/pictures/приложение.jpg" width=300/>
   </p>
   
- 6) Настроить подключение и выбрать период опроса.
-   <p align="center">
-  <img src="/modbusTCP/pictures/подключение.jpg" width=500/>
-  </p>
-  
- 7) Если все получилось, будут отображаться регистры.
-   <p align="center">
-  <img src="/modbusTCP/pictures/чтение регистров.jpg" width=900/>
-  </p>
-  
- 8) Для изменения значения регистра нужно на него нажать и ввести желаемое значение.
+ 6) Для работы приложения необходима библиотека MODBUS для Matlab.
