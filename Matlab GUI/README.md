@@ -14,7 +14,7 @@
  
  5) Запустить приложение в App Designer "testgui.mlapp"
    <p align="center">
-  <img src="/modbusTCP/pictures/приложение.jpg" width=300/>
+  <img src="/modbusTCP/pictures/Приложение.jpg" width=300/>
   </p>
   
  6) Для работы приложения необходима библиотека MODBUS для Matlab.
