@@ -29,8 +29,6 @@ PROJECT_CSRC 	= src/main.c \
 				  src/controllFunc/slaveControl.c\
 				  
 				  
-				  
-				  
 # C++ source files
 PROJECT_CPPSRC 	= 
 # Directories to search headers in
