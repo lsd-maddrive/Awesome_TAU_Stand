@@ -65,7 +65,7 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_CONTR_KP_2                                     18
 #define DATA_CONTR_KI_2                                     20
 #define DATA_CONTR_KD_2                                     22
-#define CONTR_USE_SEN                                       24
+#define DATA_CONTROL_TIME                                   24
 
 #define DATA_FORCE_PID                                      26
 #define DATA_FORCE_KP                                       28
@@ -73,9 +73,9 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_FORCE_KD                                       32
 
 #define DATA_MOTOR_REQUIRED_SPEED                           34
-#define DATA_MOTOR_CURRENT_SPEED                            35
-#define DATA_MOTOR_REQUIRED_VOLTAGE                         36
-#define DATA_MOTOR_CURRENT_VOLTAGE                          37
+#define DATA_MOTOR_CURRENT_SPEED                            36
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         38
+#define DATA_MOTOR_CURRENT_VOLTAGE                          39
 
 
 #endif /* MODBUSREGISTER */

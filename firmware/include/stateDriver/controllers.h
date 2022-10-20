@@ -8,6 +8,7 @@
 
 #include <motor_control.h>
 #include <manualControl.h>
+#include <slaveControl.h>
 
 
 typedef  enum

@@ -12,18 +12,20 @@ static THD_FUNCTION(manualControlThread,arg) {
   systime_t time = chVTGetSystemTime();
   while(!chThdShouldTerminateX()){
 
-    //read the speed set by the user
+    //read the speed set by the user (set in the range -24 +24)
     required_speed = MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED);
 
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,required_speed*KOEF_SPEED_TO_VOLTAGE);
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,required_speed*KOEF_SPEED_TO_VOLTAGE);
-    time = chThdSleepUntilWindowed( time, time + TIME_MS2I( CONTROLL_TIME ) );
+    //Conversion of the user speed in the range -24..+24 to 0..100%
+    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,VOLTAGE_TO_PERCENT(required_speed));
+
+    MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,required_speed);
+    time = chThdSleepUntilWindowed( time, time + TIME_MS2I(DATA_CONTROL_TIME) );
    }
     chThdExit(MSG_OK);
 }
 
 /**
- * @brief   Initialization of motor control without a regulator.                     .
+ * @brief   Initialization of motor control without a regulator.
  *
  *
  * @return              The operation status

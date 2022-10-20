@@ -34,7 +34,7 @@ typedef enum{
 */
 typedef enum {
   MANUAL_CONTROL = 0,
-  PID = 1,
+  SLAVE_CONTROL = 1,
   CONTROL2 = 2,
   NUMBER_CONTROL
 }contrlist_t;
@@ -43,11 +43,11 @@ typedef enum {
  * @brief   Possible state variables.
  */
 typedef enum{
-  PARAM_SPEED=0,
-  PARAM_ANGLE=1,
-  PARAM_ROTATE=2,
-  PARAM_VOLT=3,
-  NUMBER_PARAM
+  VARIABLE_SPEED=0,
+  VARIABLE_ANGLE=1,
+  VARIABLE_ROTATE=2,
+  VARIABLE_CURRENT=3,
+  NUMBER_VARIABLE
 }contrstvariable_t;
 
 /**
