@@ -6,6 +6,7 @@
 - модуль диспетчера
 
 Modbus позволяет передавать информацию от пользователя в МК и обратно. 
+
 Диспетчер при помощи mailbox общается с модулем Modbus и разбирает приходящую информацию, решая, что делать дальше.
 И определяется это следующим образом. По mailbox диспетчер получает запрос в виде адреса ячейки Modbus и данных, которые требуются туда записать. В файле scheduler.c прописан switch-case по адресу ячеек, исходя из которых выполняются те или иные действия с записываемыми данными:  
 
@@ -45,7 +46,7 @@ switch (address) {
      
      msg_t senUninit(void);(останавливающая ф-ция должна вернуть MSG_OK при успешном выключении либо MSG_RESET ) 
      
-  2)  В самих модулях использовать define записи (см. [сюда](https://github.com/lsd-maddrive/Awesome_TAU_Stand/tree/5-LLD/docs/Modbus_register/README.md)) 
+  2)  В самих модулях использовать define записи (см. [сюда](https://github.com/lsd-maddrive/Awesome_TAU_Stand/tree/develop/docs/Modbus_register/README.md)) 
       и  define записи статуса датчика. Статус может быть:
       
 	typedef enum {
