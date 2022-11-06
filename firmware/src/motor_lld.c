@@ -60,9 +60,9 @@ static PWMConfig pwmcfg = {
  *                                  | 5. GND
  */
 void motorSimpleInit(void){
-  palSetLineMode(PWM_LINE_CH1N, PWM_MODE_CH1N);
+//  palSetLineMode(PWM_LINE_CH1N, PWM_MODE_CH1N);
   palSetLineMode(PWM_LINE_CH1, PWM_MODE_CH1);
-  palSetLineMode(PWM_LINE_CH2N, PWM_MODE_CH2N);
+//  palSetLineMode(PWM_LINE_CH2N, PWM_MODE_CH2N);
   palSetLineMode(PWM_LINE_CH2, PWM_MODE_CH2);
 
   pwmStart(pwm, &pwmcfg);
@@ -123,9 +123,9 @@ void motorSimpleUninit(void){
   pwmStop(pwm);
 
   // Setting a safe state for used leg.
-  palSetLineMode(PWM_LINE_CH1N, PAL_MODE_UNCONNECTED);
+//  palSetLineMode(PWM_LINE_CH1N, PAL_MODE_UNCONNECTED);
   palSetLineMode(PWM_LINE_CH1, PAL_MODE_UNCONNECTED);
-  palSetLineMode(PWM_LINE_CH2N, PAL_MODE_UNCONNECTED);
+//  palSetLineMode(PWM_LINE_CH2N, PAL_MODE_UNCONNECTED);
   palSetLineMode(PWM_LINE_CH2, PAL_MODE_UNCONNECTED);
 
 }

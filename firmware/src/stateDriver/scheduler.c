@@ -35,6 +35,7 @@ void  whatToDo(msg_t received_msg)
 {
   uint16_t address=0;
   int16_t value=0;
+  float fullValue;
   address=received_msg;
   value=received_msg>>16;
   msg_t msg;
@@ -47,14 +48,16 @@ void  whatToDo(msg_t received_msg)
         {
           stateDriverDeactivateMotor(&sdDriver);
           stateDriverStop(&sdDriver);
-          MB_WRITE_DISCRET_REG(MEASURE,FALSE);
-          MB_WRITE_DISCRET_REG(MOTOR,FALSE);
+          for(uint8_t i=1;i<REGISTER_LEN-1;i++)MB_WRITE_DISCRET_REG(i,FALSE);
         }
         MB_WRITE_DISCRET_REG(SYSTEM_STOP,value);
         break;
 
       case MEASURE:
-        if(value)msg=stateDriverStart(&sdDriver);
+        if(value){
+            msg=stateDriverStart(&sdDriver);
+            MB_WRITE_REG_INT16(DATA_CONTROL_TIME,CONTROL_TIME_DEFAULT);
+          }
         else msg = stateDriverStop(&sdDriver);
         if(msg==MSG_OK)MB_WRITE_DISCRET_REG(MEASURE,value);
         break;
@@ -72,8 +75,18 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_2,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_3,!value);
-//                setNewSen(&sdDriver,SEN_CURRENT,SEN_ON);
-//                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
+
+                for(uint8_t i=0;i<NUMBER_SENSORS;i++)
+                {
+                  if((sdDriver.config.load & (1<<i))!=0){
+                      setNewSen(&sdDriver,i,SEN_ON);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,TRUE);
+                    }
+                  else{
+                      setNewSen(&sdDriver,i,SEN_OFF);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,FALSE);
+                    }
+                }
               }
               break;
       case FLAG_LOAD_2:
@@ -83,9 +96,17 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_1,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_3,!value);
-//                setNewSen(&sdDriver,SEN_INC_ENCODER,SEN_ON);
-//                setNewSen(&sdDriver,SEN_ABS_ENCODER,SEN_ON);
-              }
+                for(uint8_t i=0;i<NUMBER_SENSORS;i++)
+                {
+                  if((sdDriver.config.load & (1<<i))!=0){
+                      setNewSen(&sdDriver,i,SEN_ON);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,TRUE);
+                    }
+                  else{
+                      setNewSen(&sdDriver,i,SEN_OFF);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,FALSE);
+                    }
+                }              }
               break;
       case FLAG_LOAD_3:
               if(!value || (setNewLoad(&sdDriver,THIRD_LOAD)!=MSG_OK)) value=FALSE;
@@ -94,6 +115,17 @@ void  whatToDo(msg_t received_msg)
               {
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_1,!value);
                 MB_WRITE_DISCRET_REG(FLAG_LOAD_2,!value);
+                for(uint8_t i=0;i<NUMBER_SENSORS;i++)
+                {
+                  if((sdDriver.config.load & (1<<i))!=0){
+                      setNewSen(&sdDriver,i,SEN_ON);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,TRUE);
+                    }
+                  else{
+                      setNewSen(&sdDriver,i,SEN_OFF);
+                      MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,FALSE);
+                    }
+                }
               }
               break;
 
@@ -108,26 +140,26 @@ void  whatToDo(msg_t received_msg)
               break;
 
       case FLAG_CONTROLLER_1:
-             if(!value || (setNewControll(&sdDriver,SLAVE_CONTROL)!=MSG_OK)) value=FALSE;
+             if(!value || (setNewControll(&sdDriver,MANUAL_CONTROL)!=MSG_OK)) value=FALSE;
              MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,value);
              if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_2,!value);
              break;
       case FLAG_CONTROLLER_2:
-             if(!value || (setNewControll(&sdDriver,CONTROL2)!=MSG_OK)) value=FALSE;
+             if(!value || (setNewControll(&sdDriver,SLAVE_CONTROL)!=MSG_OK)) value=FALSE;
              MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_2,value);
              if(value==TRUE)MB_WRITE_DISCRET_REG(FLAG_CONTROLLER_1,!value);
              break;
-      case FLAG_SPEED:
-             if(setNewParamControll(&sdDriver,VARIABLE_SPEED,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_SPEED,value);
+      case FLAG_VARIABLE_SPEED:
+             if(setNewParamControll(&sdDriver,VARIABLE_SPEED,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VARIABLE_SPEED,value);
              break;
-      case FLAG_ANGLE:
-             if(setNewParamControll(&sdDriver,VARIABLE_ANGLE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ANGLE,value);
+      case FLAG_VARIABLE_ANGLE:
+             if(setNewParamControll(&sdDriver,VARIABLE_ANGLE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VARIABLE_ANGLE,value);
              break;
-      case FLAG_ROTATE:
-             if(setNewParamControll(&sdDriver,VARIABLE_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_ROTATE,value);
+      case FLAG_VARIABLE_ROTATE:
+             if(setNewParamControll(&sdDriver,VARIABLE_ROTATE,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VARIABLE_ROTATE,value);
              break;
-      case FLAG_VOLT:
-             if(setNewParamControll(&sdDriver,VARIABLE_CURRENT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VOLT,value);
+      case FLAG_VARIABLE_CURRENT:
+             if(setNewParamControll(&sdDriver,VARIABLE_CURRENT,(variablestep_t)value)==MSG_OK) MB_WRITE_DISCRET_REG(FLAG_VARIABLE_CURRENT,value);
              break;
     }
 
@@ -137,16 +169,23 @@ void  whatToDo(msg_t received_msg)
     switch(address-100)
     {
       case  DATA_MOTOR_REQUIRED_SPEED:
-        if(value>=-24 && value<=24)MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED,value);
+        if(value>=-24 && value<=24)MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_SPEED,value);
         break;
       case DATA_CONTR_KP:
-        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,value);
+        chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
+        fullValue=(float)((value<<16)+(received_msg>>16));
+        dbgPrintf("fullvalue =  %f\r\n",fullValue);
+        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,fullValue);
         break;
       case DATA_CONTR_KI:
-        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,value);
+        chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
+        fullValue=(float)((value<<16)+(received_msg>>16));
+        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,value);
         break;
       case DATA_CONTR_KD:
-        if(value>=0 && value <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,value);
+        chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
+        fullValue=(float)((value<<16)+(received_msg>>16));
+        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,fullValue);
         break;
       case DATA_CONTROL_TIME:
         if(value>=5 && value<=500)MB_WRITE_REG_INT16(DATA_CONTROL_TIME,value);
