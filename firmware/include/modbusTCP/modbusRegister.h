@@ -35,10 +35,10 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 
 #define FLAG_CONTROLLER_1               9
 #define FLAG_CONTROLLER_2               10
-#define FLAG_SPEED                      11
-#define FLAG_ANGLE                      12
-#define FLAG_ROTATE                     13
-#define FLAG_VOLT                       14
+#define FLAG_VARIABLE_SPEED             11
+#define FLAG_VARIABLE_ANGLE             12
+#define FLAG_VARIABLE_ROTATE            13
+#define FLAG_VARIABLE_CURRENT           14
 
 #define STATUS_MOTOR                    15
 #define STATUS_CURRENT                  16
@@ -73,9 +73,9 @@ extern uint8_t Discrete_Register[REGISTER_LEN];
 #define DATA_FORCE_KD                                       32
 
 #define DATA_MOTOR_REQUIRED_SPEED                           34
-#define DATA_MOTOR_CURRENT_SPEED                            36
-#define DATA_MOTOR_REQUIRED_VOLTAGE                         38
-#define DATA_MOTOR_CURRENT_VOLTAGE                          39
+#define DATA_MOTOR_CURRENT_SPEED                            35
+#define DATA_MOTOR_REQUIRED_VOLTAGE                         36
+#define DATA_MOTOR_CURRENT_VOLTAGE                          37
 
 
 #endif /* MODBUSREGISTER */

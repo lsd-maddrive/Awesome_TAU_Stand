@@ -1,5 +1,4 @@
 #include <manualControl.h>
-
 thread_t * th_manualControl;
 /**
  * @brief   Motor speed change function without regulator.
@@ -8,19 +7,22 @@ thread_t * th_manualControl;
  */
 static THD_FUNCTION(manualControlThread,arg) {
   (void)arg;
-  float required_speed=0;
+  int16_t required_speed=0;
   systime_t time = chVTGetSystemTime();
   while(!chThdShouldTerminateX()){
 
     //read the speed set by the user (set in the range -24 +24)
-    required_speed = MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED);
+    required_speed = MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_SPEED);
 
-    //Conversion of the user speed in the range -24..+24 to 0..100%
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,VOLTAGE_TO_PERCENT(required_speed));
+    //Conversion of the user speed in the range -24..+24 to -9500..9500
+    MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE,VOLTAGE_TO_ROTATE(required_speed));
+    MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED,required_speed);
 
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,required_speed);
-    time = chThdSleepUntilWindowed( time, time + TIME_MS2I(DATA_CONTROL_TIME) );
+    time = chThdSleepUntilWindowed( time, time + TIME_MS2I(MB_READ_REG_INT16(DATA_CONTROL_TIME)) );
    }
+
+  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE,0);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED,0);
     chThdExit(MSG_OK);
 }
 

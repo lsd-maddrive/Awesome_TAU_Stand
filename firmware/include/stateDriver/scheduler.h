@@ -10,6 +10,7 @@
 #include <modbusRegister.h>
 #include <terminal_write.h>
 
+#define SENSORS_FIRST_FLAG FLAG_CURRENT
 
 void schedulerStart(void);
 void whatToDo(msg_t received_msg);
