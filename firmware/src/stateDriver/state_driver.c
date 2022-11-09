@@ -1,5 +1,5 @@
 #include "state_driver.h"
-#include <terminal_write.h>
+
 mailbox_t sen_mb;
 #define SEN_BUFFER_SIZE 10
 msg_t sen_mb_buffer[SEN_BUFFER_SIZE];
