@@ -11,10 +11,10 @@ static THD_FUNCTION(slaveControlThread,stateVariable) {
   pid_t pid_data={.error_speed={0,0,0,0,0,0},
                   .force_speed={0,0,0},
                   .sum_force=0};
-  float required_output=0;
+  int16_t required_output=0;
   systime_t time = chVTGetSystemTime();
   while(!chThdShouldTerminateX()){
-    required_output=MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_SPEED);
+    required_output=MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_SPEED);
     for(uint8_t i=0;i<NUMBER_VARIABLE;i++)
     {
       if((*(uint8_t*)stateVariable & (1<<i))!=0)
@@ -23,7 +23,7 @@ static THD_FUNCTION(slaveControlThread,stateVariable) {
         {
         case VARIABLE_ROTATE:
           pid_data.error_speed.prev=pid_data.error_speed.current;
-          pid_data.error_speed.current=required_output-MB_READ_REG_FLOAT(DATA_INC_ENCODER_ROTATIONAL_SPEED);
+          pid_data.error_speed.current=VOLTAGE_TO_INC_ENCODER_ROTATE(required_output)+MB_READ_REG_FLOAT(DATA_INC_ENCODER_ROTATIONAL_SPEED);
 
           //Finding the proportional component of the regulator
           pid_data.force_speed.pr=MB_READ_REG_FLOAT(DATA_CONTR_KP)*pid_data.error_speed.current;
@@ -52,11 +52,13 @@ static THD_FUNCTION(slaveControlThread,stateVariable) {
     }
     MB_WRITE_REG_FLOAT(DATA_FORCE_PID,pid_data.sum_force);
 
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE,MB_READ_REG_FLOAT(DATA_MOTOR_REQUIRED_VOLTAGE)+pid_data.sum_force);
-    MB_WRITE_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED,MB_READ_REG_FLOAT(DATA_MOTOR_CURRENT_SPEED)+pid_data.sum_force);
+    MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE,MB_READ_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE)+(int16_t)pid_data.sum_force);
+    MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED,MB_READ_REG_INT16(DATA_MOTOR_CURRENT_SPEED)+(int16_t)pid_data.sum_force);
 
-    time = chThdSleepUntilWindowed( time, time + TIME_MS2I( DATA_CONTROL_TIME ) );
+    time = chThdSleepUntilWindowed( time, time + TIME_MS2I( MB_READ_REG_INT16(DATA_CONTROL_TIME) ) );
    }
+  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE,0);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_SPEED,0);
     chThdExit(MSG_OK);
 }
 

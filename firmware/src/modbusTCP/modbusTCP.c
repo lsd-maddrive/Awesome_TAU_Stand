@@ -188,7 +188,10 @@ int16_t modbustcp_go(uint8_t* data)
     case MB_FUN_WRITE_MULTIPLE_ANALOG_REGISTER:
        {
          for(uint8_t perem=0;perem<count;perem++)
-           Analog_Register[address+perem]=modbustcp_get_multiple_register(data,perem);
+         {
+           msg_t perm=(modbustcp_get_multiple_register(data,perem)<<16)+(address+100+perem);
+           chMBPostTimeout(&main_mb, perm, TIME_IMMEDIATE);
+         }
          len=modbusTCP_Write_Multiple_Analog_Register(tid,pid,uid,func, address,count);
          return len;
        }
@@ -197,6 +200,3 @@ int16_t modbustcp_go(uint8_t* data)
     }
   return len; 
 }
-
-
-

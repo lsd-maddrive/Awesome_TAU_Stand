@@ -23,7 +23,7 @@
 
 |    Имя 				         | Адрес |  Тип данных |       Модуль           | Тип взаимодействия |
 |:----------------------------------------------:|:-----:|:-----------:|:----------------------:|:------------------:|
-| DATA_CURRENT_SENSOR_CURRENT 	   		 |   0	 |    int16    | датчик тока		|    Read only	     |
+| DATA_CURRENT_SENSOR_CURRENT 	   		 |   0	 |    float    | датчик тока		|    Read only	     |
 | DATA_INC_ENCODER_ROTATIONAL_SPEED		 |   2	 |    float    | инкрементальный энкодер|    Read only	     |
 | DATA_ABS_ENCODER_ANGLE_OF_ROTATION		 |   4	 |    float    | абсолютный энкодер	|    Read only	     |
 | DATA_ABS_ENCODER_MULTI_TURN_ANGLE_OF_ROTATION  |   6	 |    int32    | абсолютный энкодер	|    Read only	     |
@@ -60,10 +60,10 @@
 | FLAG_INC_ENCODER			  |   8   |
 | FLAG_CONTROLLER_1			  |   9   |
 | FLAG_CONTROLLER_2			  |   10  |
-| FLAG_SPEED				  |   11  |
-| FLAG_ANGLE				  |   12  | 
-| FLAG_ROTATE  	                  	  |   13  |
-| FLAG_VOLT  	                  	  |   14  |
+| FLAG_VARIABLE_SPEED				  |   11  |
+| FLAG_VARIABLE_ANGLE				  |   12  | 
+| FLAG_VARIABLE_ROTATE  	                  	  |   13  |
+| FLAG_VARIABLE_CURRENT  	                  	  |   14  |
 | STATUS_MOTOR	                  	  |   15  |
 | STATUS_CURRENT	                  |   16  |
 | STATUS_INC_ENCODER	                  |   17  |

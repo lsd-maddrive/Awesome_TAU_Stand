@@ -5,7 +5,6 @@
 #include<system_setup.h>
 #include <modbusRegister.h>
 
-
 /**
 * @brief Errors used by the PID regulator.
 */
