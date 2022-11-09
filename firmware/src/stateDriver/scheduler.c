@@ -106,7 +106,8 @@ void  whatToDo(msg_t received_msg)
                       setNewSen(&sdDriver,i,SEN_OFF);
                       MB_WRITE_DISCRET_REG(SENSORS_FIRST_FLAG+i,FALSE);
                     }
-                }              }
+                }
+              }
               break;
       case FLAG_LOAD_3:
               if(!value || (setNewLoad(&sdDriver,THIRD_LOAD)!=MSG_OK)) value=FALSE;
@@ -169,22 +170,21 @@ void  whatToDo(msg_t received_msg)
     switch(address-100)
     {
       case  DATA_MOTOR_REQUIRED_SPEED:
-        if(value>=-24 && value<=24)MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_SPEED,value);
+        if(setNewRequiredSpeed(&sdDriver,value)==MSG_OK)MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_SPEED,value);
         break;
       case DATA_CONTR_KP:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=(float)((value<<16)+(received_msg>>16));
-        dbgPrintf("fullvalue =  %f\r\n",fullValue);
+        fullValue=*(float*)&received_msg;
         if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,fullValue);
         break;
       case DATA_CONTR_KI:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=(float)((value<<16)+(received_msg>>16));
+        fullValue=*(float*)&received_msg;
         if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,value);
         break;
       case DATA_CONTR_KD:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=(float)((value<<16)+(received_msg>>16));
+        fullValue=*(float*)&received_msg;
         if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,fullValue);
         break;
       case DATA_CONTROL_TIME:

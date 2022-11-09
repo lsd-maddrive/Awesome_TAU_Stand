@@ -222,6 +222,24 @@ msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,var
     }
   else return MSG_RESET;
 }
+msg_t setNewRequiredSpeed(stateDriver_t *sdstruct,int16_t required_speed)
+{
+  if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY || sdstruct->state == STATE_ACTIVE )
+      {
+        switch(sdstruct->config.controller.type)
+        {
+        case MANUAL_CONTROL:
+          if(required_speed>=-24 && required_speed<=24) return MSG_OK;
+          else return MSG_RESET;
+            break;
+        case SLAVE_CONTROL:
+          if(required_speed>=-1000 && required_speed<=1000)return MSG_OK;
+          else return MSG_RESET;
+          break;
+        }
+      }
+    else return MSG_RESET;
+}
 
 
 

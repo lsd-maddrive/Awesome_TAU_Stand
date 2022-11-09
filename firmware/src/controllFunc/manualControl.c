@@ -1,5 +1,4 @@
 #include <manualControl.h>
-#include <terminal_write.h>
 thread_t * th_manualControl;
 /**
  * @brief   Motor speed change function without regulator.

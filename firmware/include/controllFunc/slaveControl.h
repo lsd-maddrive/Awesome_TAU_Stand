@@ -5,6 +5,10 @@
 #include<system_setup.h>
 #include <modbusRegister.h>
 
+/**
+* @brief   Conversion of the user speed in the range -24..+24 to -1160..1160.
+*/
+#define VOLTAGE_TO_INC_ENCODER_ROTATE(speed) (speed*48)
 
 /**
 * @brief Errors used by the PID regulator.

@@ -69,4 +69,7 @@ msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step);
 
 msg_t setNewControll(stateDriver_t *sdstruct,contrlist_t new_controll);
 msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,variablestep_t step);
+
+msg_t setNewRequiredSpeed(stateDriver_t *sdstruct,int16_t required_speed);
+
 #endif
