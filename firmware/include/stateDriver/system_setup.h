@@ -20,15 +20,22 @@ typedef enum {
  */
 typedef enum{
     NONE_LOAD = 0,
-    FIRST_LOAD = (1<<SEN_CURRENT) | (1<<SEN_INC_ENCODER)| (1<<SEN_ABS_ENCODER),
-    SECOND_LOAD = (1<<SEN_INC_ENCODER) | (1<<SEN_ABS_ENCODER),
-    THIRD_LOAD = (1<<SEN_INC_ENCODER)
+    FIRST_LOAD =  (1<<SEN_INC_ENCODER)| (1<<SEN_ABS_ENCODER),
+    SECOND_LOAD = (1<<SEN_INC_ENCODER),
+    THIRD_LOAD = (1<<SEN_ABS_ENCODER),
+    NUMBER_LOADS
   }load_t;
 
 
 /*===========================================================================*/
 /* Data types related to motor control modules.                                                         */
 /*===========================================================================*/
+
+/**
+* @brief   The frequency at which the engine control modules operate by default.
+*/
+#define CONTROL_TIME_DEFAULT 20
+
 /**
 * @brief   Possible ways to control the motor.
 */
