@@ -35,11 +35,11 @@ void  whatToDo(msg_t received_msg)
 {
   uint16_t address=0;
   int16_t value=0;
-  float fullValue;
+  float fullValueFloat;
+  int32_t fullValueInt;
   address=received_msg;
   value=received_msg>>16;
   msg_t msg;
-  dbgPrintf("address = %d  value = %d\r\n", address,value);
   if(address<100)//addresses of discrete registers : 0-99
   {
     switch (address) {
@@ -174,18 +174,21 @@ void  whatToDo(msg_t received_msg)
         break;
       case DATA_CONTR_KP:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=*(float*)&received_msg;
-        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,fullValue);
+        fullValueInt = (received_msg & 0xFFFF0000) | (value & 0x0000FFFF);
+        fullValueFloat=*(float*)&fullValueInt;
+        if(fullValueFloat>=0 && fullValueFloat <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KP,fullValueFloat);
         break;
       case DATA_CONTR_KI:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=*(float*)&received_msg;
-        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,value);
+        fullValueInt = (received_msg & 0xFFFF0000) | (value & 0x0000FFFF);
+        fullValueFloat=*(float*)&fullValueInt;
+        if(fullValueFloat>=0 && fullValueFloat <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KI,fullValueFloat);
         break;
       case DATA_CONTR_KD:
         chMBFetchTimeout(&main_mb, &received_msg, TIME_INFINITE);
-        fullValue=*(float*)&received_msg;
-        if(fullValue>=0 && fullValue <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,fullValue);
+        fullValueInt = (received_msg & 0xFFFF0000) | (value & 0x0000FFFF);
+        fullValueFloat=*(float*)&fullValueInt;
+        if(fullValueFloat>=0 && fullValueFloat <=5)MB_WRITE_REG_FLOAT(DATA_CONTR_KD,fullValueFloat);
         break;
       case DATA_CONTROL_TIME:
         if(value>=5 && value<=500)MB_WRITE_REG_INT16(DATA_CONTROL_TIME,value);
