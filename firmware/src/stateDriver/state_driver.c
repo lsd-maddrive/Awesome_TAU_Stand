@@ -69,7 +69,6 @@ msg_t stateDriverStop(stateDriver_t *sdstruct)
   if(sdstruct->state == STATE_READY)
     {
       measurementsStop();
-      chThdSleepMilliseconds(10);
       sdstruct->config.sens = 0;
       sdstruct->state = STATE_STOP;
       return MSG_OK;
