@@ -15,29 +15,19 @@ static THD_FUNCTION(sensContr, sens)
   senlist_t sen;
   senstep_t step;
   msg_t received_msg;
-  for(uint8_t i=0;i<NUMBER_SENSORS;i++)
-  {
-    if((*(uint16_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_init();
-  }
   while(!chThdShouldTerminateX()){
     msg_t msg_mb = chMBFetchTimeout(sensors_mb, &received_msg, TIME_INFINITE);
     if(msg_mb==MSG_OK && received_msg!=-1)
       {
         step=(senstep_t)(received_msg>>16);
         sen=(senlist_t)(received_msg & 0xFF);
-        switch (step){
-        case SEN_ON:
-          sen_table_fun[sen].sen_init();
-          break;
-        case SEN_OFF:
-          sen_table_fun[sen].sen_uninit();
-          break;
-        }
+        if (step == SEN_ON) sen_table_fun[sen].sen_init();
+        else if (step == SEN_OFF) sen_table_fun[sen].sen_uninit();
       }
   }
   for(uint8_t i=0;i<NUMBER_SENSORS;i++)
   {
-    if((*(uint16_t*)sens & (1<<i))!=0)sen_table_fun[i].sen_uninit();
+    if((*(uint16_t*)sens & (1<<i)) != SEN_OFF)sen_table_fun[i].sen_uninit();
   }
 
   chThdExit(MSG_OK);

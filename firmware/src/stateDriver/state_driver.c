@@ -69,6 +69,7 @@ msg_t stateDriverStop(stateDriver_t *sdstruct)
   if(sdstruct->state == STATE_READY)
     {
       measurementsStop();
+      sdstruct->config.sens = 0;
       sdstruct->state = STATE_STOP;
       return MSG_OK;
     }
@@ -135,7 +136,7 @@ msg_t stateDriverDeactivateMotor(stateDriver_t *sdstruct)
  */
 msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load)
 {
-  if(sdstruct->state == STATE_STOP)
+  if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY)
     {
     sdstruct->config.load=new_load;
       return MSG_OK;
@@ -158,19 +159,14 @@ msg_t setNewLoad(stateDriver_t *sdstruct,load_t new_load)
  * @api
  */
 msg_t setNewSen(stateDriver_t *sdstruct,senlist_t sen,senstep_t step){
-  if(sdstruct->state == STATE_READY || sdstruct->state == STATE_ACTIVE || sdstruct->state == STATE_STOP)
+  if(sdstruct->state == STATE_READY || sdstruct->state == STATE_STOP)
    {
-    if((sdstruct->config.load & (1<<sen))!=0)
-    {
-      if(sdstruct->state != STATE_STOP)chMBPostTimeout(&sen_mb, (msg_t)((step<<16)+(sen)), TIME_IMMEDIATE);
-
-      if(step==TRUE)sdstruct->config.sens |=(1<<sen);
+      chMBPostTimeout(&sen_mb, (msg_t)((step<<16)+(sen)), TIME_IMMEDIATE);
+      if(step == SEN_ON) sdstruct->config.sens |=(1<<sen);
       else sdstruct->config.sens &=~(1<<sen);
 
      return MSG_OK;
     }
-    else return MSG_RESET;
-   }
    else return MSG_RESET;
 }
 
@@ -222,6 +218,7 @@ msg_t setNewParamControll(stateDriver_t *sdstruct,uint8_t new_param_controll,var
     }
   else return MSG_RESET;
 }
+
 msg_t setNewRequiredSpeed(stateDriver_t *sdstruct,int16_t required_speed)
 {
   if(sdstruct->state == STATE_STOP || sdstruct->state == STATE_READY || sdstruct->state == STATE_ACTIVE )
@@ -236,11 +233,10 @@ msg_t setNewRequiredSpeed(stateDriver_t *sdstruct,int16_t required_speed)
           if(required_speed>=-1000 && required_speed<=1000)return MSG_OK;
           else return MSG_RESET;
           break;
+        default:
+        	return MSG_RESET;
+        	break;
         }
       }
     else return MSG_RESET;
 }
-
-
-
-
