@@ -32,7 +32,7 @@ void absolute_encoder_flush(void){
     msg = canReceiveTimeout(&CAND1, CAN_ANY_MAILBOX, &buf, TIME_MS2I(1)) ;
   }
 }
-#include "terminal_write.h"
+
 /*
  *  @brief  Measures encoder rotation speed in rpm.
  *

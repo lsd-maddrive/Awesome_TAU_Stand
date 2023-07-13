@@ -113,8 +113,8 @@ msg_t motorUninit(void){
   MotorRequiredVoltage = MOTOR_ZERO_VOLTAGE;
   MotorCurrentVoltage = MOTOR_ZERO_VOLTAGE;
   // Writing data to the modbus
-//  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE, MotorRequiredVoltage);
-//  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_REQUIRED_VOLTAGE, MotorRequiredVoltage);
+  MB_WRITE_REG_INT16(DATA_MOTOR_CURRENT_VOLTAGE, MotorCurrentVoltage);
 
   return msg;
 }
