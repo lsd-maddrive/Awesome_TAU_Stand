@@ -74,3 +74,5 @@ absoluteEncoderParam* getAbsoluteEncoderStruct(void);
 угол в градусах, который не обнулсется после 360, количество оборотов, а также все эти данные собранные в единую структуру.
 
 [Энкодер](https://aliexpress.ru/item/4001309275150.html?gatewayAdapt=glo2rus&sku_id=10000015687603201&spm=a2g0s.12269583.0.0.609b1e84TvdLx1)
+
+[Энкодер datasheet](https://briterencoder.com/wp-content/uploads/2021/09/CAN-Single-Turn-User-Manual-V2.2.pdf)
