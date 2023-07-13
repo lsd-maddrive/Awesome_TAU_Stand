@@ -32,7 +32,7 @@ void absolute_encoder_flush(void){
     msg = canReceiveTimeout(&CAND1, CAN_ANY_MAILBOX, &buf, TIME_MS2I(1)) ;
   }
 }
-
+#include "terminal_write.h"
 /*
  *  @brief  Measures encoder rotation speed in rpm.
  *
@@ -42,7 +42,7 @@ void absolute_encoder_flush(void){
  */
 void absolute_encoder_read_rotational_speed(void){
   txbuf.data8[2] = CAN_TXBUF_VELOCITY_BYTE; // Makes necessary configuration.
-  uint8_t sign; // Direction of rotation.
+  int8_t sign; // Direction of rotation.
   do{
     canSimpleWrite(&txbuf); // Writes configuration.
     // If the answer came, it will convert the data into the necessary ones.
@@ -63,8 +63,6 @@ void absolute_encoder_read_rotational_speed(void){
   else if (absoluteEncoder.NumberOfTurns - absoluteEncoder.PreviousNumberOfTurns < 0) sign = COUNTERCLOCKWISE_ROTATION;
 
   absoluteEncoder.RotationalSpeed = absoluteEncoder.RotationalSpeed * sign;
-  absoluteEncoder.PreviousNumberOfTurns = absoluteEncoder.NumberOfTurns;
-  absoluteEncoder.PreviousAngleOfRotation = absoluteEncoder.AngleOfRotation;
   MB_WRITE_REG_FLOAT(DATA_ABS_ENCODER_ROTATIONAL_SPEED, absoluteEncoder.RotationalSpeed); // Writing data to the modbus
 }
 
@@ -87,6 +85,7 @@ void absolute_encoder_read_number_of_turns(void){
     }
     else palToggleLine(LINE_LED1);
   }while(1);
+  absoluteEncoder.PreviousNumberOfTurns = absoluteEncoder.NumberOfTurns;
   absoluteEncoder.NumberOfTurns = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
   MB_WRITE_REG_INT32(DATA_ABS_ENCODER_NUMBER_OF_TURNS, absoluteEncoder.NumberOfTurns); // Writing data to the modbus
 }
@@ -113,6 +112,7 @@ void absolute_encoder_read_angle_of_rotation(void){
     }
     else palToggleLine(LINE_LED1);
   }while(1);
+  absoluteEncoder.PreviousAngleOfRotation = absoluteEncoder.AngleOfRotation;
   absoluteEncoder.AngleOfRotation = rxbuf.data8[6] << 24 | rxbuf.data8[5] << 16 | rxbuf.data8[4] << 8 | rxbuf.data8[3];
   absoluteEncoder.AngleOfRotation = absoluteEncoder.AngleOfRotation * COEF_ANGLE;
   MB_WRITE_REG_FLOAT(DATA_ABS_ENCODER_ANGLE_OF_ROTATION, absoluteEncoder.AngleOfRotation); // Writing data to the modbus
@@ -169,9 +169,9 @@ static THD_FUNCTION(absoluteEncoderThread, arg)
     chRegSetThreadName("Absolute encoder thread");
     systime_t time = chVTGetSystemTime();
     while( !chThdShouldTerminateX() ){
+      absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_read_number_of_turns(); // Measures the number of turns.
       absolute_encoder_read_rotational_speed(); // Measures encoder rotation speed.
-      absolute_encoder_read_angle_of_rotation(); // Measures the rotation angle within one turn.
       absolute_encoder_calculate_multi_turn_angle_of_rotation(); // Measures the multi-turn rotation angle.
 
 
