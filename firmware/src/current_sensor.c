@@ -17,9 +17,9 @@ static THD_FUNCTION(currentSensorThread, arg)
     chRegSetThreadName("Current sensor thread");
     systime_t time = chVTGetSystemTime();
     while( !chThdShouldTerminateX() ){
-      current = sensorM3421Read()*CURRENT_COEF; // Converts the voltage to a current value.
+      current = lemCurrentRead(); // Converts the voltage to a current value.
       MB_WRITE_REG_FLOAT(DATA_CURRENT_SENSOR_CURRENT, current); // Writing data to the modbus
-      time = chThdSleepUntilWindowed( time, time + TIME_MS2I( ADC_DATA_RATE ) );
+      time = chThdSleepUntilWindowed( time, time + TIME_MS2I( 50 ) );
     }
     chThdExit(MSG_OK);
 }
@@ -32,9 +32,8 @@ static THD_FUNCTION(currentSensorThread, arg)
  *  @note   One-Shot mode may not be working.
  */
 msg_t currentSensorInit(void){
-  sensorM3421Init();
-  if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)
-    tp_current_sensor = chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
+  lemInit();
+  tp_current_sensor = chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
   return MSG_OK;
 }
 
@@ -46,7 +45,7 @@ msg_t currentSensorInit(void){
 msg_t currentSensorUninit(void){
   chThdTerminate(tp_current_sensor);
   msg_t msg = chThdWait(tp_current_sensor);
-  i2cSimpleStop();
+  lemUninit();
   return msg;
 }
 
@@ -59,6 +58,5 @@ msg_t currentSensorUninit(void){
  *
  */
 float getCurrent(void){
-  if (ADC_MODE_ROUTINE == ADC_MODE_CONTINUOUS)  return current;
-  return sensorM3421Read()*CURRENT_COEF;
+  return lemCurrentRead();
 }

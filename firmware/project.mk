@@ -27,6 +27,7 @@ PROJECT_CSRC 	= src/main.c \
 				  src/controllFunc/manualControl.c\
 				  tests/can_test.c\
 				  src/controllFunc/slaveControl.c\
+				  src/lem_lts.c \
 				  
 				  
 # C++ source files
