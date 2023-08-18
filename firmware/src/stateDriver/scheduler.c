@@ -47,6 +47,7 @@ void set_sensors(void){
 	}
 }
 
+
 void  whatToDo(msg_t received_msg)
 {
   uint16_t address=0;

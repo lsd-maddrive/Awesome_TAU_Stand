@@ -1,58 +1,88 @@
 #include "lem_lts.h"
 
-static float zeroCurrent = 0;
-static float current = 0;
+// Data of the currnet.
+static float zeroCurrent = 0; // To reduce voltage to zero.
+static float current = 0; // In amperes.
 
-static uint16_t adc_buf[5] = {0};
-static float adc_value = 0;
+// To read from ADC.
+static uint16_t adc_buf[ADC_BUF_SIZE] = {0};
+static float adc_value = 0; // Average value per ADC.
 
+static ADCDriver *adc3 = &ADCD3;
 
+/*
+ * @brief	Configuration of the channel.
+ *
+ * @note	ADC3 is used. Channel 5 is used.
+ */
 static ADCConversionGroup adcconf3 = {
-    // Непрерывный режим не нужен
     .circular = FALSE,
-    // Канал всего один
     .num_channels = 1,
-    // Callback функции не нужны
     .end_cb = NULL,
     .error_cb = NULL,
-    // Здесь можно поменять разрешение (номинально 12 бит) и включить watchdog (сейчас выключен)
     .cr1 = 0,
-    // Пусть Chibi сама разбирается, как запускать преобразование
     .cr2 = ADC_CR2_SWSTART,
-    // Выбираем для третьего канала АЦП самый быстрый режим работы, 3 такта на одно преобразование
     .smpr1 = 0,
     .smpr2 = ADC_SMPR2_SMP_AN5(ADC_SAMPLE_144),
-    // Watchdog выключен, значит и пределы никого не интересуют
     .htr = 0,
     .ltr = 0,
-    // Так как канал только один, значит указываем только в первом элементе последовательности желаемый канал
     .sqr1 = 0,
     .sqr2 = 0,
     .sqr3 = ADC_SQR3_SQ1_N(ADC_CHANNEL_IN5)
 
 };
 
+/*
+ * @brief	Read data from the ADC.
+ *
+ * @note	Read data several times for a more accurate measurement.
+ *
+ * @note	ADC3 is used. Channel 5 is used.
+ *
+ * @notapi
+ */
 float lem_adc_read(void){
-	adcConvert(&ADCD3, &adcconf3, adc_buf, 5);
-	for (uint8_t i = 0; i < 5; i++){
+	adcConvert(adc3, &adcconf3, adc_buf, ADC_BUF_SIZE); // Reads data from the ADC.
+
+	// Count average adc value.
+	adc_value = 0;
+	for (uint8_t i = 0; i < ADC_BUF_SIZE; i++){
 		adc_value += (float) adc_buf[i];
 	}
-	adc_value = adc_value / 5;
+	adc_value = adc_value / ADC_BUF_SIZE;
 	return adc_value;
 }
 
+/*
+ * @brief	Inits ADC to count the current.
+ *
+ * @note	ADC3 is used. Channel 5 is used.
+ *
+ * @note	Inits zero position in ADC.
+ */
 void lemInit(void){
-	palSetLineMode(PAL_LINE(GPIOF, 7), PAL_MODE_INPUT_ANALOG);
-	adcStart(&ADCD3, NULL);
-
-	zeroCurrent = lem_adc_read();
+	palSetLineMode(ADC_PIN_LINE, PAL_MODE_INPUT_ANALOG);
+	adcStart(adc3, NULL);
+	zeroCurrent = lem_adc_read(); // Inits zero position in ADC.
 }
 
+/*
+ * @brief	Count new current value.
+ *
+ * @note	Formula can be wrong!
+ *
+ * @param_out	current		New current value
+ */
 float lemCurrentRead(void){
-	current = ((lem_adc_read() - zeroCurrent) * 6) / 0.625;
+	current = (lem_adc_read() - zeroCurrent) * 6 / 625;
 	return current;
 }
 
+/*
+ * @note	Stops ADC.
+ *
+ * @note	ADC3 is used. Channel 5 is used.
+ */
 void lemUninit(void){
-	adcStop(&ADCD3);
+	adcStop(adc3);
 }

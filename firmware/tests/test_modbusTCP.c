@@ -1,11 +1,13 @@
 #include "tests.h"
 #include "modbusTCP.h"
 #include "modbusRegister.h"
+#include "terminal_write.h"
 
 void test_modbusTCP(void)
 {
   	chSysInit();
   	halInit();
+  	debugStreamInit();
 	modbustcp_init();
 	for(uint8_t i=0;i<100;i++)
 	{

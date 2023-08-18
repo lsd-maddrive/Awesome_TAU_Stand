@@ -1,4 +1,5 @@
 #include <current_sensor.h>
+#include "terminal_write.h"
 
 static float current; // Current value calculated from the voltage in AMPS.
 
@@ -32,9 +33,10 @@ static THD_FUNCTION(currentSensorThread, arg)
  *  @note   One-Shot mode may not be working.
  */
 msg_t currentSensorInit(void){
-  lemInit();
-  tp_current_sensor = chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
-  return MSG_OK;
+	lemInit();
+	tp_current_sensor = chThdCreateStatic(waCurrentSensor, sizeof(waCurrentSensor), NORMALPRIO, currentSensorThread, NULL);
+	chThdSleepMilliseconds(5);
+	return MSG_OK;
 }
 
 /*
